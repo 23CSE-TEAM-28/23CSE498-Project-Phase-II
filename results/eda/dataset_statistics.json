@@ -1,0 +1,13 @@
+{
+  "total_patients": 40327,
+  "training_setA_patients": 20336,
+  "training_setB_patients": 19991,
+  "total_features": 40,
+  "total_records": 1551697,
+  "avg_icu_stay_hours": 38.48,
+  "max_icu_stay_hours": 336,
+  "min_icu_stay_hours": 8,
+  "median_icu_stay_hours": 38.0,
+  "sepsis_positive_patients": 2931,
+  "sepsis_rate_percent": 7.27
+}

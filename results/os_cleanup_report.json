@@ -1,0 +1,8 @@
+{
+    "metadata_files_found": 40327,
+    "metadata_files_deleted": 40327,
+    "valid_patient_files_remaining": 40327,
+    "suspicious_files_found": 0,
+    "suspicious_files": [],
+    "confirmation": "No actual patient dataset files were modified or deleted."
+}
