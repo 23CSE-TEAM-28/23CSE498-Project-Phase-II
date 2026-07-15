@@ -75,10 +75,12 @@ To bridge these gaps, we present the Federated Personalized Drift-Aware Attentio
 
 \section{Literature Review}
 \subsection{Federated Learning in Healthcare}
-Federated Averaging (FedAvg) proposed by McMahan et al. establishes the baseline for decentralized collaborative optimization. However, in non-IID settings, local optimization diverges from the global objective. FedProx introduces a proximal term to penalize local weights from diverging too far from global weights, enhancing stability. Ditto approaches personalization as a bi-level optimization problem, balancing global collaboration with local customization.
+Federated Averaging (FedAvg) proposed by McMahan et al. \cite{mcmahan2017} establishes the baseline for decentralized collaborative optimization. To improve learning stability under non-IID conditions, dual-end gradient correction frameworks have been proposed \cite{liu2022}. In clinical settings, protecting privacy is paramount, leading to microaggregation techniques \cite{gupta2025privacy} and secure multi-party computation wrappers \cite{maurya2025secure}. Several applications have successfully deployed federated architectures for triage \cite{karamanlioglu2025clinical}, severity classification \cite{maurya2025secure}, and financial forecasting \cite{noseda2025financial}. To mitigate non-IID data issues, clustering approaches \cite{amato2023clustering} and vertical federated paradigms \cite{yang2025mvfl} are active research areas. 
+
+To improve robustness, FedProx \cite{li2020fedprox} introduces a proximal term to penalize local weights from diverging too far from global weights, while Ditto \cite{li2021ditto} balances global collaboration with local customization using bi-level optimization. Personalization layers (FedPer) proposed by Arivazhagan et al. \cite{arivazhagan2020} split the network into base layers and task-specific heads.
 
 \subsection{Concept Drift \& Explainability}
-Concept drift monitoring, such as Cumulative Sum (CUSUM) control charts, tracks residuals of sequential predictions to identify statistical population shifts. Explainable AI (XAI) using Shapley Additive exPlanations (SHAP) and Multi-Head Self-Attention maps features and temporal slices to explain predictions, helping clinicians verify feature importances against established clinical protocols.
+Concept drift monitoring in federated networks, such as Cumulative Sum (CUSUM) control charts, enables tracking prediction residuals to identify statistical demographic changes and trigger model adaptation \cite{jothimurugesan2022}. In multivariate time-series forecasting, attention mechanisms help identify important variables and temporal slices \cite{larocca2021attention}. Explainable AI (XAI) tools, including Shapley Additive exPlanations (SHAP) and LIME, provide clinicians with model-agnostic feature importances to confirm predictions against clinical pathways \cite{larocca2022shap, kalakoti2025fedxai, lei2025supervised}. Sepsis onset prediction via sliding windows has been explored in FL contexts by Düsing et al. \cite{dusing2025sepsis} and Qayyum et al. \cite{qayyum2023fedsepsis}, demonstrating that decentralized networks can match centralized models while maintaining data privacy. Other works have explored automated hyperparameter optimization (AutoML) in federated settings \cite{maher2025automl} and optimal look-back horizon selection \cite{tang2025horizon}.
 
 \section{Methodology \& Data Preprocessing}
 \subsection{Dataset Organization}
@@ -237,10 +239,7 @@ This work demonstrates a complete decentralized pipeline for sepsis prediction u
 
 The ultimate end goal of this research project is to develop and validate a production-ready clinical early warning framework (FPDAF) deployable across heterogeneous hospital networks. By maintaining absolute data decentralization (addressing the privacy gap), dynamically personalizing models to adapt to local hospital cohorts (addressing the accuracy gap), detecting concept drift in patient populations in real-time, and rendering deep learning decisions explainable via temporal attention maps and SHAP scores (addressing the clinical trust gap), this framework aims to serve as a reliable, privacy-compliant bedside assistant that reduces sepsis mortality rates in intensive care units.
 
-\begin{thebibliography}{00}
-\bibitem{b1} McMahan, B., Moore, E., Ramage, D., Hampson, S., \& y Arcas, B. A. (2017). Communication-efficient learning of deep networks from decentralized data. AISTATS.
-\bibitem{b2} Li, T., Sahu, A. K., Zaheer, M., Sanjabi, M., Talwalkar, A., \& Smith, V. (2020). Federated optimization in heterogeneous networks. MLSys.
-\bibitem{b3} Li, T., Hu, S., Beirami, A., \& Smith, V. (2021). Ditto: Fair and personalized federated learning. ICML.
-\end{thebibliography}
+\bibliographystyle{IEEEtran}
+\bibliography{ref}
 
 \end{document}
