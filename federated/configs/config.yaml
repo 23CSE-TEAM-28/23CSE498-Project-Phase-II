@@ -1,0 +1,43 @@
+# Federated Learning FedAvg configurations
+
+# Seed for reproducibility
+seed: 42
+
+# Device (will fall back to cpu if cuda/mps is not available)
+device: "cuda"
+
+# Path parameters
+paths:
+  data_dir: "datasets/processed"
+  checkpoint_dir: "federated/checkpoints"
+  results_dir: "federated/results"
+  log_dir: "federated/logs"
+  centralized_results_dir: "baseline/results"  # For baseline comparison
+
+# Dataset parameters
+dataset:
+  sequence_length: 24
+  num_features: 40
+  label_column: "SepsisLabel"
+
+# Model architecture parameters (Must match centralized baseline for comparison)
+model:
+  input_dim: 40
+  hidden_dim: 64
+  num_layers: 2
+  dropout: 0.3
+  output_dim: 1  # Binary classification (SepsisLabel: 0 or 1)
+
+# Federated parameters
+federated:
+  rounds: 10             # Number of federated communication rounds
+  client_fraction: 1.0   # Fraction of registered clients participating per round
+  num_clients: 3         # Total number of simulated hospital clients
+
+# Local training parameters
+local_training:
+  epochs: 2              # Local epochs trained on client per round
+  batch_size: 128
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  patience: 6            # Early stopping patience (rounds to wait for improvement in global val AUROC)
