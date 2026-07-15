@@ -1,0 +1,174 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{A Unified Explainable Federated Learning Framework for Multivariate Time-Series Forecasting with Personalized Drift Adaptation\\
+\thanks{Identify support institution here if any.}
+}
+
+\author{\IEEEauthorblockN{1\textsuperscript{st} Sheela Akshar Sakhi}
+\IEEEauthorblockA{\textit{Dept. of Computer Science and Engineering} \\
+\textit{Amrita School of Computing, Coimbatore}\\
+Amrita Vishwa Vidyapeetham, India \\
+CB.SC.U4CSE23547}
+\and
+\IEEEauthorblockN{2\textsuperscript{nd} Hasini Reddy M}
+\IEEEauthorblockA{\textit{Dept. of Computer Science and Engineering} \\
+\textit{Amrita School of Computing, Coimbatore}\\
+Amrita Vishwa Vidyapeetham, India \\
+CB.SC.U4CSE23529}
+\and
+\IEEEauthorblockN{3\textsuperscript{rd} Kousik Sarma Lakkaraju}
+\IEEEauthorblockA{\textit{Dept. of Computer Science and Engineering} \\
+\textit{Amrita School of Computing, Coimbatore}\\
+Amrita Vishwa Vidyapeetham, India \\
+CB.SC.U4CSE23761}
+\and
+\IEEEauthorblockN{4\textsuperscript{th} Haswitha K}
+\IEEEauthorblockA{\textit{Dept. of Computer Science and Engineering} \\
+\textit{Amrita School of Computing, Coimbatore}\\
+Amrita Vishwa Vidyapeetham, India \\
+CB.SC.U4CSE23363}
+\and
+\IEEEauthorblockN{5\textsuperscript{th} V. Chakravarthy}
+\IEEEauthorblockA{\textit{Dept. of Computer Science and Engineering} \\
+\textit{Amrita School of Computing, Coimbatore}\\
+Amrita Vishwa Vidyapeetham, India \\
+CB.SC.U4CSE23753}
+}
+
+\maketitle
+
+\begin{abstract}
+Early sepsis detection in Intensive Care Units (ICUs) is vital for improving patient survival rates. While machine learning offers high-accuracy solutions using multivariate physiological time-series data, clinical adoption remains limited due to privacy concerns regarding patient health records, model generalization issues across different hospital systems (the accuracy gap), and a lack of clinical interpretability (the trust gap). This paper presents a Unified Explainable Federated Learning Framework for Multivariate Time-Series Forecasting with Personalized Drift Adaptation (FPDAF). Our framework enables collaborative training across decentralized clinical nodes using Federated Learning (FedAvg) without sharing raw records. Furthermore, it incorporates personalized local heads (FedPer) to adapt to hospital-specific demographics and integrates a Cumulative Sum (CUSUM) drift detection module to monitor demographic drifts. Finally, clinical explainability is achieved using visual multi-head attention weights and SHAP impact scores. We evaluate the preprocessing consistency and establish a centralized LSTM baseline model on the PhysioNet 2019 Sepsis dataset, demonstrating a robust test Area Under the ROC Curve (AUROC) of 0.8058 and a sensitivity (Recall) of 72.17\% as a baseline for future federated optimization.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Federated Learning, Explainable AI, Time-Series Forecasting, Sepsis Prediction, Concept Drift
+\end{IEEEkeywords}
+
+\section{Introduction}
+Sepsis is a life-threatening organ dysfunction caused by a dysregulated host response to infection. It represents a primary cause of mortality in Intensive Care Units (ICUs) worldwide, with survival rates dropping by approximately 7.6\% for every hour delay in treatment administration. Early clinical forecasting utilizing vital signs and laboratory measurements remains the gold standard for survival.
+
+Although deep learning models show high predictive capacity, training them requires large centralized patient repositories. In healthcare systems, centralizing raw data is restricted by regulatory frameworks such as HIPAA (Health Insurance Portability and Accountability Act) and the DPDPA (Digital Personal Data Protection Act). Federated Learning (FL) offers a privacy-preserving alternative by allowing clinical sites to train models locally and share parameters instead of raw records. 
+
+However, standard FL frameworks face three main challenges:
+\begin{enumerate}
+\item \textbf{Data Heterogeneity (Non-IID Data)}: Variation in clinical equipment, patient demographics, and recording frequencies between hospital nodes decreases the accuracy of a single global model.
+\item \textbf{Concept Drift}: Demographics and treatment methodologies shift over time, leading to performance degradation in static models.
+\item \textbf{Black-box Nature}: Clinicians require explainable predictions to trust AI-generated sepsis alerts.
+\end{enumerate}
+
+To bridge these gaps, we present the Federated Personalized Drift-Aware Attention Framework (FPDAF). In this paper, we describe the data preparation workflow, perform Exploratory Data Analysis (EDA) on the PhysioNet 2019 challenge dataset, establish a centralized baseline LSTM model to benchmark future decentralized runs, and lay out our evaluation plan.
+
+\section{Literature Review}
+\subsection{Federated Learning in Healthcare}
+Federated Averaging (FedAvg) proposed by McMahan et al. establishes the baseline for decentralized collaborative optimization. However, in non-IID settings, local optimization diverges from the global objective. FedProx introduces a proximal term to penalize local weights from diverging too far from global weights, enhancing stability. Ditto approaches personalization as a bi-level optimization problem, balancing global collaboration with local customization.
+
+\subsection{Concept Drift & Explainability}
+Concept drift monitoring, such as Cumulative Sum (CUSUM) control charts, tracks residuals of sequential predictions to identify statistical population shifts. Explainable AI (XAI) using Shapley Additive exPlanations (SHAP) and Multi-Head Self-Attention maps features and temporal slices to explain predictions, helping clinicians verify feature importances against established clinical protocols.
+
+\section{Methodology & Data Preprocessing}
+\subsection{Dataset Organization}
+The framework is evaluated using the PhysioNet Computing in Cardiology Challenge 2019 dataset, comprising 40,327 patient files containing 40 hourly physiological parameters (e.g., HR, SpO2, Temp, MAP) and a binary SepsisLabel target.
+
+\subsection{Preprocessing Pipeline}
+To ensure robust model convergence, we designed a PyTorch-based preprocessing pipeline:
+\begin{enumerate}
+\item \textbf{Patient-Level Imputation}: Missing clinical values are imputed per patient stay using forward filling, backward filling, and zero-padding for completely missing columns.
+\item \textbf{Leakage-Free Scaling}: Standardization features are fit strictly on the training partition and applied to validation and testing splits.
+\item \textbf{Sliding Windowing}: Sequential parameters are segmented into 24-hour sliding blocks. Short-stay patient windows ($T < 24$h) are pre-padded with zero features.
+\end{enumerate}
+
+To verify dataset sanity, a quality assurance script audits tensor dimensions, checks for disjoint patient splits, and confirms that StandardScaler parameters do not leak from the training set.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.45\textwidth]{images/preprocessing_comparison.png}
+\caption{Vital signs before and after patient-level preprocessing (imputation and standard scaling).}
+\label{fig:preprocessing_comparison}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.45\textwidth]{images/preprocessing_padding.png}
+\caption{Zero pre-padding validation on a short-stay ICU patient ($T < 24$h) to form sequence blocks.}
+\label{fig:preprocessing_padding}
+\end{figure}
+
+\section{Centralized Baseline LSTM Model}
+We implement a Centralized LSTM model as our baseline benchmark. The network consists of a 2-layer LSTM with a hidden dimension of 64 and a dropout rate of 0.3, followed by a fully connected classification head.
+
+\subsection{Training Configurations}
+Given the extreme class imbalance in sepsis occurrences (only $\sim$2.5\% of the sliding windows are sepsis-positive), standard Binary Cross-Entropy loss would bias the model toward the negative class. We incorporate a dynamic positive class weight in our loss function:
+$$\mathcal{L}_{BCE} = - [ w_{pos} \cdot y \log \sigma(x) + (1-y) \log (1-\sigma(x)) ]$$
+where $w_{pos} = \frac{N_{neg}}{N_{pos}} \approx 37.17$. 
+We train the model using the Adam optimizer with a starting learning rate of $0.001$, step learning rate scheduler (decay factor $0.5$ every 10 epochs), and an early stopping patience of 8 epochs.
+
+\subsection{Inference Results}
+The baseline model training early-stopped at Epoch 9 as validation AUROC peaked at 0.8232. Final performance metrics on the test partition are summarized in Table~\ref{tab:metrics}.
+
+\begin{table}[htbp]
+\caption{Centralized LSTM Baseline Test Results}
+\label{tab:metrics}
+\centering
+\begin{tabular}{lc}
+\toprule
+\textbf{Metric} & \textbf{Baseline LSTM Score} \\
+\midrule
+Accuracy & 75.09\% \\
+Precision & 7.14\% \\
+Recall (Sensitivity) & 72.17\% \\
+F1 Score & 0.1300 \\
+\textbf{AUROC} & \textbf{0.8058} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The model achieves a high sensitivity (Recall = 72.17\%), catching a majority of organ failures in the test set. The low precision (7.14\%) is expected due to the extreme class imbalance and represents a common baseline behavior in medical alerts. Figure~\ref{fig:baseline_roc} presents the test ROC curve, showing a strong AUROC of 0.8058.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.4\textwidth]{images/baseline_roc.png}
+\caption{Receiver Operating Characteristic (ROC) curve of the baseline model on the test dataset.}
+\label{fig:baseline_roc}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.4\textwidth]{images/baseline_confusion_matrix.png}
+\caption{Test set confusion matrix heatmap.}
+\label{fig:baseline_confusion}
+\end{figure}
+
+\section{Future Roadmap: Federated Extension}
+This centralized baseline will serve as a comparison benchmark for our federated experiments:
+\begin{itemize}
+\item \textbf{FedAvg Split}: Patients will be split by their original hospital indicator ($Hospital_0$ and $Hospital_1$) to simulate decentralized client nodes.
+\item \textbf{FedProx Implementation}: We will evaluate the impact of local model constraint ($\mu$) on mitigating performance loss during local parameter deviations.
+\item \textbf{Ditto Personalization}: Ditto objective will balance global generalization with local hospital personalization.
+\item \textbf{FPDAF Deployment}: We will incorporate temporal self-attention layers, local personalized heads, and online CUSUM monitoring to dynamically detect and adapt to population drifts.
+\end{itemize}
+
+\section{Conclusion}
+This paper establishes the foundation for a Unified Explainable Federated Learning Framework. We preprocessed 40,327 clinical patient records, performed exploratory analyses, and evaluated a centralized baseline LSTM model that yields a solid test AUROC of 0.8058 and a sensitivity of 72.17\%. In subsequent phases, this model will be transitioned to simulated federated setups to optimize decentralized personalization and adapt to concept drifts.
+
+\begin{thebibliography}{00}
+\bibitem{b1} McMahan, B., Moore, E., Ramage, D., Hampson, S., \& y Arcas, B. A. (2017). Communication-efficient learning of deep networks from decentralized data. AISTATS.
+\bibitem{b2} Li, T., Sahu, A. K., Zaheer, M., Sanjabi, M., Talwalkar, A., \& Smith, V. (2020). Federated optimization in heterogeneous networks. MLSys.
+\bibitem{b3} Li, T., Hu, S., Beirami, A., \& Smith, V. (2021). Ditto: Fair and personalized federated learning. ICML.
+\end{thebibliography}
+
+\end{document}
