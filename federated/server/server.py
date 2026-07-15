@@ -173,6 +173,32 @@ class FederatedServer:
         global_state_dict = self.broadcast_global_model()
         
         for client in selected_clients:
+            # Check if CSSP drift bypass is active
+            if getattr(client, "skip_global_upload", False):
+                logger.info(f"  [Drift CSSP Active] Client {client.client_id} is bypassing consensus training to perform local personalization adaptation.")
+                if run_ditto:
+                    logger.info(f"Local personalization on client {client.client_id}...")
+                    pers_model = self.global_model.__class__(
+                        **{k: getattr(self.global_model, k, v) for k, v in [
+                            ('hidden_dim', 64), ('num_layers', 2)
+                        ]}
+                    ).to(self.device)
+                    # Retrieve custom training settings
+                    c_epochs = getattr(client, "custom_pers_epochs", 5)
+                    p_loss, p_acc = client.local_personalize(
+                        pers_model, 
+                        global_state_dict, 
+                        lam,
+                        freeze_backbone=True,
+                        custom_epochs=c_epochs
+                    )
+                    client_pers_losses[client.client_id] = p_loss
+                    client_pers_accs[client.client_id] = p_acc
+                    logger.info(f"  ├── Client {client.client_id} personalized update (CSSP). Val Loss: {p_loss:.4f}, Val Acc: {p_acc*100:.2f}%")
+                    # Reset skip flag after run completes
+                    client.skip_global_upload = False
+                continue
+
             logger.info(f"Local training on client {client.client_id}...")
             # Instantiate client local model (which is a clone shell)
             local_model = self.global_model.__class__(
@@ -204,12 +230,14 @@ class FederatedServer:
                 logger.info(f"  ├── Client {client.client_id} personalized update. Val Loss: {p_loss:.4f}, Val Acc: {p_acc*100:.2f}%")
             
         # 2. Server Parameter Aggregation
-        logger.info("Aggregating parameters via FedAvg...")
-        aggregated_weights = self.aggregate_parameters(local_updates)
-        
-        # 3. Global Model Update
-        self.update_global_model(aggregated_weights)
-        logger.info(f"Global model successfully updated.")
+        if len(local_updates) > 0:
+            logger.info(f"Aggregating parameters from {len(local_updates)} active clients via FedAvg...")
+            aggregated_weights = self.aggregate_parameters(local_updates)
+            # 3. Global Model Update
+            self.update_global_model(aggregated_weights)
+            logger.info(f"Global model successfully updated.")
+        else:
+            logger.info("No active consensus updates in this round. Global model remains unchanged.")
         
         return client_val_losses, client_val_accs, client_pers_losses, client_pers_accs
 
@@ -226,7 +254,9 @@ class FederatedServer:
         """
         Orchestrates full federated training across multiple rounds.
         """
-        if run_ditto:
+        if hasattr(self.global_model, "attention_query"):
+            model_filename = "best_fpdaf_global_model.pt"
+        elif run_ditto:
             model_filename = "best_ditto_global_model.pt"
         else:
             model_filename = "best_fedprox_model.pt" if mu > 0.0 else "best_global_model.pt"

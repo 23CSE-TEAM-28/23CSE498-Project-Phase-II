@@ -11,6 +11,8 @@ logger = logging.getLogger("federated.trainer")
 class LocalTrainer:
     """
     Handles local client model training and validation per communication round.
+    Supports standard LSTM, attention-based FPDAF models, proximal regularization (FedProx),
+    and client-side selective layer freezing (CSSP) for Ditto/FPDAF personalization.
     """
     def __init__(self, device: torch.device):
         self.device = device
