@@ -226,16 +226,81 @@ Under demographic and institutional Non-IID distributions, the global model expe
 \label{fig:fed_roc_cm}
 \end{figure}
 
+\section{Federated Learning via FedProx}
+To address the performance degradation caused by demographic and institutional data heterogeneity (Non-IID patient cohorts), we implemented the FedProx optimization framework \cite{li2020fedprox}. FedProx stabilizes federated aggregation by constraining local model updates to remain close to the global server parameters.
+
+\subsection{Proximal Regularization Formulation}
+FedProx modifies the local objective function by adding a proximal regularization term. The local loss $\mathcal{L}_{local}$ optimized by client $k$ during local training rounds is defined as:
+$$\mathcal{L}_{local}(w; w_{global}^t) = \mathcal{L}_{BCE}(w) + \frac{\mu}{2} \sum_{p} \| w_p - (w_{global}^t)_p \|_2^2$$
+where $\mathcal{L}_{BCE}$ is the dynamic positive class weighted Binary Cross-Entropy loss, $w_{global}^t$ is the broadcast global model weights at round $t$, $w$ is the local client weights, and $\mu \ge 0$ is the regularization coefficient. The proximal term restricts local updates from diverging significantly due to local data biases, enabling more robust global parameter averaging. We configure $\mu = 0.01$ based on our validation audits.
+
+\subsection{FedProx Optimization Loop}
+Training proceeds similarly to standard FedAvg:
+\begin{enumerate}
+\item \textbf{Broadcast}: Central server broadcasts $w_{global}^t$ to registered hospital nodes.
+\item \textbf{Local Regularization}: Clients initialize their local model using $w_{global}^t$ and train for $E=2$ epochs. At each step, the proximal regularized loss is computed and backpropagated.
+\item \textbf{Decentralized Aggregation}: Server collects local parameters and performs weighted averaging to broadcast the updated global model.
+\end{enumerate}
+
+Early stopping is monitored using global validation AUROC (patience = 6 rounds). 
+
+\subsection{Results and Three-Way Benchmarking}
+FedProx training early-stopped at round 8, with the validation AUROC peaking at **0.8062** in Round 2. Fig.~\ref{fig:fedprox_curves} presents validation loss and validation AUROC across rounds.
+
+Table~\ref{tab:threeway} summarizes the final global test performance of the Centralized Baseline, FedAvg, and FedProx models.
+
+\begin{figure}[htbp]
+\centering
+\begin{tabular}{cc}
+\includegraphics[width=0.23\textwidth]{images/fedprox_rounds_loss.png} &
+\includegraphics[width=0.23\textwidth]{images/fedprox_rounds_auroc.png} \\
+(a) Validation Loss & (b) Validation AUROC
+\end{tabular}
+\caption{FedProx global model performance across communication rounds.}
+\label{fig:fedprox_curves}
+\end{figure}
+
+\begin{table}[htbp]
+\caption{Three-Way Test Performance Comparison}
+\label{tab:threeway}
+\centering
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Metric} & \textbf{Centralized} & \textbf{FedAvg} & \textbf{FedProx} & \textbf{Diff (Prox-Avg)} \\
+\midrule
+Accuracy & 75.09\% & 75.94\% & 83.85\% & +7.91\% \\
+Precision & 7.14\% & 6.94\% & 9.36\% & +2.42\% \\
+Recall & 72.17\% & 67.19\% & 60.64\% & -6.55\% \\
+F1 Score & 0.1300 & 0.1259 & 0.1622 & +0.0363 \\
+\textbf{AUROC} & \textbf{0.8058} & \textbf{0.7844} & \textbf{0.8033} & \textbf{+0.0189} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The addition of the proximal penalty term ($\mu = 0.01$) successfully counteracts local client weight divergence. FedProx achieves a test AUROC of **0.8033** (an improvement of **+1.89\%** over FedAvg), narrowing the performance gap to within 0.25\% of the centralized model. Furthermore, FedProx achieves an F1-score of **0.1622** (outperforming the centralized baseline by +3.22\% and FedAvg by +3.63\%). The slight reduction in Recall is compensated by a substantial decrease in false alarms (Precision increases by 2.42\%). Fig.~\ref{fig:fedprox_roc_cm} plots the three-way ROC curve overlay and the FedProx confusion matrix.
+
+\begin{figure}[htbp]
+\centering
+\begin{tabular}{cc}
+\includegraphics[width=0.23\textwidth]{images/fedprox_three_way_roc.png} &
+\includegraphics[width=0.23\textwidth]{images/fedprox_confusion_matrix.png} \\
+(a) Three-Way ROC Curve & (b) Confusion Matrix
+\end{tabular}
+\caption{Three-way comparative test evaluation.}
+\label{fig:fedprox_roc_cm}
+\end{figure}
+
 \section{Future Roadmap: Personalization and Drift Adaptation}
-To close the accuracy gap observed in the FedAvg baseline, our future roadmap consists of:
+To further optimize performance and enable clients to adapt directly to their unique local cohorts, our future roadmap consists of:
 \begin{itemize}
-\item \textbf{FedProx}: Introducing a proximal regularization term to local optimization to constrain parameters near global weights, improving optimization stability on heterogeneous client splits.
-\item \textbf{Ditto}: Applying bi-level optimization to decouple global model aggregation from local personalized models, enabling clients to adapt to local demographic splits.
-\item \textbf{FPDAF (Proposed)}: Deploying self-attention heads for explainable time-series modeling, personalized classification layers (FedPer), and online Cumulative Sum (CUSUM) residuals monitoring to flag concept drift in clinical streams.
+\item \textbf{Ditto Personalization}: Deploying a bi-level optimization objective \cite{li2021ditto} to decouple global consensus aggregation from local personalized models ($v_k$), optimizing:
+$$\mathcal{L}_{ditto}(v_k; w^*) = \mathcal{L}_{BCE}(v_k) + \frac{\lambda}{2} \| v_k - w^* \|_2^2$$
+where $w^*$ is the global FedProx consensus weights.
+\item \textbf{FPDAF (Proposed)}: Integrating visual multi-head temporal self-attention layers to identify key diagnostic hourly patterns, decoupling personalized heads (FedPer) \cite{arivazhagan2020}, and running CUSUM control charts to detect population-level drifts online \cite{jothimurugesan2022}.
 \end{itemize}
 
 \section{Conclusion \& Project End Goal}
-This work demonstrates a complete decentralized pipeline for sepsis prediction using FedAvg. On a cohort of 40,327 ICU patients split into three Non-IID clients, the global model achieved a test AUROC of 0.7844 and a Recall of 67.19\%. The observed performance degradation highlights the necessity of personalization.
+This work evaluates a complete decentralized pipeline for early sepsis prediction. On a cohort of 40,327 patient stays across three Non-IID nodes, the FedProx model achieved a test AUROC of 0.8033 and an F1-score of 0.1622, narrowing the data heterogeneity gap.
 
 The ultimate end goal of this research project is to develop and validate a production-ready clinical early warning framework (FPDAF) deployable across heterogeneous hospital networks. By maintaining absolute data decentralization (addressing the privacy gap), dynamically personalizing models to adapt to local hospital cohorts (addressing the accuracy gap), detecting concept drift in patient populations in real-time, and rendering deep learning decisions explainable via temporal attention maps and SHAP scores (addressing the clinical trust gap), this framework aims to serve as a reliable, privacy-compliant bedside assistant that reduces sepsis mortality rates in intensive care units.
 
