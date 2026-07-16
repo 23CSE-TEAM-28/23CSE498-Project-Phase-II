@@ -98,7 +98,7 @@
     \end{columns}
 \end{frame}
 
-% --- PROPOSED FRAMEWORK: FPDAF WHAT/HOW/NOVELTY (3) ---
+% --- PROPOSED FRAMEWORK: FPDAF WHAT/HOW (3) ---
 \begin{frame}{Proposed Framework: FPDAF}
     \begin{block}{WHAT is FPDAF?}
         \scriptsize
@@ -122,22 +122,28 @@
             \end{column}
         \end{columns}
     \end{block}
+\end{frame}
+
+% --- DEDICATED SLIDE: OUR NOVELTY (4) ---
+\begin{frame}{Core Scientific \& Technical Novelties}
+    \begin{alertblock}{1. Multi-Head Attention Saliency (Clinical Explainability)}
+        \scriptsize
+        Integrates a 4-head query-key temporal self-attention mechanism to output dynamic sequence saliency weights, mapping exactly which hourly vitals contributed to Sepsis alarms at the bedside.
+    \end{alertblock}
     
-    \begin{alertblock}{OUR NOVELTY}
-        \begin{columns}[t]
-            \begin{column}{0.48\textwidth}
-                \scriptsize
-                \begin{itemize}
-                    \item \textbf{Multi-Head Attention:} Integrates 4-head query-key self-attention to output explainable bedside timelines.
-                \end{itemize}
-            \end{column}
-            \begin{column}{0.48\textwidth}
-                \scriptsize
-                \begin{itemize}
-                    \item \textbf{CSSP Protocol:} Freezes backbones dynamically upon drift triggers, saving \textbf{38\% network bandwidth} and cutting node adaptation to \textbf{6 minutes}.
-                \end{itemize}
-            \end{column}
-        \end{columns}
+    \begin{alertblock}{2. Online CUSUM Residual Neural Drift Monitor}
+        \scriptsize
+        Tracks local validation loss residuals round-by-round ($S_r > 3.0$). Concept drift is detected entirely client-side, avoiding constant full-parameter aggregation cycles.
+    \end{alertblock}
+    
+    \begin{alertblock}{3. Client-Side Selective Personalization (CSSP)}
+        \scriptsize
+        Freezes the shared BiLSTM/attention layers upon drift triggers to train local classifier heads exclusively.
+        \begin{itemize}
+            \scriptsize
+            \item Bypasses global parameter uploads, saving \textbf{38\% in communication bandwidth} (1.52 GB vs 2.48 GB).
+            \item Cuts client-side adaptation training time to \textbf{6 minutes} (down from 25 minutes).
+        \end{itemize}
     \end{alertblock}
 \end{frame}
 
