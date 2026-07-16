@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Heart, 
   Activity, 
@@ -16,7 +16,6 @@ import {
   Tooltip, 
   ResponsiveContainer 
 } from 'recharts';
-import { useEffect } from 'react';
 import { fetchPatientVitals } from '../services/mockDataService';
 import type { Patient, VitalSignRecord } from '../services/mockDataService';
 
@@ -40,48 +39,48 @@ export const PatientDetails: React.FC<PatientDetailsProps> = ({ patient, setActi
 
   if (isLoading || vitals.length === 0) {
     return (
-      <div className="p-8 flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="p-6 flex items-center justify-center min-h-[300px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-teal-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="p-8 space-y-6 overflow-y-auto max-h-[calc(100vh-4rem)]">
+    <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-3.5rem)]">
       {/* Navigation header */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <button
           onClick={() => setActiveTab('patients')}
-          className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition-colors"
+          className="p-1.5 rounded border border-slate-200 dark:border-[#1a2744] bg-white dark:bg-[#0d1829] text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#152238] transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
         </button>
         <div>
-          <h2 className="text-2xl font-extrabold text-slate-800 dark:text-white leading-tight">Patient Clinical Records</h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">ICU bed vital signs monitoring logs for Patient: {patient.id}</p>
+          <h2 className="text-lg font-semibold text-slate-800 dark:text-white leading-tight">Patient Clinical Records</h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Timeline monitoring data — ID: {patient.id}</p>
         </div>
       </div>
 
       {/* Bedside Info Card */}
-      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 rounded-2xl shadow-sm grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="space-y-1">
-          <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Admission ID</span>
-          <h4 className="font-extrabold text-slate-800 dark:text-white text-base">{patient.id}</h4>
+      <div className="bg-white dark:bg-[#0d1829] border border-slate-200 dark:border-[#1a2744] p-5 rounded-md grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="space-y-0.5">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Admission ID</span>
+          <h4 className="font-semibold text-sm text-slate-800 dark:text-white leading-tight">{patient.id}</h4>
           <span className="text-xs text-slate-500 dark:text-slate-400 block">{patient.age}y / {patient.gender}</span>
         </div>
 
-        <div className="space-y-1">
-          <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">ICU Ward Location</span>
-          <h4 className="font-bold text-slate-700 dark:text-slate-350 text-base">{patient.ward}</h4>
+        <div className="space-y-0.5">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">ICU Ward Location</span>
+          <h4 className="font-semibold text-sm text-slate-800 dark:text-slate-350 leading-tight">{patient.ward}</h4>
           <span className="text-xs text-slate-400 block">{patient.hospital}</span>
         </div>
 
         <div className="space-y-1">
-          <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Sepsis Alert Risk</span>
-          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Sepsis Alert Risk</span>
+          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold ${
             patient.riskLevel === 'High'
-              ? 'bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-400'
-              : 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400'
+              ? 'bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-400'
+              : 'bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400'
           }`}>
             {patient.riskLevel} Risk Profile
           </span>
@@ -90,43 +89,43 @@ export const PatientDetails: React.FC<PatientDetailsProps> = ({ patient, setActi
         <div className="flex items-center md:justify-end">
           <button
             onClick={() => setActiveTab('prediction')}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-blue-500/20 transition-all text-xs"
+            className="flex items-center gap-1 bg-teal-600 hover:bg-teal-700 text-white font-medium px-3.5 py-2 rounded transition-colors text-xs"
           >
-            Sepsis Predict Diagnostic <ArrowRight className="h-4 w-4" />
+            Sepsis Diagnostic <ArrowRight className="h-3.5 w-3.5" />
           </button>
         </div>
       </div>
 
       {/* Vital Metric Selection */}
-      <div className="flex gap-3 bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl w-fit">
+      <div className="flex gap-1.5 bg-slate-100 dark:bg-[#0a1323] p-1 rounded-md w-fit">
         <button
           onClick={() => setActiveMetric('all')}
-          className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-            activeMetric === 'all' ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm' : 'text-slate-500'
+          className={`px-3 py-1.5 rounded text-xs font-semibold transition-colors ${
+            activeMetric === 'all' ? 'bg-white dark:bg-[#152238] text-teal-600 dark:text-teal-400 shadow-sm' : 'text-slate-500'
           }`}
         >
-          Bedside Monitor (All)
+          All Vitals
         </button>
         <button
           onClick={() => setActiveMetric('hr')}
-          className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-            activeMetric === 'hr' ? 'bg-white dark:bg-slate-700 text-red-500 dark:text-white shadow-sm' : 'text-slate-500'
+          className={`px-3 py-1.5 rounded text-xs font-semibold transition-colors ${
+            activeMetric === 'hr' ? 'bg-white dark:bg-[#152238] text-red-500 dark:text-red-400 shadow-sm' : 'text-slate-500'
           }`}
         >
-          Heart Rate (HR)
+          Heart Rate
         </button>
         <button
           onClick={() => setActiveMetric('bp')}
-          className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-            activeMetric === 'bp' ? 'bg-white dark:bg-slate-700 text-orange-500 dark:text-white shadow-sm' : 'text-slate-500'
+          className={`px-3 py-1.5 rounded text-xs font-semibold transition-colors ${
+            activeMetric === 'bp' ? 'bg-white dark:bg-[#152238] text-amber-500 dark:text-amber-450 shadow-sm' : 'text-slate-500'
           }`}
         >
           Blood Pressure
         </button>
         <button
           onClick={() => setActiveMetric('spo2')}
-          className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-            activeMetric === 'spo2' ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm' : 'text-slate-500'
+          className={`px-3 py-1.5 rounded text-xs font-semibold transition-colors ${
+            activeMetric === 'spo2' ? 'bg-white dark:bg-[#152238] text-teal-500 dark:text-teal-450 shadow-sm' : 'text-slate-500'
           }`}
         >
           Oxygen (SpO₂)
@@ -134,24 +133,24 @@ export const PatientDetails: React.FC<PatientDetailsProps> = ({ patient, setActi
       </div>
 
       {/* Recharts Vital Graphs Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {(activeMetric === 'all' || activeMetric === 'hr') && (
-          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 rounded-2xl shadow-sm space-y-4">
+          <div className="bg-white dark:bg-[#0d1829] border border-slate-200 dark:border-[#1a2744] p-5 rounded-md space-y-3">
             <div className="flex justify-between items-center text-red-500">
-              <span className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
-                <Heart className="h-4 w-4 animate-pulse" /> Heart Rate (HR)
+              <span className="text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
+                <Heart className="h-4 w-4" /> Heart Rate (HR)
               </span>
-              <span className="text-sm font-extrabold">{vitals[vitals.length - 1].heartRate} bpm</span>
+              <span className="text-sm font-bold">{vitals[vitals.length - 1].heartRate} bpm</span>
             </div>
-            <div className="h-64">
+            <div className="h-56">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={vitals} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" className="dark:hidden" />
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" className="hidden dark:block" />
-                  <XAxis dataKey="hour" stroke="#94a3b8" fontSize={11} name="Hour" />
-                  <YAxis stroke="#94a3b8" fontSize={11} domain={[50, 150]} />
-                  <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '12px' }} />
-                  <Line type="monotone" dataKey="heartRate" stroke="#ef4444" strokeWidth={2.5} dot={false} activeDot={{ r: 6 }} />
+                <LineChart data={vitals} margin={{ top: 5, right: 5, left: -25, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" className="dark:hidden" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1a2744" className="hidden dark:block" />
+                  <XAxis dataKey="hour" stroke="#94a3b8" fontSize={10} />
+                  <YAxis stroke="#94a3b8" fontSize={10} domain={[50, 150]} />
+                  <Tooltip contentStyle={{ backgroundColor: '#0d1829', border: '1px solid #1a2744', borderRadius: '6px', fontSize: '11px' }} />
+                  <Line type="monotone" dataKey="heartRate" stroke="#ef4444" strokeWidth={1.5} dot={false} activeDot={{ r: 4 }} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -159,22 +158,22 @@ export const PatientDetails: React.FC<PatientDetailsProps> = ({ patient, setActi
         )}
 
         {(activeMetric === 'all' || activeMetric === 'bp') && (
-          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 rounded-2xl shadow-sm space-y-4">
-            <div className="flex justify-between items-center text-orange-500">
-              <span className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+          <div className="bg-white dark:bg-[#0d1829] border border-slate-200 dark:border-[#1a2744] p-5 rounded-md space-y-3">
+            <div className="flex justify-between items-center text-amber-500">
+              <span className="text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
                 <Activity className="h-4 w-4" /> Systolic Blood Pressure (SBP)
               </span>
-              <span className="text-sm font-extrabold">{vitals[vitals.length - 1].bloodPressure} mmHg</span>
+              <span className="text-sm font-bold">{vitals[vitals.length - 1].bloodPressure} mmHg</span>
             </div>
-            <div className="h-64">
+            <div className="h-56">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={vitals} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" className="dark:hidden" />
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" className="hidden dark:block" />
-                  <XAxis dataKey="hour" stroke="#94a3b8" fontSize={11} />
-                  <YAxis stroke="#94a3b8" fontSize={11} domain={[70, 160]} />
-                  <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '12px' }} />
-                  <Line type="monotone" dataKey="bloodPressure" stroke="#f97316" strokeWidth={2.5} dot={false} />
+                <LineChart data={vitals} margin={{ top: 5, right: 5, left: -25, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" className="dark:hidden" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1a2744" className="hidden dark:block" />
+                  <XAxis dataKey="hour" stroke="#94a3b8" fontSize={10} />
+                  <YAxis stroke="#94a3b8" fontSize={10} domain={[70, 160]} />
+                  <Tooltip contentStyle={{ backgroundColor: '#0d1829', border: '1px solid #1a2744', borderRadius: '6px', fontSize: '11px' }} />
+                  <Line type="monotone" dataKey="bloodPressure" stroke="#f97316" strokeWidth={1.5} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -182,22 +181,22 @@ export const PatientDetails: React.FC<PatientDetailsProps> = ({ patient, setActi
         )}
 
         {(activeMetric === 'all' || activeMetric === 'spo2') && (
-          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 rounded-2xl shadow-sm space-y-4">
-            <div className="flex justify-between items-center text-blue-500">
-              <span className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+          <div className="bg-white dark:bg-[#0d1829] border border-slate-200 dark:border-[#1a2744] p-5 rounded-md space-y-3">
+            <div className="flex justify-between items-center text-teal-500">
+              <span className="text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
                 <Stethoscope className="h-4 w-4" /> Oxygen Saturation (SpO₂)
               </span>
-              <span className="text-sm font-extrabold">{vitals[vitals.length - 1].spo2} %</span>
+              <span className="text-sm font-bold">{vitals[vitals.length - 1].spo2} %</span>
             </div>
-            <div className="h-64">
+            <div className="h-56">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={vitals} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" className="dark:hidden" />
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" className="hidden dark:block" />
-                  <XAxis dataKey="hour" stroke="#94a3b8" fontSize={11} />
-                  <YAxis stroke="#94a3b8" fontSize={11} domain={[85, 100]} />
-                  <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '12px' }} />
-                  <Line type="monotone" dataKey="spo2" stroke="#3b82f6" strokeWidth={2.5} dot={false} />
+                <LineChart data={vitals} margin={{ top: 5, right: 5, left: -25, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" className="dark:hidden" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1a2744" className="hidden dark:block" />
+                  <XAxis dataKey="hour" stroke="#94a3b8" fontSize={10} />
+                  <YAxis stroke="#94a3b8" fontSize={10} domain={[85, 100]} />
+                  <Tooltip contentStyle={{ backgroundColor: '#0d1829', border: '1px solid #1a2744', borderRadius: '6px', fontSize: '11px' }} />
+                  <Line type="monotone" dataKey="spo2" stroke="#0d9488" strokeWidth={1.5} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -205,22 +204,22 @@ export const PatientDetails: React.FC<PatientDetailsProps> = ({ patient, setActi
         )}
 
         {activeMetric === 'all' && (
-          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 rounded-2xl shadow-sm space-y-4">
+          <div className="bg-white dark:bg-[#0d1829] border border-slate-200 dark:border-[#1a2744] p-5 rounded-md space-y-3">
             <div className="flex justify-between items-center text-emerald-500">
-              <span className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+              <span className="text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
                 <Thermometer className="h-4 w-4" /> Body Temperature
               </span>
-              <span className="text-sm font-extrabold">{vitals[vitals.length - 1].temperature} °C</span>
+              <span className="text-sm font-bold">{vitals[vitals.length - 1].temperature} °C</span>
             </div>
-            <div className="h-64">
+            <div className="h-56">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={vitals} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" className="dark:hidden" />
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" className="hidden dark:block" />
-                  <XAxis dataKey="hour" stroke="#94a3b8" fontSize={11} />
-                  <YAxis stroke="#94a3b8" fontSize={11} domain={[35.0, 41.0]} />
-                  <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '12px' }} />
-                  <Line type="monotone" dataKey="temperature" stroke="#10b981" strokeWidth={2.5} dot={false} />
+                <LineChart data={vitals} margin={{ top: 5, right: 5, left: -25, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" className="dark:hidden" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1a2744" className="hidden dark:block" />
+                  <XAxis dataKey="hour" stroke="#94a3b8" fontSize={10} />
+                  <YAxis stroke="#94a3b8" fontSize={10} domain={[35.0, 41.0]} />
+                  <Tooltip contentStyle={{ backgroundColor: '#0d1829', border: '1px solid #1a2744', borderRadius: '6px', fontSize: '11px' }} />
+                  <Line type="monotone" dataKey="temperature" stroke="#10b981" strokeWidth={1.5} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   BarChart, 
   Bar, 
@@ -11,7 +11,6 @@ import {
   LineChart,
   Line
 } from 'recharts';
-import { useState, useEffect } from 'react';
 import { Award, Zap } from 'lucide-react';
 import { fetchModelComparison } from '../services/mockDataService';
 import type { ModelMetrics } from '../services/mockDataService';
@@ -45,56 +44,56 @@ export const ModelComparison: React.FC = () => {
 
   if (isLoading || comparisonMetrics.length === 0) {
     return (
-      <div className="p-8 flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="p-6 flex items-center justify-center min-h-[300px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-teal-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="p-8 space-y-8 overflow-y-auto max-h-[calc(100vh-4rem)]">
+    <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-3.5rem)]">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-extrabold text-slate-800 dark:text-white leading-tight">Decentralized Model Benchmark</h2>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Five-way metrics verification overlay comparing centralized baselines and personalized federated algorithms</p>
+        <h2 className="text-lg font-semibold text-slate-800 dark:text-white leading-tight">Decentralized Model Benchmark</h2>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Five-way metrics verification overlay comparing centralized baselines and personalized federated algorithms</p>
       </div>
 
       {/* Model Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
         {comparisonMetrics.map((model, i) => {
           const isProposed = model.name.includes('Proposed') || model.name.includes('FPDAF');
           return (
             <div 
               key={i}
-              className={`p-5 rounded-2xl shadow-sm border bg-white dark:bg-slate-800 flex flex-col justify-between transition-all ${
+              className={`p-4 rounded-md border bg-white dark:bg-[#0d1829] flex flex-col justify-between transition-colors ${
                 isProposed 
-                  ? 'border-red-500 ring-2 ring-red-500/20 scale-102 bg-gradient-to-b from-white to-red-50/10 dark:from-slate-800 dark:to-red-950/10' 
-                  : 'border-slate-200 dark:border-slate-700'
+                  ? 'border-teal-500 dark:border-teal-500/60 ring-2 ring-teal-500/10' 
+                  : 'border-slate-200 dark:border-[#1a2744]'
               }`}
             >
               <div>
-                <div className="flex justify-between items-start mb-2">
-                  <h4 className="font-extrabold text-xs text-slate-800 dark:text-white leading-tight pr-2">{model.name}</h4>
-                  {isProposed && <Award className="h-4 w-4 text-red-500 fill-red-500 shrink-0" />}
+                <div className="flex justify-between items-start mb-1.5">
+                  <h4 className="font-semibold text-xs text-slate-800 dark:text-white leading-tight pr-1.5">{model.name}</h4>
+                  {isProposed && <Award className="h-4.5 w-4.5 text-teal-500 shrink-0" />}
                 </div>
-                <span className="text-[10px] text-slate-400 block">Test set AUROC</span>
-                <span className={`text-2xl font-black block mt-1 ${isProposed ? 'text-red-500' : 'text-slate-750 dark:text-slate-300'}`}>
+                <span className="text-[10px] text-slate-450 block">Test set AUROC</span>
+                <span className={`text-xl font-bold block mt-0.5 ${isProposed ? 'text-teal-500' : 'text-slate-700 dark:text-slate-305'}`}>
                   {model.auroc.toFixed(4)}
                 </span>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700 text-[10px] space-y-1.5 font-medium text-slate-500 dark:text-slate-400">
+              <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-[#1a2744] text-[10px] space-y-1 font-semibold text-slate-500 dark:text-slate-400">
                 <div className="flex justify-between">
                   <span>Accuracy:</span>
-                  <span className="font-bold text-slate-700 dark:text-slate-350">{model.accuracy.toFixed(2)}%</span>
+                  <span className="font-bold text-slate-750 dark:text-slate-300">{model.accuracy.toFixed(2)}%</span>
                 </div>
                 <div className="flex justify-between">
                   <span>F1-Score:</span>
-                  <span className="font-bold text-slate-700 dark:text-slate-350">{model.f1.toFixed(4)}</span>
+                  <span className="font-bold text-slate-750 dark:text-slate-300">{model.f1.toFixed(4)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Comm Cost:</span>
-                  <span className="font-bold text-slate-750 dark:text-slate-350">{model.commCost}</span>
+                  <span className="font-bold text-slate-750 dark:text-slate-300">{model.commCost}</span>
                 </div>
               </div>
             </div>
@@ -103,50 +102,50 @@ export const ModelComparison: React.FC = () => {
       </div>
 
       {/* Graphs Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         
         {/* ROC Overlay curve */}
-        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 rounded-2xl shadow-sm space-y-6">
+        <div className="bg-white dark:bg-[#0d1829] border border-slate-200 dark:border-[#1a2744] p-5 rounded-md space-y-4">
           <div className="flex justify-between items-center">
-            <h4 className="font-bold text-slate-800 dark:text-white text-base">Five-Way ROC Curve Overlay</h4>
-            <span className="text-xs font-semibold text-slate-450 uppercase tracking-wider">Test Set Evaluator</span>
+            <h4 className="font-semibold text-sm text-slate-700 dark:text-slate-200">ROC Curve Comparison</h4>
+            <span className="text-[10px] font-bold text-slate-450 uppercase tracking-wide">Test Set</span>
           </div>
-          <div className="h-72">
+          <div className="h-60">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={rocCurveData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" className="dark:hidden" />
-                <CartesianGrid strokeDasharray="3 3" stroke="#334155" className="hidden dark:block" />
-                <XAxis dataKey="fpr" stroke="#94a3b8" fontSize={11} name="FPR" />
-                <YAxis stroke="#94a3b8" fontSize={11} domain={[0, 1.0]} />
-                <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '12px' }} />
-                <Legend wrapperStyle={{ fontSize: '10px', fontWeight: 500 }} />
-                <Line type="monotone" dataKey="centralized" stroke="#64748b" strokeWidth={2.5} name="Centralized" dot={false} />
-                <Line type="monotone" dataKey="fedavg" stroke="#e67e22" strokeWidth={2} name="FedAvg" dot={false} />
-                <Line type="monotone" dataKey="fedprox" stroke="#3498db" strokeWidth={2} name="FedProx" dot={false} />
-                <Line type="monotone" dataKey="ditto" stroke="#2ecc71" strokeWidth={2} name="Ditto P." dot={false} />
-                <Line type="monotone" dataKey="fpdaf" stroke="#e74c3c" strokeWidth={3} name="FPDAF P. (Proposed)" dot={false} />
+              <LineChart data={rocCurveData} margin={{ top: 5, right: 5, left: -25, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" className="dark:hidden" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#1a2744" className="hidden dark:block" />
+                <XAxis dataKey="fpr" stroke="#94a3b8" fontSize={10} />
+                <YAxis stroke="#94a3b8" fontSize={10} domain={[0, 1.0]} />
+                <Tooltip contentStyle={{ backgroundColor: '#0d1829', border: '1px solid #1a2744', borderRadius: '6px', fontSize: '11px' }} />
+                <Legend wrapperStyle={{ fontSize: '10px' }} />
+                <Line type="monotone" dataKey="centralized" stroke="#64748b" strokeWidth={1.5} name="Centralized" dot={false} />
+                <Line type="monotone" dataKey="fedavg" stroke="#f97316" strokeWidth={1.5} name="FedAvg" dot={false} />
+                <Line type="monotone" dataKey="fedprox" stroke="#3b82f6" strokeWidth={1.5} name="FedProx" dot={false} />
+                <Line type="monotone" dataKey="ditto" stroke="#10b981" strokeWidth={1.5} name="Ditto P." dot={false} />
+                <Line type="monotone" dataKey="fpdaf" stroke="#0d9488" strokeWidth={2} name="FPDAF Proposed" dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* F1 & Accuracy Bar Chart */}
-        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-6 rounded-2xl shadow-sm space-y-6">
+        <div className="bg-white dark:bg-[#0d1829] border border-slate-200 dark:border-[#1a2744] p-5 rounded-md space-y-4">
           <div className="flex justify-between items-center">
-            <h4 className="font-bold text-slate-800 dark:text-white text-base">Accuracy & F1 Score Comparison</h4>
-            <span className="text-xs font-semibold text-slate-450 uppercase tracking-wider">Metrics Overlay</span>
+            <h4 className="font-semibold text-sm text-slate-700 dark:text-slate-200">Accuracy & Recall Performance</h4>
+            <span className="text-[10px] font-bold text-slate-450 uppercase tracking-wide">Metrics</span>
           </div>
-          <div className="h-72">
+          <div className="h-60">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={comparisonMetrics} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" className="dark:hidden" />
-                <CartesianGrid strokeDasharray="3 3" stroke="#334155" className="hidden dark:block" />
+              <BarChart data={comparisonMetrics} margin={{ top: 5, right: 5, left: -25, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" className="dark:hidden" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#1a2744" className="hidden dark:block" />
                 <XAxis dataKey="name" stroke="#94a3b8" fontSize={9} tickFormatter={(name) => name.split(' ')[0]} />
-                <YAxis stroke="#94a3b8" fontSize={11} />
-                <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '12px' }} />
-                <Legend wrapperStyle={{ fontSize: '11px', fontWeight: 500 }} />
-                <Bar dataKey="accuracy" fill="#3b82f6" name="Accuracy (%)" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="recall" fill="#ef4444" name="Recall / Sensitivity (%)" radius={[4, 4, 0, 0]} />
+                <YAxis stroke="#94a3b8" fontSize={10} />
+                <Tooltip contentStyle={{ backgroundColor: '#0d1829', border: '1px solid #1a2744', borderRadius: '6px', fontSize: '11px' }} />
+                <Legend wrapperStyle={{ fontSize: '10px' }} />
+                <Bar dataKey="accuracy" fill="#0d9488" name="Accuracy (%)" radius={[3, 3, 0, 0]} />
+                <Bar dataKey="recall" fill="#ef4444" name="Recall / Sensitivity (%)" radius={[3, 3, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -155,37 +154,37 @@ export const ModelComparison: React.FC = () => {
       </div>
 
       {/* Communication & Time Efficiency Table */}
-      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-slate-200 dark:border-slate-700">
-          <h4 className="font-bold text-slate-800 dark:text-white text-base flex items-center gap-2">
-            <Zap className="h-5 w-5 text-amber-500 fill-amber-500/20" /> Efficiency and Communication Savings Telemetry
+      <div className="bg-white dark:bg-[#0d1829] border border-slate-200 dark:border-[#1a2744] rounded-md overflow-hidden">
+        <div className="p-4 border-b border-slate-200 dark:border-[#1a2744]">
+          <h4 className="font-semibold text-sm text-slate-800 dark:text-white flex items-center gap-1.5">
+            <Zap className="h-4 w-4 text-amber-500 fill-amber-500/10" /> Efficiency and Communication Savings Telemetry
           </h4>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-700">
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-400">Model Configuration</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-400">Total Comm Bandwidth</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-400">Aggregate Training Time</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-400">Drift Adaptation Latency</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-400">Privacy Safeguards</th>
+              <tr className="bg-slate-50 dark:bg-[#0a1323] border-b border-slate-200 dark:border-[#1a2744]">
+                <th className="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">Model Configuration</th>
+                <th className="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Comm Bandwidth</th>
+                <th className="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">Aggregate Training Time</th>
+                <th className="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">Drift Adaptation Latency</th>
+                <th className="px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">Privacy Safeguards</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200 dark:divide-slate-700 text-xs font-semibold">
+            <tbody className="divide-y divide-slate-100 dark:divide-[#1a2744] text-[11px] font-medium text-slate-500 dark:text-slate-400">
               {comparisonMetrics.map((model, i) => {
                 const isProposed = model.name.includes('Proposed') || model.name.includes('FPDAF');
                 return (
-                  <tr key={i} className={isProposed ? 'bg-red-500/5 dark:bg-red-950/10' : ''}>
-                    <td className="px-6 py-4 text-slate-800 dark:text-slate-200">{model.name}</td>
-                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{model.commCost}</td>
-                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{model.trainTime}</td>
-                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{model.driftAdaptTime}</td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                  <tr key={i} className={isProposed ? 'bg-teal-500/5 dark:bg-teal-950/10' : ''}>
+                    <td className="px-5 py-3 text-slate-800 dark:text-slate-200 font-semibold">{model.name}</td>
+                    <td className="px-5 py-3">{model.commCost}</td>
+                    <td className="px-5 py-3">{model.trainTime}</td>
+                    <td className="px-5 py-3">{model.driftAdaptTime}</td>
+                    <td className="px-5 py-3">
+                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-bold ${
                         model.name.includes('Centralized')
-                          ? 'bg-red-100 text-red-700 dark:bg-red-900/30'
-                          : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30'
+                          ? 'bg-red-50 dark:bg-red-955/20 text-red-700 dark:text-red-400'
+                          : 'bg-emerald-50 dark:bg-emerald-955/20 text-emerald-700 dark:text-emerald-450'
                       }`}>
                         {model.name.includes('Centralized') ? 'No (Data Shared)' : 'Yes (Decentralized)'}
                       </span>

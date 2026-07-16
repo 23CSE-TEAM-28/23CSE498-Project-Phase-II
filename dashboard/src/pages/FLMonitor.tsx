@@ -19,46 +19,45 @@ export const FLMonitor: React.FC = () => {
   ];
 
   return (
-    <div className="p-8 space-y-6 overflow-y-auto max-h-[calc(100vh-4rem)]">
+    <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-3.5rem)]">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-extrabold text-slate-800 dark:text-white leading-tight">Federated Learning Monitor</h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Live parameter aggregation pipeline showing consensus loops and communication status</p>
+          <h2 className="text-lg font-semibold text-slate-800 dark:text-white leading-tight">Federated Learning Monitor</h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Live parameter aggregation pipeline showing consensus loops and communication status</p>
         </div>
         <button
           onClick={() => setIsPlaying(!isPlaying)}
-          className={`flex items-center gap-2 font-bold px-4 py-2.5 rounded-xl text-xs transition-all shadow-md ${
-            isPlaying ? 'bg-amber-600 hover:bg-amber-700 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'
+          className={`flex items-center gap-1.5 font-medium px-3.5 py-1.5 rounded text-xs transition-colors shadow-sm ${
+            isPlaying ? 'bg-amber-600 hover:bg-amber-700 text-white' : 'bg-teal-600 hover:bg-teal-700 text-white'
           }`}
         >
-          {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-          {isPlaying ? 'Pause Workflow' : 'Play Live Loop'}
+          {isPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
+          {isPlaying ? 'Pause Loop' : 'Start Loop'}
         </button>
       </div>
 
       {/* Animation Canvas */}
-      <div className="bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-xl min-h-[400px] flex flex-col items-center justify-center relative overflow-hidden">
+      <div className="bg-[#0b1320] border border-slate-200 dark:border-[#1a2744] p-6 rounded-md min-h-[350px] flex flex-col items-center justify-center relative overflow-hidden">
         {/* Floating background grids */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-30"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20"></div>
 
-        <div className="w-full max-w-3xl flex flex-col md:flex-row justify-between items-center gap-12 relative z-10">
+        <div className="w-full max-w-2xl flex flex-col md:flex-row justify-between items-center gap-10 relative z-10">
           
           {/* Hospital Nodes (Left Side) */}
-          <div className="flex flex-col gap-8 w-full md:w-64">
+          <div className="flex flex-col gap-6 w-full md:w-56">
             {nodes.map((node, i) => (
-              <motion.div
+              <div
                 key={i}
-                whileHover={{ scale: 1.02 }}
-                className="bg-slate-800/80 backdrop-blur-md border border-slate-700 p-4 rounded-xl flex items-center gap-3.5 relative"
+                className="bg-[#0d1829]/90 backdrop-blur-sm border border-slate-700 p-3 rounded flex items-center gap-3 relative"
               >
-                <div className="p-3 bg-blue-950 text-blue-400 rounded-lg">
-                  <Database className="h-5 w-5" />
+                <div className="p-2 bg-teal-950/40 text-teal-400 rounded">
+                  <Database className="h-4 w-4" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-xs text-white leading-tight">{node.name}</h4>
+                  <h4 className="font-semibold text-xs text-white leading-tight">{node.name}</h4>
                   <span className="text-[10px] text-slate-400 block mt-0.5">{node.data}</span>
-                  <span className={`text-[9px] font-bold mt-1 inline-block ${
+                  <span className={`text-[9px] font-semibold mt-0.5 inline-block ${
                     node.status.includes('CSSP') ? 'text-amber-400' : 'text-emerald-400'
                   }`}>{node.status}</span>
                 </div>
@@ -68,7 +67,7 @@ export const FLMonitor: React.FC = () => {
                   <motion.div
                     initial={{ x: 0, opacity: 0 }}
                     animate={{ 
-                      x: [0, 200, 200, 0], 
+                      x: [0, 180, 180, 0], 
                       opacity: [0, 1, 1, 0] 
                     }}
                     transition={{ 
@@ -77,35 +76,32 @@ export const FLMonitor: React.FC = () => {
                       delay: i * 1.2,
                       ease: 'easeInOut'
                     }}
-                    className="absolute right-0 h-2.5 w-2.5 bg-blue-500 rounded-full shadow-lg shadow-blue-400/50 hidden md:block"
+                    className="absolute right-0 h-2 w-2 bg-teal-400 rounded-full shadow-lg shadow-teal-400/50 hidden md:block"
                   />
                 )}
-              </motion.div>
+              </div>
             ))}
           </div>
 
           {/* Central Connecting Hub */}
           <div className="flex items-center justify-center shrink-0">
-            <div className="h-16 w-16 bg-blue-950/50 border border-blue-500/30 rounded-full flex items-center justify-center animate-pulse">
-              <ArrowDownUp className="h-8 w-8 text-blue-400" />
+            <div className="h-12 w-12 bg-teal-950/30 border border-teal-500/20 rounded-full flex items-center justify-center">
+              <ArrowDownUp className="h-6 w-6 text-teal-400" />
             </div>
           </div>
 
           {/* Central Federated Server (Right Side) */}
-          <div className="w-full md:w-64">
-            <motion.div 
-              whileHover={{ scale: 1.02 }}
-              className="bg-slate-800/80 backdrop-blur-md border border-slate-700 p-6 rounded-2xl flex flex-col items-center text-center space-y-4 relative"
-            >
-              <div className="p-4 bg-blue-600/10 text-blue-400 rounded-2xl border border-blue-500/20">
-                <Server className="h-10 w-10 animate-bounce" />
+          <div className="w-full md:w-56">
+            <div className="bg-[#0d1829]/90 backdrop-blur-sm border border-slate-700 p-5 rounded flex flex-col items-center text-center space-y-3 relative">
+              <div className="p-3 bg-teal-650/10 text-teal-400 rounded border border-teal-550/20">
+                <Server className="h-8 w-8" />
               </div>
               <div>
-                <h3 className="font-bold text-sm text-white leading-tight">Central Aggregation Server</h3>
-                <span className="text-[10px] text-slate-400 mt-1 block">FPDAF Global Aggregator v1.0.4</span>
+                <h3 className="font-semibold text-xs text-white leading-tight">Central Aggregation Server</h3>
+                <span className="text-[9px] text-slate-400 mt-0.5 block">FPDAF Global Aggregator v1.0</span>
               </div>
-              <div className="bg-slate-900 border border-slate-700/60 px-4 py-2 rounded-xl text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
-                FedAvg Aggregation Active
+              <div className="bg-[#0a1323] border border-slate-700 px-3 py-1 rounded text-[9px] font-bold text-emerald-450 uppercase tracking-wide">
+                FedAvg Active
               </div>
 
               {/* Animated sliding packet from server back to clients */}
@@ -113,7 +109,7 @@ export const FLMonitor: React.FC = () => {
                 <motion.div
                   initial={{ x: 0, opacity: 0 }}
                   animate={{ 
-                    x: [0, -200, -200, 0], 
+                    x: [0, -180, -180, 0], 
                     opacity: [0, 1, 1, 0] 
                   }}
                   transition={{ 
@@ -122,37 +118,37 @@ export const FLMonitor: React.FC = () => {
                     delay: 2,
                     ease: 'easeInOut'
                   }}
-                  className="absolute left-0 h-2.5 w-2.5 bg-emerald-500 rounded-full shadow-lg shadow-emerald-400/50 hidden md:block"
+                  className="absolute left-0 h-2 w-2 bg-emerald-400 rounded-full shadow-lg shadow-emerald-400/50 hidden md:block"
                 />
               )}
-            </motion.div>
+            </div>
           </div>
 
         </div>
 
         {/* Dynamic loop label */}
-        <div className="mt-8 text-center text-xs text-slate-400 font-medium">
-          🔄 Consensus Loop: local epochs training → send weights → FedAvg aggregation → update global parameter weights.
+        <div className="mt-6 text-center text-[11px] text-slate-400 font-medium">
+          Consensus loop: local training iterations $\rightarrow$ parameter transfer $\rightarrow$ FedAvg aggregation $\rightarrow$ parameter update.
         </div>
       </div>
 
       {/* Network telemetry stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-5 rounded-2xl shadow-sm space-y-1">
-          <span className="text-xs text-slate-400 block font-medium">Total Comm Rounds</span>
-          <h3 className="font-black text-2xl text-slate-800 dark:text-white">10 / 10</h3>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-white dark:bg-[#0d1829] border border-slate-200 dark:border-[#1a2744] p-4 rounded-md space-y-0.5">
+          <span className="text-[10px] text-slate-450 block font-medium uppercase tracking-wide">Comm Rounds</span>
+          <h3 className="font-bold text-lg text-slate-800 dark:text-white">10 / 10</h3>
         </div>
-        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-5 rounded-2xl shadow-sm space-y-1">
-          <span className="text-xs text-slate-400 block font-medium">Node Participation</span>
-          <h3 className="font-black text-2xl text-slate-800 dark:text-white">100% (3/3 nodes)</h3>
+        <div className="bg-white dark:bg-[#0d1829] border border-slate-200 dark:border-[#1a2744] p-4 rounded-md space-y-0.5">
+          <span className="text-[10px] text-slate-450 block font-medium uppercase tracking-wide">Participation</span>
+          <h3 className="font-bold text-lg text-slate-800 dark:text-white">100% (3/3)</h3>
         </div>
-        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-5 rounded-2xl shadow-sm space-y-1">
-          <span className="text-xs text-slate-400 block font-medium">CSSP Bypasses Saved</span>
-          <h3 className="font-black text-2xl text-emerald-500">38% Bandwidth</h3>
+        <div className="bg-white dark:bg-[#0d1829] border border-slate-200 dark:border-[#1a2744] p-4 rounded-md space-y-0.5">
+          <span className="text-[10px] text-slate-450 block font-medium uppercase tracking-wide">CSSP Bandwidth</span>
+          <h3 className="font-bold text-lg text-emerald-500">38% Saved</h3>
         </div>
-        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-5 rounded-2xl shadow-sm space-y-1">
-          <span className="text-xs text-slate-400 block font-medium">Aggregation Latency</span>
-          <h3 className="font-black text-2xl text-slate-800 dark:text-white">1.8s avg</h3>
+        <div className="bg-white dark:bg-[#0d1829] border border-slate-200 dark:border-[#1a2744] p-4 rounded-md space-y-0.5">
+          <span className="text-[10px] text-slate-450 block font-medium uppercase tracking-wide">Latency avg</span>
+          <h3 className="font-bold text-lg text-slate-800 dark:text-white">1.8s</h3>
         </div>
       </div>
     </div>
