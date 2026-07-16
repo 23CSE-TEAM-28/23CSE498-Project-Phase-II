@@ -200,3 +200,50 @@ def get_ablation():
               "auroc": r["auroc"]
             }
     return formatted
+
+@app.get("/api/stats")
+def get_stats():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Compute live stats from DB
+    cursor.execute("SELECT COUNT(*) FROM patients")
+    total = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT COUNT(*) FROM patients WHERE status = 'Critical'")
+    high = cursor.fetchone()[0]
+    
+    cursor.execute("""
+        SELECT COUNT(*) FROM patients p 
+        JOIN predictions pr ON p.id = pr.patient_id 
+        WHERE pr.fpdaf >= 0.35 AND pr.fpdaf <= 0.65
+    """)
+    medium = cursor.fetchone()[0]
+    
+    low = total - high - medium
+    conn.close()
+    
+    return {
+      "total_patients": total,
+      "high_risk": high,
+      "medium_risk": medium,
+      "low_risk": low,
+      "admissions": [
+        { "time": "08:00", "admissions": 3, "discharges": 2 },
+        { "time": "10:00", "admissions": 5, "discharges": 4 },
+        { "time": "12:00", "admissions": 10, "discharges": 6 },
+        { "time": "14:00", "admissions": 8, "discharges": 9 },
+        { "time": "16:00", "admissions": 12, "discharges": 7 },
+        { "time": "18:00", "admissions": 15, "discharges": 10 },
+        { "time": "20:00", "admissions": 9, "discharges": 11 }
+      ],
+      "trends": [
+        { "date": "Jul 10", "sepsisAlerts": 3, "fpdafBypasses": 1 },
+        { "date": "Jul 11", "sepsisAlerts": 5, "fpdafBypasses": 2 },
+        { "date": "Jul 12", "sepsisAlerts": 4, "fpdafBypasses": 1 },
+        { "date": "Jul 13", "sepsisAlerts": 7, "fpdafBypasses": 3 },
+        { "date": "Jul 14", "sepsisAlerts": 10, "fpdafBypasses": 4 },
+        { "date": "Jul 15", "sepsisAlerts": 8, "fpdafBypasses": 2 },
+        { "date": "Jul 16", "sepsisAlerts": 15, "fpdafBypasses": 5 }
+      ]
+    }
