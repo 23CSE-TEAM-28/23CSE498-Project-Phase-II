@@ -8,7 +8,8 @@ import {
   Network, 
   BarChart3, 
   FileText, 
-  LogOut 
+  LogOut,
+  HeartPulse
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -31,18 +32,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
   ].filter(item => item.roles.includes(userRole));
 
   return (
-    <aside className="w-64 bg-slate-900 text-slate-100 flex flex-col min-h-screen border-r border-slate-800">
-      {/* Clinician Brand */}
-      <div className="p-6 border-b border-slate-800 flex items-center gap-3">
-        <Activity className="h-8 w-8 text-blue-500 animate-pulse" />
+    <aside className="w-56 bg-[#0a1628] text-slate-300 flex flex-col min-h-screen border-r border-[#152238] shrink-0">
+      {/* Brand */}
+      <div className="px-5 py-5 border-b border-[#152238] flex items-center gap-2.5">
+        <HeartPulse className="h-6 w-6 text-teal-400" />
         <div>
-          <h1 className="font-bold text-lg leading-tight text-white">FPDAF CDSS</h1>
-          <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">ICU Decision Alert</span>
+          <h1 className="font-semibold text-sm leading-tight text-white tracking-wide">FPDAF CDSS</h1>
+          <span className="text-[10px] text-slate-500 font-medium uppercase tracking-widest">ICU Monitor</span>
         </div>
       </div>
 
-      {/* Nav Menu */}
-      <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+      {/* Nav */}
+      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -50,27 +51,27 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
+              className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-[13px] font-medium transition-colors ${
                 isActive 
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' 
-                  : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'
+                  ? 'bg-teal-600/15 text-teal-400 border-l-2 border-teal-400' 
+                  : 'text-slate-400 hover:bg-white/5 hover:text-slate-200 border-l-2 border-transparent'
               }`}
             >
-              <Icon className="h-5 w-5" />
+              <Icon className="h-4 w-4 shrink-0" />
               {item.label}
             </button>
           );
         })}
       </nav>
 
-      {/* System Footer */}
-      <div className="p-4 border-t border-slate-800">
+      {/* Footer */}
+      <div className="px-3 py-3 border-t border-[#152238]">
         <button 
           onClick={onLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-400 hover:bg-red-950/20 hover:text-red-400 transition-colors"
+          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-[13px] font-medium text-slate-500 hover:bg-red-950/30 hover:text-red-400 transition-colors"
         >
-          <LogOut className="h-5 w-5" />
-          {userRole === 'Doctor' ? 'Clinician Sign Out' : 'Admin Sign Out'}
+          <LogOut className="h-4 w-4" />
+          {userRole === 'Doctor' ? 'Sign Out' : 'Admin Logout'}
         </button>
       </div>
     </aside>

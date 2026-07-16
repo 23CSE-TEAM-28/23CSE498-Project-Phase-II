@@ -66,7 +66,7 @@ function App() {
   }
 
   return (
-    <div className="flex h-screen w-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors overflow-hidden">
+    <div className="flex h-screen w-screen bg-slate-100 dark:bg-[#080e1a] text-slate-800 dark:text-slate-200 transition-colors overflow-hidden">
       {/* Sidebar navigation */}
       <Sidebar 
         userRole={user.role}
@@ -84,7 +84,7 @@ function App() {
           setTheme={setTheme} 
         />
 
-        <main className="flex-1 overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors">
+        <main className="flex-1 overflow-hidden bg-slate-100 dark:bg-[#080e1a] transition-colors">
           {hasConnectionError ? (
             <div className="p-8 flex flex-col items-center justify-center min-h-[400px] text-center space-y-4">
               <AlertTriangle className="h-16 w-16 text-amber-500 animate-bounce" />
