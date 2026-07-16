@@ -9,17 +9,36 @@ import {
   ResponsiveContainer, 
   Cell 
 } from 'recharts';
-import { Eye, ShieldAlert, BookOpen, AlertTriangle } from 'lucide-react';
-import { Patient, getAttentionTimeline, getFeatureImportance } from '../services/mockDataService';
+import { useState, useEffect } from 'react';
+import { ShieldAlert, BookOpen, AlertTriangle } from 'lucide-react';
+import { fetchPatientAttention, getFeatureImportance } from '../services/mockDataService';
+import type { Patient, AttentionData } from '../services/mockDataService';
 
 interface ExplainableAIProps {
   patient: Patient;
 }
 
 export const ExplainableAI: React.FC<ExplainableAIProps> = ({ patient }) => {
-  const attentionData = getAttentionTimeline(patient.id);
+  const [attentionData, setAttentionData] = useState<AttentionData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const featureImportance = getFeatureImportance();
   const isHighRisk = patient.riskLevel === 'High';
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchPatientAttention(patient.id).then((data) => {
+      setAttentionData(data);
+      setIsLoading(false);
+    });
+  }, [patient.id]);
+
+  if (isLoading || attentionData.length === 0) {
+    return (
+      <div className="p-8 flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-8 space-y-6 overflow-y-auto max-h-[calc(100vh-4rem)]">
@@ -129,7 +148,6 @@ export const ExplainableAI: React.FC<ExplainableAIProps> = ({ patient }) => {
             <div className="h-56">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
-                  layout=" Sherman"
                   layout="vertical"
                   data={featureImportance}
                   margin={{ top: 10, right: 20, left: 30, bottom: 0 }}
