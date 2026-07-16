@@ -69,10 +69,10 @@ By exploiting time-series clinical signals, the framework addresses three main c
 
 | Feature | Description |
 | :--- | :--- |
-| **Federated Collaboration (FedAvg)** | Joint model training using decentralized parameter aggregation. |
-| **Personalized Adaptation (FedPer)** | Base layers are aggregated globally while classification layers adapt locally to clinical demographics. |
-| **Concept Drift Detection (CUSUM)** | Monitors forecasting residuals to flag population distribution shifts. |
-| **Explainable AI (SHAP & Attention)** | Interprets LSTM decisions using attention importance heatmaps and SHAP impact scores. |
+| **Federated Collaboration (FedAvg/FedProx)** | Joint model training using decentralized parameter aggregation and proximal constraints. |
+| **Personalized Adaptation (Ditto & CSSP)** | Bi-level optimization decoupling global models from client heads, combined with Client-Side Selective Personalization (CSSP) under drift. |
+| **Concept Drift Detection (CUSUM)** | Monitors validation loss residuals in real-time to flag institutional patient population shifts. |
+| **Explainable AI (Multi-Head Attention)** | Saliency visualization extracting temporal timeline importance across 24-hour ICU sequence segments. |
 | **Data Quality Verification** | Automatic testing pipeline verifying imputer, scaling, and sequence padding consistency. |
 
 ---
@@ -88,9 +88,10 @@ By exploiting time-series clinical signals, the framework addresses three main c
 │
 ├── notebooks/                  # Jupyter notebooks for EDA & experiments
 ├── preprocessing/              # Data cleaning, imputation & scaling pipelines
-├── models/                     # Model architectures (LSTM, Attention, Personalized Heads)
-├── federated/                  # FedAvg, FedPer, aggregation & client simulation logic
-├── explainability/             # SHAP, Attention visualization & Explainable AI modules
+├── models/                     # Unidirectional and bidirectional baseline models
+├── federated/                  # FedAvg, FedProx, Ditto personalization, CUSUM drift detection, and local training
+├── backend/                    # FastAPI REST API database endpoints loading PyTorch model checkpoints
+├── dashboard/                  # React Vite clinician dashboard workstation overlay
 ├── evaluation/                 # Metrics, AUC-ROC, confusion matrices & benchmarking
 ├── results/                    # Generated reports, plots and evaluation outputs
 │
@@ -106,10 +107,10 @@ By exploiting time-series clinical signals, the framework addresses three main c
 
 ## Technology Stack
 * **Deep Learning Framework**: PyTorch
-* **Data Processing & ML**: Pandas, NumPy, Scikit-learn
-* **Explainability Modules**: SHAP (Shapley Additive exPlanations)
-* **Visualization**: Matplotlib, Seaborn
-* **Reporting**: ReportLab (automated PDF audit generators)
+* **Data Processing & ML**: Pandas, NumPy, Scikit-learn, Joblib
+* **ICU Workstation API Backend**: FastAPI, Uvicorn, SQLite3
+* **Clinician Web Dashboard**: React (TypeScript), Vite, Tailwind CSS v4, Recharts, Framer Motion
+* **Academic Deliverables**: pdfTeX (LaTeX Madrid Beamer templates)
 
 ---
 
@@ -158,17 +159,18 @@ Raw Dataset (.psv) ──> Imputation (FFill/BFill) ──> Scaling (StandardSca
 
 ## Current Project Status
 
-| Module / Milestone | Status | Expected Completion |
+| Module / Milestone | Status | Completion Date |
 | :--- | :---: | :---: |
 | Repository & Workspace Setup | ✅ Completed | July 2026 |
 | Exploratory Data Analysis (EDA) | ✅ Completed | July 2026 |
 | PyTorch Preprocessing Pipeline | ✅ Completed | July 2026 |
 | Preprocessing Quality Audit | ✅ Completed | July 2026 |
-| Centralized Baseline LSTM Model | 🚧 In Progress | July 2026 |
-| Federated Aggregation (FedAvg) | ⏳ Planned | August 2026 |
-| Personalized Local Heads (FedPer) | ⏳ Planned | August 2026 |
-| CUSUM Drift Detection Module | ⏳ Planned | September 2026 |
-| SHAP & Attention Explainability | ⏳ Planned | October 2026 |
+| Centralized Baseline LSTM Model | ✅ Completed | July 2026 |
+| Federated Baselines (FedAvg/FedProx) | ✅ Completed | August 2026 |
+| Personalized Local Heads (Ditto Optimization) | ✅ Completed | August 2026 |
+| CUSUM Drift Detection & CSSP Module | ✅ Completed | September 2026 |
+| Multi-Head Attention Explainability (XAI) | ✅ Completed | October 2026 |
+| Clinician CDSS Workstation Dashboard | ✅ Completed | October 2026 |
 
 ---
 
