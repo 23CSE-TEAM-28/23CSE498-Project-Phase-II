@@ -1,14 +1,33 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { 
   FileDown, 
   BookOpen, 
   Brain, 
-  HelpCircle, 
-  TrendingUp, 
-  ShieldAlert 
+  HelpCircle,
+  Award
 } from 'lucide-react';
+import { fetchAblationData } from '../services/mockDataService';
 
 export const ResearchInsights: React.FC = () => {
+  const [ablationData, setAblationData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchAblationData().then((data) => {
+      setAblationData(data);
+      setIsLoading(false);
+    });
+  }, []);
+
+  if (isLoading || !ablationData) {
+    return (
+      <div className="p-8 flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-8 space-y-8 overflow-y-auto max-h-[calc(100vh-4rem)]">
       {/* Title */}
@@ -106,9 +125,65 @@ export const ResearchInsights: React.FC = () => {
               S_r = max(0, S_(r-1) + e_r - κ)
             </div>
             <p className="text-[10px] text-slate-450 leading-normal">
-              Accumulates validation error residuals $e_r = \mathcal{L}_{val, r} - \mu_0$ (slack $\kappa = 0.02$). If $S_r &gt; 3.0$, a local drift trigger freezes the feature backbone and updates classifier parameters.
+              {"Accumulates validation error residuals e_r = L_(val, r) - μ_0 (slack κ = 0.02). If S_r > 3.0, a local drift trigger freezes the feature backbone and updates classifier parameters."}
             </p>
           </div>
+        </div>
+      </div>
+
+      {/* Ablation Table */}
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm overflow-hidden">
+        <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex items-center gap-2">
+          <Award className="h-5 w-5 text-blue-500" />
+          <h4 className="font-bold text-slate-800 dark:text-white text-base">Ablation Study Metrics Table</h4>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse text-xs font-semibold">
+            <thead>
+              <tr className="bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200 dark:border-slate-700">
+                <th className="px-6 py-4 text-slate-450 uppercase tracking-wider">Ablation Configuration</th>
+                <th className="px-6 py-4 text-slate-450 uppercase tracking-wider">Accuracy</th>
+                <th className="px-6 py-4 text-slate-450 uppercase tracking-wider">Precision</th>
+                <th className="px-6 py-4 text-slate-450 uppercase tracking-wider">Recall</th>
+                <th className="px-6 py-4 text-slate-450 uppercase tracking-wider">F1 Score</th>
+                <th className="px-6 py-4 text-slate-450 uppercase tracking-wider">AUROC</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
+              <tr>
+                <td className="px-6 py-4 text-slate-800 dark:text-slate-200">FPDAF w/o CUSUM</td>
+                <td className="px-6 py-4 text-slate-50">{ablationData.fpdaf_no_cusum.accuracy.toFixed(2)}%</td>
+                <td className="px-6 py-4 text-slate-50">{ablationData.fpdaf_no_cusum.precision.toFixed(2)}%</td>
+                <td className="px-6 py-4 text-slate-50">{ablationData.fpdaf_no_cusum.recall.toFixed(2)}%</td>
+                <td className="px-6 py-4 text-slate-50">{ablationData.fpdaf_no_cusum.f1_score.toFixed(4)}</td>
+                <td className="px-6 py-4 text-slate-50">{ablationData.fpdaf_no_cusum.auroc.toFixed(4)}</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-slate-800 dark:text-slate-200">FPDAF w/o Attention</td>
+                <td className="px-6 py-4 text-slate-50">{ablationData.fpdaf_no_attention.accuracy.toFixed(2)}%</td>
+                <td className="px-6 py-4 text-slate-50">{ablationData.fpdaf_no_attention.precision.toFixed(2)}%</td>
+                <td className="px-6 py-4 text-slate-50">{ablationData.fpdaf_no_attention.recall.toFixed(2)}%</td>
+                <td className="px-6 py-4 text-slate-50">{ablationData.fpdaf_no_attention.f1_score.toFixed(4)}</td>
+                <td className="px-6 py-4 text-slate-50">{ablationData.fpdaf_no_attention.auroc.toFixed(4)}</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-slate-800 dark:text-slate-200">FPDAF w/o Personalization</td>
+                <td className="px-6 py-4 text-slate-50">{ablationData.fpdaf_no_personalization.accuracy.toFixed(2)}%</td>
+                <td className="px-6 py-4 text-slate-50">{ablationData.fpdaf_no_personalization.precision.toFixed(2)}%</td>
+                <td className="px-6 py-4 text-slate-50">{ablationData.fpdaf_no_personalization.recall.toFixed(2)}%</td>
+                <td className="px-6 py-4 text-slate-50">{ablationData.fpdaf_no_personalization.f1_score.toFixed(4)}</td>
+                <td className="px-6 py-4 text-slate-50">{ablationData.fpdaf_no_personalization.auroc.toFixed(4)}</td>
+              </tr>
+              <tr className="bg-red-500/5 dark:bg-red-950/10">
+                <td className="px-6 py-4 text-slate-800 dark:text-slate-200 font-bold">Full FPDAF (Proposed)</td>
+                <td className="px-6 py-4 text-slate-800 dark:text-slate-200 font-bold">{ablationData.full_fpdaf.accuracy.toFixed(2)}%</td>
+                <td className="px-6 py-4 text-slate-800 dark:text-slate-200 font-bold">{ablationData.full_fpdaf.precision.toFixed(2)}%</td>
+                <td className="px-6 py-4 text-slate-800 dark:text-slate-200 font-bold">{ablationData.full_fpdaf.recall.toFixed(2)}%</td>
+                <td className="px-6 py-4 text-slate-800 dark:text-slate-200 font-bold">{ablationData.full_fpdaf.f1_score.toFixed(4)}</td>
+                <td className="px-6 py-4 text-slate-800 dark:text-slate-200 font-bold">{ablationData.full_fpdaf.auroc.toFixed(4)}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
