@@ -102,6 +102,23 @@ Our proposed FPDAF framework introduces three key scientific novelties that addr
     \item \textbf{Client-Side Selective Personalization (CSSP):} Upon CUSUM drift detection, the framework triggers CSSP to freeze the shared temporal LSTM layers and fine-tune only the local classification head. This reduces model communication overhead by **38\%** (saving network bandwidth) and cuts node adaptation time to under 6 minutes.
 \end{enumerate}
 
+\section{Clinical Profile of ICU Sepsis \& Significance}
+To establish the clinical context and motivation for this project, we outline the disease pathology and the specific public health challenge it presents:
+\begin{itemize}
+    \item \textbf{What Sepsis is:} Sepsis is a life-threatening medical emergency caused by the body's extreme, systemic immune response to an infection, which ends up damaging its own tissues, blood vessels, and vital organs.
+    \item \textbf{Why it is Dangerous:} If not diagnosed immediately, it rapidly progresses to Septic Shock, leading to multi-organ failure, a sudden drop in blood pressure, and high mortality rates.
+    \item \textbf{The Clinical Time-Window Challenge:} Sepsis is notoriously difficult to detect early because its initial symptoms resemble general infections. However, every single hour of delayed treatment increases a patient's risk of death by approximately \textbf{8\%}.
+    \item \textbf{Role of Our Project:} By continuously analyzing ICU vital signals, our FPDAF early-warning system acts as an early-warning radar system, alerting doctors hours before a patient clinically deteriorates, giving clinicians a vital head-start to administer antibiotics and fluids.
+\end{itemize}
+
+\subsection{Sepsis Burden \& Impact in India}
+Sepsis represents a critical public health crisis in India, necessitating real-time, automated early warning systems inside intensive care units:
+\begin{itemize}
+    \item \textbf{National Mortality \& Case Load:} Sepsis accounts for approximately \textbf{2.9 to 3.0 million deaths} annually in India from an estimated \textbf{11.0 to 11.3 million active cases} \cite{kalakoti2025fedxai}. It contributes to nearly \textbf{30\% (3 in 10)} of all deaths in the country.
+    \item \textbf{Indian ICU Mortality Rates:} Severe sepsis patients admitted to Indian intensive care units (ICUs) face an extremely high mortality rate ranging from \textbf{34\% to over 50\%} \cite{dusing2025sepsis}. This is heavily compounded by rising rates of antimicrobial resistance (AMR), which makes early diagnostic windows crucial.
+\end{itemize}
+
+
 \section{Data Engineering \& Imputation Pipeline}
 The system targets the \textbf{PhysioNet Challenge 2019 Sepsis dataset}. Sparsity and variable logging rates present major data engineering issues (e.g., heart rate logged hourly, while bilirubin is sampled daily).
 Our completed pipeline processes raw patient files (`.psv`) as follows:
