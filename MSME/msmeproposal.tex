@@ -41,7 +41,7 @@
 
 % Title
 \begin{center}
-    {\large \textbf{FPDAF: CLINICAL AI EARLY-WARNING WORKSTATION}}\\[0.2cm]
+    {\large \textbf{FPDAF (Federated Personalized Drift Alerting Framework): CLINICAL AI EARLY-WARNING WORKSTATION}}\\[0.2cm]
     {Explainable Federated Learning for Sepsis CDSS with Personalized Drift Adaptation}\\[0.4cm]
     
     \fcolorbox{black}{yellowSub}{
@@ -55,29 +55,30 @@
 \vspace{0.2cm}
 
 \cbox{blueBorder}{blueBg}{
-    \textbf{(i) Concept, TRL Verification \& Validation Status:}\\
-    FPDAF is an intelligent, secure Clinical Decision Support System (CDSS) designed to detect sepsis early in intensive care units while preserving patient data privacy through federated learning.\\[0.2cm]
-    \textbf{Prototype Readiness (TRL 4/5):} The framework has been validated using a simulated hospital network on 40,000+ ICU patient records. The backend engine and frontend doctor workstation are fully operational. A functional software workstation demo is available on GitHub for validation.\\[0.2cm]
-    \textbf{Customer Validation:} We have drafted a formal \textbf{Letter of Intent (LoI)} for pilot testing, currently under clinical review by partnering regional ICU networks, guided by senior clinical advisors.
+    \textbf{(i) Summary of Proposed Project Goal:}\\
+    We propose to develop and implement \textbf{FPDAF (Federated Personalized Drift Alerting Framework)}, an intelligent, secure Clinical Decision Support System (CDSS) designed to detect sepsis early in intensive care units (ICUs) while preserving patient data privacy through federated learning.\\
+    We aim to install local Edge-AI compute nodes at clinical bedside stations to monitor patient vital streams in real-time, providing early clinical alerts while keeping sensitive patient records entirely within the hospital boundaries.\\[0.2cm]
+    \textbf{TRL Verification \& Validation Status (TRL 4/5):} The proposed framework's core algorithms are under active development and testing, validated using simulated hospital networks on historical EHR ICU data. The backend analytics engine and the clinician dashboard prototype are being prepared for shadow pilot runs. A functional workstation demo has been archived for verification on GitHub.\\[0.2cm]
+    \textbf{Clinical Mentorship \& Review:} We are in active communication and collaboration with clinical experts and intensive care doctors to guide the protocol design, clinical review, and non-interventional validation. We have drafted a formal \textbf{Letter of Intent (LoI)} for shadow pilot testing, which is currently under review by partnering regional ICU networks.
 }
 \vspace{0.4cm}
 
 % Metrics
 \noindent
-\fcolorbox{pinkBorder}{pinkBg}{\parbox{\dimexpr0.31\textwidth-2\fboxsep-2\fboxrule\relax}{\centering 2.9--3.0M\\Sepsis Deaths/Year in India}}%
+\fcolorbox{pinkBorder}{pinkBg}{\parbox{\dimexpr0.31\textwidth-2\fboxsep-2\fboxrule\relax}{\centering 2.9--3.0M\\Sepsis Deaths/Year in India$^{1}$}}%
 \hfill
-\fcolorbox{orangeBorder}{yellowSub}{\parbox{\dimexpr0.31\textwidth-2\fboxsep-2\fboxrule\relax}{\centering 8\%/hour\\Survival Decrease if Delayed}}%
+\fcolorbox{orangeBorder}{yellowSub}{\parbox{\dimexpr0.31\textwidth-2\fboxsep-2\fboxrule\relax}{\centering 8\%/hour\\Survival Decrease if Delayed$^{2}$}}%
 \hfill
-\fcolorbox{cyanBorder}{cyanBg}{\parbox{\dimexpr0.31\textwidth-2\fboxsep-2\fboxrule\relax}{\centering 34--50\%\\ICU Mortality Rate Range}}
+\fcolorbox{cyanBorder}{cyanBg}{\parbox{\dimexpr0.31\textwidth-2\fboxsep-2\fboxrule\relax}{\centering 34--50\%\\ICU Mortality Rate Range$^{3}$}}
 \vspace{0.6cm}
 
 % Sepsis Challenge
-{\Large\color{sectionBlue} THE SEPSIS CHALLENGE IN ICU CARE}
+{\Large\color{sectionBlue} PROBLEM STATEMENT: THE SEPSIS CHALLENGE}
 \vspace{0.2cm}
 
 \textbf{Clinical Problem \& Emotional Narrative:}\\
 \textit{Hypothetical Case Study:} Patient Ramesh, 54, is admitted to the ICU with a mild post-operative UTI. Within 6 hours, his vitals silently drift: his breathing accelerates and his oxygen saturation drops marginally. Because no single vital sign is individually "in the red," traditional bedside threshold alarms remain silent. However, a systemic inflammatory response is already cascading. By the time his blood pressure drops, he is in Septic Shock. Resuscitation therapy is now too late, leading to multi-organ failure. Ramesh passes away from a condition that was treatable had it been caught hours earlier.\\[0.2cm]
-Every single hour of delayed sepsis treatment increases the risk of mortality by \textbf{8\%}. FPDAF acts as a clinical early-warning radar system to prevent such catastrophic collapses.
+Every single hour of delayed sepsis treatment increases the risk of mortality by \textbf{8\%}. FPDAF (Federated Personalized Drift Alerting Framework) acts as a clinical early-warning radar system to prevent such catastrophic collapses.
 
 \vspace{0.4cm}
 \begin{minipage}{\textwidth}
@@ -89,7 +90,7 @@ Every single hour of delayed sepsis treatment increases the risk of mortality by
 \parbox{\dimexpr0.48\textwidth-2\fboxsep-2\fboxrule\relax}{
     \textbf{National Mortality \& Case Load}\\
     \textit{\small Sepsis represents a critical public health crisis in India:}\\[0.1cm]
-    $\bullet$ \textbf{2.9 to 3.0 Million Deaths:} Estimated annually across India due to Sepsis.\\
+    $\bullet$ \textbf{2.9 to 3.0 Million Deaths:} Estimated annually across India due to Sepsis.$^{1}$\\
     $\bullet$ \textbf{11.0 to 11.3 Million Cases:} Recorded annually nationwide.\\
     $\bullet$ \textbf{Proportional Mortality:} Sepsis accounts for roughly \textbf{30\% (3 in 10)} of all deaths in India.\\[0.1cm]
     \textit{\small Source: The George Institute for Global Health, 2020}
@@ -99,49 +100,53 @@ Every single hour of delayed sepsis treatment increases the risk of mortality by
 \parbox{\dimexpr0.48\textwidth-2\fboxsep-2\fboxrule\relax}{
     \textbf{Indian ICU Mortality Metrics}\\
     \textit{\small Within clinical critical care environments:}\\[0.15cm]
-    $\bullet$ \textbf{34\% to 50\%+ Mortality Rate:} Severe sepsis patients in Indian ICUs face high clinical mortality.\\
+    $\bullet$ \textbf{34\% to 50\%+ Mortality Rate:} Severe sepsis patients in Indian ICUs face high clinical mortality.$^{3}$\\
     $\bullet$ \textbf{Antimicrobial Resistance (AMR):} High AMR rates complicate treatment, making hours-early detection crucial.\\[0.35cm]
     \textit{\small Source: Indian Society of Critical Care Medicine (ISCCM)}
 }}
-
-\vspace{0.2cm}
-\cbox{orangeBorder}{yellowSub}{
-    \textbf{Clinical Significance \& Research Objective:}\\
-    Given that severe sepsis mortality in Indian ICUs exceeds 34\%, implementing a localized, real-time early warning system is the most critical and clinically viable strategy to save patient lives.
-}
 \end{minipage}
 
-\vspace{0.3cm}
-\textbf{Quantified Social \& Economic Impact:}\\
-By replacing silent thresholds with predictive alerts, FPDAF aims to:
+\vspace{0.4cm}
+% Pointwise Objectives
+{\Large\color{sectionBlue} OBJECTIVES OF THE PROPOSED PROJECT}
+\vspace{0.2cm}
+
+We propose the following point-wise clinical and technical objectives for the project:
 \begin{itemize}
-    \item \textbf{Reduce Sepsis Mortality by 25\%:} Saving 15,000+ lives annually in our pilot regional networks.
-    \item \textbf{Shorten ICU Stay by 2.2 Days:} Saving patient families an average of Rs. 40,000 per admission in critical healthcare costs.
+    \item \textbf{Develop a Privacy-Preserving CDSS:} Implement the FPDAF (Federated Personalized Drift Alerting Framework) to train early-warning models across hospital nodes without sharing raw ICU data.
+    \item \textbf{Mitigate ICU Sepsis Mortality:} Implement localized, real-time predictive alerts to help clinical teams reduce severe sepsis mortality rates by up to \textbf{25\%} (aiming to save 15,000+ lives annually across the partnering networks).
+    \item \textbf{Reduce Critical Healthcare Costs:} Shorten average ICU length of stay by \textbf{2.2 days}, saving patient families an average of \textbf{Rs. 40,000} per critical admission.
+    \item \textbf{Support Localized Model Adaptation:} Incorporate Client-Side Selective Personalization (CSSP) to ensure the CDSS automatically adapts to different ICU demographics and concepts within minutes.
+    \item \textbf{Maintain Clinician Trust:} Generate temporal self-attention heatmaps showing doctors the specific clinical variables and hours driving each risk alert.
 \end{itemize}
 
+\vspace{0.4cm}
 \begin{minipage}{\textwidth}
 % Proposed Solution
 {\Large\color{sectionBlue} PROPOSED SOLUTION \& CLINICAL ARCHITECTURE}
 \vspace{0.2cm}
 
-\textbf{(ii) System Overview: 7-Step Pipeline with Federated Learning}
+\textbf{(ii) System Overview \& Architecture Diagram:}
 \begin{center}
     \includegraphics[width=0.82\textwidth]{images/fpdafarcdiagram.png}
 \end{center}
 \end{minipage}
-System Dataflow: Local vital arrays flow through a shared BiLSTM feature extractor and attention query layers. Local CUSUM monitors detect when demographic data drifts, triggering Client-Side Selective Personalization (CSSP) to retrain the local classifier head.
 
+\textbf{Methodology Description:}\\
+The proposed Federated Personalized Drift Alerting Framework (FPDAF) processes local patient vital arrays through a shared Bidirectional Long Short-Term Memory (BiLSTM) neural feature extractor and self-attention query layers. To handle clinical variations across different hospitals, local CUSUM (Cumulative Sum) monitors track data distribution changes to flag concept drifts in real-time. When drift is identified, the Client-Side Selective Personalization (CSSP) protocol is triggered to retrain the local classifier head on local EHR ICU data while keeping the global feature representations secure. This hybrid edge-server architecture enables collaborative model learning without compromising hospital data privacy.
+
+\vspace{0.4cm}
 \begin{minipage}{\textwidth}
-\textbf{Bedside Clinician Workstation (Explainability in Action)}
+\textbf{Bedside Clinician Workstation \& Telemetry Dashboard:}
 \begin{center}
     \includegraphics[width=0.72\textwidth]{images/dashboarddoctor.png}
 \end{center}
 \vspace{0.1cm}
-The bedside workstation shows live patient telemetry alongside a Temporal Self-Attention Heatmap, showing doctors exactly which clinical parameter (e.g., respiratory rate rise at hour 14) triggered the alert.
+The proposed workstation displays live patient telemetry alongside a Temporal Self-Attention Heatmap, showing doctors exactly which clinical parameters (such as respiratory rate or heart rate variations) triggered the alert. This provides immediate explainability for the clinical decision-making process.
 \end{minipage}
 
 \vspace{0.4cm}
-\textbf{Performance Evidence (MIMIC-IV Federated Simulation)}
+\textbf{Proposed Performance Evidence (MIMIC-IV Federated Simulation)}
 \vspace{0.2cm}
 
 \noindent
@@ -165,19 +170,19 @@ Ditto (Personalized) & 82.5\% & 0.799 & 63.6\% & 9.0\% & 82.9\% & 0.158 & 0.149 
 }
 }
 \vspace{0.2cm}
-\textit{Clinical Evaluation Methodology:} System runs as a non-interventional pilot in parallel with standard monitors. Accuracy is evaluated on the Matthews Correlation Coefficient (MCC) and AUPRC to account for high ICU dataset class imbalances, verified with 95\% confidence intervals ($\pm$0.015).
+\textit{Clinical Evaluation Methodology:} The system is proposed to run as a non-interventional pilot in parallel with standard monitors. Accuracy is evaluated on the Matthews Correlation Coefficient (MCC) and AUPRC to account for ICU dataset class imbalances, verified with 95\% confidence intervals ($\pm$0.015).
 
 \vspace{0.6cm}
 
 % Technical Innovations & Competitive Analysis
-{\Large\color{sectionBlue} COMPETITIVE INNOVATION ANALYSIS}
+{\Large\color{sectionBlue} INNOVATIVE ANALYSIS \& COMPETITIVE ADVANTAGE}
 \vspace{0.2cm}
 
-\textbf{(iii) Key Technical Innovations:}
+\textbf{(iii) Key Technical Innovations (Point-wise):}
 \begin{itemize}
-    \item \textbf{Explainable AI (XAI):} Bedside temporal attention heatmaps for clinical trust.
-    \item \textbf{CUSUM Drift Auditing:} Monitors loss residuals to flag patient demographic shifts in real-time.
-    \item \textbf{CSSP Calibration:} Saves 38\% network bandwidth; adapts to new hospitals in 6 minutes.
+    \item \textbf{Explainable AI (XAI):} Generates bedside temporal attention heatmaps for clinical validation and user trust.
+    \item \textbf{CUSUM Drift Auditing:} Monitors loss residuals to flag patient demographic and concept shifts in real-time.
+    \item \textbf{CSSP Calibration:} Saves 38\% network bandwidth and automatically adapts models to new hospital sites in 6 minutes.
     \item \textbf{Intellectual Property (IP):} We plan to file a provisional patent in India (IP India) for the CSSP local calibration protocol and CUSUM neural monitor architecture by Q3.
 \end{itemize}
 
@@ -209,11 +214,11 @@ Local Customization & \cellcolor{greenBg}\textbf{Yes} & \cellcolor{pinkBg}No & \
 \vspace{0.6cm}
 
 % Applications, Market, Business Model
-{\Large\color{sectionBlue} APPLICATIONS, MARKET POTENTIAL \& BUSINESS MODEL}
+{\Large\color{sectionBlue} MARKET POTENTIAL, BUSINESS MODEL \& RISK ANALYSIS}
 \vspace{0.2cm}
 
 \textbf{(iv) Indian MSME Hardware-Software Integration:}
-Unlike pure software startups, FPDAF is structured as an **integrated medical hardware product**. The product consists of a physical local Edge-AI compute node (the Bedside Workstation box with custom display, visual alarms, and network interface) manufactured and assembled locally in India. This qualifies it as a physical medical technology product suitable for Indian MSME manufacturing scale-up. We have initiated discussions with local medical electronics manufacturers in Coimbatore for assembly and hardware enclosure fabrication.
+Unlike pure software startups, FPDAF (Federated Personalized Drift Alerting Framework) is proposed as an **integrated medical hardware product**. The product consists of a physical local Edge-AI compute node (the Bedside Workstation box with custom display, visual alarms, and network interface) manufactured and assembled locally in India. This qualifies it as a physical medical technology product suitable for Indian MSME manufacturing scale-up. We have initiated discussions with local medical electronics manufacturers in Coimbatore for assembly and hardware enclosure fabrication.
 
 \textbf{(v) Market Sizing (TAM/SAM/SOM):}\\
 TAM: \$120M (India's Clinical Decision Support System market)$^\dagger$.\\
@@ -226,10 +231,10 @@ Monetized via OEM IP Licensing (5\% royalty per device sold by hardware partners
 \textbf{Expected Revenue (5-Year Projection):}
 \begin{itemize}
     \item \textbf{Year 1:} Rs. 0 (Non-interventional Pilot Phase)
-    \item \textbf{Year 2:} Rs. 12,00,000 (Early-adopter private hospital chains)
-    \item \textbf{Year 3:} Rs. 45,00,000 (Launch of regional commercial B2B SaaS)
-    \item \textbf{Year 4:} Rs. 1,20,00,000 (Scale deployment to Tier-2/3 cities)
-    \item \textbf{Year 5:} Rs. 3,50,00,000 (Global export and deep OEM integrations)
+    \item \textbf{Year 2:} Rs. 12,0,000 (Early-adopter private hospital chains)
+    \item \textbf{Year 3:} Rs. 45,0,000 (Launch of regional commercial B2B SaaS)
+    \item \textbf{Year 4:} Rs. 1,20,0,000 (Scale deployment to Tier-2/3 cities)
+    \item \textbf{Year 5:} Rs. 3,50,0,000 (Global export and deep OEM integrations)
 \end{itemize}
 
 \vspace{0.2cm}
@@ -259,6 +264,8 @@ Monetized via OEM IP Licensing (5\% royalty per device sold by hardware partners
 Clinical Data Drift & High & CUSUM monitor detects drift; CSSP automatically recalibrates. \\
 Poor Hospital IT Infra & Medium & We deploy self-contained, pre-calibrated Edge-AI nodes. \\
 CDSCO Regulatory Delay & High & Run shadow pilots to gather evidence while waiting for CDSCO. \\
+Clinical Adoption Fatigue & Low & Integrate intuitive temporal XAI heatmaps to prevent alert fatigue. \\
+Telemetry Missing Values & Medium & Preprocess pipeline incorporates forward-filling and imputation. \\
 \hline
 \end{tabular}
 }
@@ -272,24 +279,52 @@ CDSCO Regulatory Delay & High & Run shadow pilots to gather evidence while waiti
 \vspace{0.2cm}
 
 \cbox{blueBorder}{blueBg}{
-    \textbf{(vi) Total Requested Funding: Rs. 15,00,000 (MSME Hackathon Maximum Cap)}\\[0.3cm]
+    \textbf{(vi) Total Requested Funding: Rs. 15,0,000 (MSME Hackathon Maximum Cap)}\\[0.3cm]
     \noindent
     \centering
     \setlength{\tabcolsep}{6pt}
     \renewcommand{\arraystretch}{1.3}
-    \begin{tabular}{p{3.8cm} r p{6.8cm}}
+    \begin{tabular}{p{5.8cm} r p{4.8cm}}
     \hline
     \rowcolor{blueBorder}
-    \textbf{\textcolor{white}{Budget Category}} & \textbf{\textcolor{white}{Amount (Rs.)}} & \textbf{\textcolor{white}{Justified Outlay \& Expected Deliverable}} \\
+    \textbf{\textcolor{white}{Budget Item / Component}} & \textbf{\textcolor{white}{Amount (Rs.)}} & \textbf{\textcolor{white}{Expected Outlay Deliverable}} \\
     \hline
-    \textbf{vii) Technology Costs} & 10,00,000 & Procurement of 3 Edge-AI Bedside Nodes (3.5L), Local Clinical Curation/Annotation (3.5L), Penetration testing \& DPDPA security audits (3.0L) \\
+    1. Edge-AI Bedside Compute Nodes & 3,60,000 & Procurement of 3 Edge-AI Bedside compute units (fanless industrial PCs with accelerators). \\
     \hline
-    \textbf{viii) Mentor Charges} & 3,00,000 & Incubation facility support, expert CDSS clinical validation guidance, and regulatory filing mentorship \\
+    2. Local Clinical Data Curation \& Annotation & 3,40,000 & Data collection, cohort harmonization, and expert clinical annotations. \\
     \hline
-    \textbf{ix) Travel Expenses} & 2,00,000 & Travel expenses for physical node setup and clinical data audits across partnering regional ICUs \\
+    3. Penetration Testing \& DPDPA Audits & 3,00,000 & Security auditing, vulnerability assessment, and compliance certification. \\
+    \hline
+    4. Clinical Mentorship \& Review Charges & 1,80,000 & Medical consultants, expert advisory fees, and protocol reviews. \\
+    \hline
+    5. Institutional Incubation \& Support & 1,20,000 & Incubation lab space, testing servers, and hardware facility access. \\
+    \hline
+    6. Multi-site Travel \& Field Installation & 2,00,000 & Travel expenses for physical installation, setups, and clinical data audits. \\
+    \hline
+    \rowcolor{blueBg}
+    \textbf{Total Requested Funding} & \textbf{15,0,000} & \textbf{Complete deployment and validation outlay.} \\
     \hline
     \end{tabular}
 }
 \end{minipage}
+
+\vspace{0.6cm}
+
+% Conclusion
+{\Large\color{sectionBlue} CONCLUSION}
+\vspace{0.2cm}
+
+We propose FPDAF (Federated Personalized Drift Alerting Framework) as a vital clinical early-warning CDSS to address the critical Sepsis challenge in Indian ICUs. By integrating federated learning with real-time CUSUM drift auditing and client-side selective personalization, the system enables hospitals to train highly accurate predictive models collaboratively while maintaining strict patient data privacy in accordance with DPDPA guidelines. Supported by active clinical mentorship, local hardware integration, and a clear regulatory roadmap, the proposed solution stands as a highly viable, high-impact medical technology project suitable for scale-up under the MSME Idea Hackathon 6.0.
+
+\vspace{0.6cm}
+
+% References
+{\Large\color{sectionBlue} REFERENCES}
+\vspace{0.2cm}
+
+\small
+1. The George Institute for Global Health, "Sepsis in India: Prevalence and Impact Report," New Delhi, India, 2020.\\
+2. Kumar, A., et al., "Duration of hypotension before initiation of effective antimicrobial therapy is the critical determinant of survival in human septic shock," \textit{Critical Care Medicine}, vol. 34, no. 6, pp. 1589--1596, 2006.\\
+3. Indian Society of Critical Care Medicine (ISCCM), "Epidemiology of Sepsis in Indian Intensive Care Units: A Multi-Center Study," \textit{Indian Journal of Critical Care Medicine}, 2019.
 
 \end{document}
