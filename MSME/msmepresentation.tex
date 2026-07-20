@@ -180,7 +180,7 @@
         \begin{column}{0.48\textwidth}
             \begin{block}{\textcolor{neonCyan}{A.} Multi-Head Temporal XAI}
                 \scriptsize
-                Standard models are black-boxes. We embed temporal self-attentions that display exactly which specific hours and vital trends (e.g. SpO$_2$ drop at hour 14) influenced the alert.
+                Standard models are black-boxes. We embed temporal self-attentions that provide explainable insights into which specific hours and vital trends (e.g. SpO$_2$ drop at hour 14) influenced the alert.
             \end{block}
             
             \begin{block}{\textcolor{neonTeal}{B.} CUSUM Concept Drift Auditing}
@@ -229,8 +229,8 @@
                 The proposed software systems are under active development:
                 \begin{itemize}
                     \item \textbf{Validated Backend:} Algorithms are validated using simulated hospital networks on historical EHR ICU data.
+                    \item \textbf{Public Health Ready:} Architected for scalable deployment and pilot validation within Indian public healthcare environments.
                     \item \textbf{Proposed Workstations:} Clinician dashboards and telemetry portals are prepared for local bedside deployment.
-                    \item \textbf{Evaluation Demo:} A functional software workstation demo is available on GitHub for evaluation and validation.
                 \end{itemize}
             \end{block}
         \end{column}
@@ -295,7 +295,7 @@
                 Unlike pure software startups, FPDAF (Federated Personalized Drift Alerting Framework) is proposed as an \textbf{integrated medical hardware product}:
                 \begin{itemize}
                     \item \textbf{Physical Node Box:} A bedside workstation cabinet containing custom local display, visual/audio alarms, and network interface.
-                    \item \textbf{Local Assembly Partner:} We have initiated discussions with local medical electronics manufacturers in Coimbatore for assembly and enclosure fabrication.
+                    \item \textbf{Local Assembly Partner:} Discussions initiated with local embedded electronics and medical device MSMEs in Coimbatore for PCB assembly and edge hardware enclosure fabrication.
                 \end{itemize}
             \end{block}
         \end{column}
@@ -313,10 +313,10 @@
 \end{frame}
 
 % --- SLIDE 11: MARKET POTENTIAL & BUSINESS MODEL ---
-\begin{frame}{Market Potential \& Business Model}
+\begin{frame}{Market Sizing \& Government Adoption}
     \begin{columns}[t]
         \begin{column}{0.48\textwidth}
-            \begin{block}{\textcolor{neonCyan}{[Growth]} TAM/SAM/SOM Sizing}
+            \begin{block}{\textcolor{neonCyan}{TAM/SAM/SOM Sizing}}
                 \scriptsize
                 Detailed market mapping highlights scaling capacity:
                 \begin{itemize}
@@ -325,16 +325,27 @@
                     \item \textbf{SOM: Rs. 40 Crores} (Regional hospital networks targetable in Years 1--2 representing 12 chains).
                 \end{itemize}
             \end{block}
+            
+            \begin{block}{\textcolor{neonTeal}{Government Adoption}}
+                \scriptsize
+                Designed for scalable deployment across public healthcare infrastructure:
+                \begin{itemize}
+                    \item \textbf{Potential Users:} AIIMS, State Medical Colleges, Government Hospitals, District Hospitals, Corporate Chains, Tele-ICU Networks.
+                \end{itemize}
+            \end{block}
         \end{column}
         
         \begin{column}{0.48\textwidth}
-            \begin{block}{\textcolor{neonTeal}{[Revenue]} Commercialization Strategy}
+            \begin{block}{\textcolor{neonAmber}{Commercialization \& Scaling Strategy}}
                 \scriptsize
-                We employ a scalable B2B software-as-a-service (SaaS) architecture:
-                \begin{itemize}
-                    \item \textbf{Revenue Streams:} B2B SaaS subscriptions (Rs. 15,000/bed/year), OEM IP licensing royalties (5\%), and maintenance contracts (15\%).
-                    \item \textbf{Incubation Plan:} Leveraging Host Institute incubation support to launch local clinical pilot programs.
-                \end{itemize}
+                We scale through a 5-Phase commercialization strategy:
+                \begin{enumerate}
+                    \item \textbf{Phase 1:} Pilot hospital validation.
+                    \item \textbf{Phase 2:} Regional network deployment.
+                    \item \textbf{Phase 3:} Government procurement integration.
+                    \item \textbf{Phase 4:} Scaling to private hospital networks.
+                    \item \textbf{Phase 5:} Global export scaling.
+                \end{enumerate}
             \end{block}
         \end{column}
     \end{columns}
@@ -356,7 +367,7 @@
                 \vspace{0.2cm}
                 \flushleft\tiny
                 \begin{itemize}
-                    \item 3 Edge-AI bedside compute nodes (3.6L).
+                    \item Prototyping component fabrication, edge hardware lease, and embedded assembly (3.6L).
                     \item Data curation \& annotation (3.4L).
                     \item Penetration testing \& DPDPA audits (3.0L).
                 \end{itemize}
@@ -432,8 +443,8 @@
                 \scriptsize
                 Sepsis is the leading cause of ICU mortality. Early bedside warning directly:
                 \begin{itemize}
-                    \item Saves patient lives through early clinical fluid and antibiotic intervention.
-                    \item Cuts down ICU average length of stay (ALoS), saving costs for middle/low-income families.
+                    \item Improves patient clinical outcomes through early clinical fluid and antibiotic intervention.
+                    \item Reduces ICU average length of stay (ALoS), helping to potentially reduce ICU treatment costs.
                 \end{itemize}
             \end{block}
         \end{column}
@@ -442,9 +453,9 @@
             \begin{block}{\textcolor{neonCyan}{[Alignment]} National Mission Alignment}
                 \scriptsize
                 \begin{itemize}
-                    \item \textbf{Aatmanirbhar Bharat:} Completely local design, eliminating dependency on imported clinical systems.
+                    \item \textbf{Aatmanirbhar Bharat:} Completely local design, reducing dependency on imported clinical systems.
                     \item \textbf{Viksit Bharat @2047:} Empowers rural and semi-urban health centers with low-cost clinical intelligence.
-                    \item \textbf{High Feasibility:} Functional prototype developed, compiled, and validated on actual PhysioNet cohorts.
+                    \item \textbf{High Feasibility:} Functional prototype developed, compiled, and validated on actual public EHR cohorts.
                 \end{itemize}
             \end{block}
         \end{column}
