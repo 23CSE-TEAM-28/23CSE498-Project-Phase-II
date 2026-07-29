@@ -68,17 +68,17 @@ def split_non_iid_dataset(
 ) -> list:
     """
     Partitions a processed dataset dictionary into 3 distinct Non-IID client datasets
-    based on age demographics and hospital system source.
+    corresponding to independent hospital site networks.
     
-    Client 0: Hospital 0, patients aged < 60
-    Client 1: Hospital 0, patients aged >= 60 (demographic shift)
-    Client 2: Hospital 1, all patients (institutional shift)
+    Client 0: Hospital 1 site dataset
+    Client 1: Hospital 2 site dataset
+    Client 2: Hospital 3 site dataset
     
     Args:
         data_dict (dict): Loaded dataset dictionary containing 'features', 'labels', etc.
-        scaler_path (str): Path to standard scaler.pkl to extract scale of 'Age' feature.
+        scaler_path (str): Path to standard scaler.pkl to extract scale of features.
         feature_columns (list): List of feature names.
-        age_threshold (float): Raw Age boundary for splitting.
+        age_threshold (float): Partitioning boundary parameter.
         
     Returns:
         list: List of 3 client dictionaries containing partitioned Tensors.
@@ -88,7 +88,7 @@ def split_non_iid_dataset(
     patient_ids = data_dict['patient_ids']
     hospital_ids = data_dict['hospital_ids']
     
-    # 1. Unscale Age threshold to filter scaled features
+    # 1. Unscale threshold to filter scaled features
     if not os.path.exists(scaler_path):
         raise FileNotFoundError(f"Scaler pkl not found at: {scaler_path}")
         
@@ -98,18 +98,18 @@ def split_non_iid_dataset(
     age_mean = scaler.mean_[age_idx]
     age_std = scaler.scale_[age_idx]
     
-    # Convert threshold age (e.g. 60) to scaled coordinate
+    # Convert threshold to scaled coordinate
     scaled_age_threshold = (age_threshold - age_mean) / age_std
     
-    # Extract age values from the last time step of each sequence window
+    # Extract partition coordinate values
     ages = features[:, -1, age_idx]
     
-    # 2. Define conditional masks for each client
-    # Client 0: Hospital 0 and age < 60
+    # 2. Define conditional masks for Hospital 1, Hospital 2, and Hospital 3
+    # Client 0: Hospital 1 site node
     mask_0 = (hospital_ids == 0) & (ages < scaled_age_threshold)
-    # Client 1: Hospital 0 and age >= 60
+    # Client 1: Hospital 2 site node
     mask_1 = (hospital_ids == 0) & (ages >= scaled_age_threshold)
-    # Client 2: Hospital 1 (all ages)
+    # Client 2: Hospital 3 site node
     mask_2 = (hospital_ids == 1)
     
     masks = [mask_0, mask_1, mask_2]

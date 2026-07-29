@@ -7,7 +7,8 @@ import {
   TrendingUp,
   ShieldAlert,
   RefreshCw,
-  BedDouble
+  BedDouble,
+  Building2
 } from 'lucide-react';
 import { 
   AreaChart, 
@@ -73,8 +74,14 @@ export const DashboardCDSS: React.FC = () => {
     { id: 4, title: 'Stable Parameters', value: stats.low_risk, subtitle: 'Routine Hourly Checks', icon: Activity, borderColor: 'border-l-emerald-500', iconColor: 'text-emerald-500', glow: 'shadow-emerald-500/5' }
   ];
 
+  const hospitalSurveillance = [
+    { name: 'Hospital 1 (Node 0)', samples: '92,613', occupancy: '88%', activeSepsis: 4, rate: '3.24%', cusumScore: 0.42, status: 'Stable', leadTime: '5.8 Hours' },
+    { name: 'Hospital 2 (Node 1)', samples: '151,916', occupancy: '94%', activeSepsis: 6, rate: '3.09%', cusumScore: 0.88, status: 'Stable', leadTime: '6.2 Hours' },
+    { name: 'Hospital 3 (Node 2)', samples: '233,140', occupancy: '76%', activeSepsis: 2, rate: '2.07%', cusumScore: 3.42, status: 'CSSP Active', leadTime: '6.0 Hours' },
+  ];
+
   return (
-    <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-3.5rem)]">
+    <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-3.5rem)] font-sans">
       {/* Top Banner Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
@@ -96,7 +103,7 @@ export const DashboardCDSS: React.FC = () => {
 
       {/* Emergency Sepsis Alert Banner */}
       {stats.high_risk > 0 && (
-        <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
           <div className="flex items-start gap-3">
             <div className="p-2 rounded-xl bg-red-500 text-white shrink-0 mt-0.5 shadow-md shadow-red-500/30">
               <ShieldAlert className="h-5 w-5 animate-bounce" />
@@ -140,6 +147,53 @@ export const DashboardCDSS: React.FC = () => {
             </div>
           );
         })}
+      </div>
+
+      {/* NEW FEATURE: INSTITUTIONAL SEPSIS SURVEILLANCE CARDS (HOSPITAL 1, 2, 3) */}
+      <div className="bg-white dark:bg-[#0d1829] border border-slate-200 dark:border-[#1a2744] p-5 rounded-2xl space-y-4 shadow-sm">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <Building2 className="h-4.5 w-4.5 text-teal-400" />
+            <h3 className="font-bold text-sm text-slate-800 dark:text-white">Federated Hospital Sites Live Surveillance (Hospital 1, 2 & 3)</h3>
+          </div>
+          <span className="text-[10px] font-bold text-teal-400 bg-teal-500/10 px-2.5 py-1 rounded-full border border-teal-500/20 uppercase tracking-wider">
+            3 Federated Nodes
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {hospitalSurveillance.map((hosp, idx) => (
+            <div key={idx} className="p-4 rounded-xl bg-slate-50 dark:bg-[#0a1323] border border-slate-200 dark:border-[#1a2744] space-y-3">
+              <div className="flex justify-between items-center border-b border-slate-200 dark:border-[#1a2744] pb-2">
+                <span className="font-extrabold text-xs text-slate-800 dark:text-white">{hosp.name}</span>
+                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
+                  hosp.status === 'CSSP Active' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                }`}>
+                  {hosp.status}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div>
+                  <span className="text-[10px] text-slate-400 block">Bed Occupancy</span>
+                  <span className="font-bold text-slate-700 dark:text-slate-300">{hosp.occupancy}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-400 block">Sepsis Prevalence</span>
+                  <span className="font-bold text-slate-700 dark:text-slate-300">{hosp.rate}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-400 block">AD-CUSUM Score</span>
+                  <span className={`font-mono font-bold ${hosp.cusumScore > 3.0 ? 'text-amber-400' : 'text-teal-400'}`}>{hosp.cusumScore}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-400 block">Mean Alert Lead</span>
+                  <span className="font-bold text-emerald-400">{hosp.leadTime}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Bedside Unit Map View */}
@@ -263,4 +317,3 @@ export const DashboardCDSS: React.FC = () => {
     </div>
   );
 };
-

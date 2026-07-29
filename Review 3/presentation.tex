@@ -168,7 +168,7 @@
     \end{columns}
 \end{frame}
 
-% --- NEW SLIDE 3: CLINICAL PROFILE OF SEPSIS ---
+% --- CLINICAL PROFILE OF SEPSIS ---
 \begin{frame}{Clinical Profile of ICU Sepsis}
     \begin{block}{What Sepsis is}
         \scriptsize
@@ -191,7 +191,7 @@
     \end{alertblock}
 \end{frame}
 
-% --- NEW SLIDE 4: SEPSIS STATS IN INDIA ---
+% --- SEPSIS STATS IN INDIA ---
 \begin{frame}{Sepsis Burden \& Impact in India}
     \begin{columns}[t]
         \begin{column}{0.5\textwidth}
@@ -230,7 +230,7 @@
     \end{alertblock}
 \end{frame}
 
-% --- PROPOSED FRAMEWORK: FPDAF WHAT/HOW (3) ---
+% --- PROPOSED FRAMEWORK: FPDAF WHAT/HOW ---
 \begin{frame}{Proposed Framework: FPDAF}
     \begin{block}{WHAT is FPDAF (Federated Personalized Drift-Aware Attention Framework)?}
         \scriptsize
@@ -256,7 +256,41 @@
     \end{block}
 \end{frame}
 
-% --- DEDICATED SLIDE: OUR NOVELTY (4) ---
+% --- DEDICATED SLIDE 1: MODEL PARADIGM TAXONOMY & INSIGHTS TABLE ---
+\begin{frame}{Model Taxonomy \& Technical Insights Extracted}
+    \scriptsize
+    Comparative taxonomy of federated learning paradigms evaluated and key insights extracted:
+    \vspace{0.1cm}
+    \begin{table}
+        \centering
+        \renewcommand{\arraystretch}{1.1}
+        \resizebox{\textwidth}{!}{%
+        \begin{tabular}{|l|l|l|l|}
+            \hline
+            \textbf{Model Paradigm} & \textbf{Core Optimization Mechanism} & \textbf{Project Usage} & \textbf{Key Insight Extracted for FPDAF} \\
+            \hline
+            \textbf{Centralized BiLSTM} & Single model trained on pooled data & Upper-bound benchmark & BiLSTM captures 24h vitals but violates HIPAA/DPDPA. \\
+            \hline
+            \textbf{FedAvg (McMahan et al.)} & Server weighted averaging: $\sum \frac{n_k}{N} W_k$ & Decentralized baseline & Client Non-IID variance drops AUROC by -2.14\% \& Recall -4.97\%. \\
+            \hline
+            \textbf{FedProx (Li et al.)} & Proximal penalty: $\frac{\mu}{2}\|w - w_{\text{global}}\|^2$ & Constrain update drift & Reduces weight divergence under Non-IID splits (+7.91\% Acc). \\
+            \hline
+            \textbf{Ditto / FedPer (Li et al.)} & Bi-level local head optimization & Local personalization & Uncoupling classifier head ($v_k$) adapts to hospital age profiles. \\
+            \hline
+            \textbf{FPDAF-v1 (Baseline)} & Attention + AD-CUSUM drift trigger & Baseline drift model & Real-time drift detection prevents online model degradation. \\
+            \hline
+            \textbf{FPDAF-v2 (Proposed)} & DDP-ERP (2D CA + KL/Cos) + CSSP & Final novel framework & Achieves \textbf{96.42\% Acc} \& \textbf{0.9418 AUROC} saving \textbf{38\% bandwidth}. \\
+            \hline
+        \end{tabular}}
+    \end{table}
+    \vspace{0.1cm}
+    \begin{block}{Methodological Evolution}
+        \tiny
+        By combining the decentralized privacy of FedAvg, the drift stability of FedProx, the local head personalization of Ditto, and our new DDP-ERP cross-attention algorithm, FPDAF-v2 achieves superior predictive performance while strictly guaranteeing patient data privacy.
+    \end{block}
+\end{frame}
+
+% --- DEDICATED SLIDE: OUR NOVELTY ---
 \begin{frame}{Core Scientific \& Technical Novelties}
     \begin{alertblock}{1. Multi-Head Attention Saliency (Clinical Explainability)}
         \scriptsize
@@ -279,7 +313,7 @@
     \end{alertblock}
 \end{frame}
 
-% --- SYSTEM DESIGN & SPLIT WEIGHT FORMULAS (4) ---
+% --- SYSTEM DESIGN & SPLIT WEIGHT FORMULAS ---
 \begin{frame}{Unified System Design \& Neural Formulations}
     \begin{columns}
         \begin{column}{0.48\textwidth}
@@ -308,7 +342,91 @@
     \end{columns}
 \end{frame}
 
-% --- DRIFT & AD-CUSUM NEURAL TRIGGER (4) ---
+% --- DEDICATED SLIDE 2: 3-HOSPITAL FEDERATED UPDATE LIFECYCLE ---
+\begin{frame}{Decentralized Model Update Lifecycle (3-Hospital Loop)}
+    \begin{columns}[t]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{5-Step Iterative Communication Loop}
+                \scriptsize
+                \begin{enumerate}
+                    \item \textbf{Step 1: Global Model Broadcast} \\
+                    Central server initializes $W_{\text{global}}^0$ and broadcasts weights to Hospital 1, Hospital 2, and Hospital 3.
+                    
+                    \item \textbf{Step 2: On-Device Data \& Local Training} \\
+                    Hospitals collect bedside ICU vitals locally. Each node trains for $E=2$ local SGD epochs, computing local weight updates $\Delta w_k$.
+                    
+                    \item \textbf{Step 3: Privacy Update Transmission} \\
+                    Hospitals send \textbf{ONLY mathematical weight updates} ($\Delta w_k$) over secure TLS. Zero raw patient records ever leave the hospital!
+                    
+                    \item \textbf{Step 4: Central Server Aggregation} \\
+                    Central server aggregates updates via weighted averaging: $W_{\text{global}}^{t+1} = \sum_{k=1}^3 \frac{n_k}{N} W_k^{t+1}$.
+                    
+                    \item \textbf{Step 5: Round Synchronization} \\
+                    Server sends $W_{\text{global}}^{t+1}$ back to all 3 hospitals, continuously updating bedside clinical risk dials.
+                \end{enumerate}
+            \end{block}
+        \end{column}
+        
+        \begin{column}{0.5\textwidth}
+            \begin{block}{3-Hospital Architecture Nodes}
+                \scriptsize
+                \begin{itemize}
+                    \item \textbf{Hospital 1 (Client Node 0):} 92,613 training samples, 3.24\% sepsis positive rate.
+                    \item \textbf{Hospital 2 (Client Node 1):} 151,916 training samples, 3.09\% sepsis positive rate.
+                    \item \textbf{Hospital 3 (Client Node 2):} 233,140 training samples, 2.07\% sepsis positive rate.
+                \end{itemize}
+            \end{block}
+            \centering
+            \begin{tikzpicture}[scale=0.8, every node/.style={transform shape}]
+                \node (server) [fill=amritaMaroon!20, draw=amritaMaroon, thick, rounded corners=4pt, font=\bfseries\scriptsize, align=center, inner sep=6pt] at (0,2) {Central Federated Server\\(Aggregation: $W_{\text{global}}^{t+1} = \sum \frac{n_k}{N} W_k$)};
+                \node (h1) [fill=blue!15, draw=blue, thick, rounded corners=4pt, font=\tiny\bfseries, align=center] at (-2.5,-0.8) {Hospital 1\\(Client Node 0)\\Local SGD $E=2$};
+                \node (h2) [fill=green!15, draw=green!60!black, thick, rounded corners=4pt, font=\tiny\bfseries, align=center] at (0,-0.8) {Hospital 2\\(Client Node 1)\\Local SGD $E=2$};
+                \node (h3) [fill=orange!15, draw=orange!80!black, thick, rounded corners=4pt, font=\tiny\bfseries, align=center] at (2.5,-0.8) {Hospital 3\\(Client Node 2)\\Local SGD $E=2$};
+                
+                \draw[<->, thick, draw=blue] (server) -- (h1) node[midway, left, font=\tiny\bfseries] {$\Delta w_1$};
+                \draw[<->, thick, draw=green!60!black] (server) -- (h2) node[midway, fill=white, font=\tiny\bfseries] {$\Delta w_2$};
+                \draw[<->, thick, draw=orange!80!black] (server) -- (h3) node[midway, right, font=\tiny\bfseries] {$\Delta w_3$};
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- DEDICATED SLIDE 3: CONCEPT DRIFT & AD-CUSUM DEEP-DIVE ---
+\begin{frame}{Concept Drift Detection \& AD-CUSUM Architecture}
+    \begin{columns}[t]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{What is Concept Drift in Clinical ICUs?}
+                \scriptsize
+                Patient demographics, seasonal virus surges, changing admission criteria, and evolving clinical guidelines cause hospital data distributions to shift over time, rendering static models inaccurate.
+            \end{block}
+            
+            \begin{block}{Why Classical CUSUM Fails in Deep Learning}
+                \scriptsize
+                Standard CUSUM process charts trigger constant false positive drift alerts due to high variance in mini-batch stochastic gradient descent loss residuals.
+            \end{block}
+        \end{column}
+        
+        \begin{column}{0.5\textwidth}
+            \begin{alertblock}{Our Innovation: AD-CUSUM Recurrence Relation}
+                \scriptsize
+                \[ S_r = \max\left(0, S_{r-1} + w_{\text{grad}}^{(r)} \cdot \left(\mathcal{L}_{\text{val}, r} + \beta D_{\text{JSD}}^{(r)} - \kappa_r\right)\right) \]
+                \begin{itemize}
+                    \scriptsize
+                    \item \textbf{Prediction Entropy ($D_{\text{JSD}}$):} Measures logit probability distribution shifts using Jensen-Shannon Divergence.
+                    \item \textbf{Gradient Variance Weight ($w_{\text{grad}}$):} Scales update progression by classifier head gradient variance, suppressing mini-batch noise false alarms.
+                    \item \textbf{Dynamic Slack ($\kappa_r$):} Auto-calibrates noise threshold ($\mu_{\text{loss}} + \alpha \sigma_{\text{loss}}$).
+                \end{itemize}
+            \end{alertblock}
+            
+            \begin{block}{Drift Response via CSSP Protocol}
+                \scriptsize
+                When $S_r > H=3.0$, client executes \textbf{Client-Side Selective Personalization (CSSP)}, freezing backbone layers (`requires\_grad = False`) and fine-tuning classifier heads locally for 5 epochs without uploading weights. Saves \textbf{38\% bandwidth} and cuts adaptation to \textbf{6 minutes}!
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- DRIFT & AD-CUSUM NEURAL TRIGGER ---
 \begin{frame}{Proactive Drift Adaptation: AD-CUSUM Neural Trigger}
     \begin{columns}
         \begin{column}{0.52\textwidth}
@@ -342,7 +460,7 @@
     \end{columns}
 \end{frame}
 
-% --- NEW SLIDE: DEVELOPED AD-CUSUM ALGORITHM PSEUDOCODE ---
+% --- DEVELOPED AD-CUSUM ALGORITHM PSEUDOCODE ---
 \begin{frame}{Our Developed Algorithm: AD-CUSUM Pseudocode}
     \begin{block}{AD-CUSUM (Adaptive Divergence-Weighted CUSUM) Algorithmic Procedure}
         \scriptsize
@@ -361,7 +479,7 @@
     \end{block}
 \end{frame}
 
-% --- NEW SLIDE: DEVELOPED FPDAF-V2 ALGORITHM DDP-ERP ---
+% --- DEVELOPED FPDAF-V2 ALGORITHM DDP-ERP ---
 \begin{frame}{Our New FPDAF-v2 Invention: DDP-ERP Algorithm}
     \begin{block}{Dynamic Dual-Phase Saliency \& Entropy-Regularized Personalization}
         \scriptsize
@@ -375,7 +493,7 @@
     \end{block}
 \end{frame}
 
-% --- EXPERIMENTAL OVERVIEW & BENCHMARK TABLE (5) ---
+% --- EXPERIMENTAL OVERVIEW & BENCHMARK TABLE ---
 \begin{frame}{Six-Way Model Benchmarking Results (FPDAF v1 vs. FPDAF v2)}
     \scriptsize
     We evaluated our framework against centralized baselines, standard federated learning algorithms, and our enhanced FPDAF-v2 architecture:
@@ -406,7 +524,7 @@
     \end{block}
 \end{frame}
 
-% --- ABLATION STUDY (6) ---
+% --- ABLATION STUDY ---
 \begin{frame}{Ablation Study Verification}
     \small
     We verified the contributions of AD-CUSUM triggers, temporal attention weights, and localized personalization by running ablation tests:
@@ -422,7 +540,8 @@
             FPDAF w/o AD-CUSUM Trigger & 83.51\% & 8.51\% & 55.33\% & 0.1475 & 0.7603 \\
             FPDAF w/o Temporal Attention & 80.01\% & 8.13\% & 52.81\% & 0.1412 & 0.7878 \\
             FPDAF w/o Personalization & 78.87\% & 8.05\% & 63.58\% & 0.1430 & 0.7887 \\
-            \textbf{Full FPDAF (Proposed)} & \textbf{86.51\%} & \textbf{9.81\%} & \textbf{65.33\%} & \textbf{0.1706} & \textbf{0.8214} \\
+            FPDAF v1 (Baseline) & 86.51\% & 9.81\% & 65.33\% & 0.1706 & 0.8214 \\
+            \textbf{FPDAF-v2 (Enhanced DDP-ERP)} & \textbf{96.42\%} & \textbf{18.75\%} & \textbf{82.50\%} & \textbf{0.3056} & \textbf{0.9418} \\
             \hline
         \end{tabular}}
     \end{table}
@@ -434,7 +553,7 @@
     \end{itemize}
 \end{frame}
 
-% --- WORKSTATION ARCHITECTURE (7) ---
+% --- WORKSTATION ARCHITECTURE ---
 \begin{frame}{Clinical Workstation Software Architecture}
     \begin{columns}
         \begin{column}{0.5\textwidth}
@@ -470,7 +589,7 @@
     \end{columns}
 \end{frame}
 
-% --- CLINICAL DASHBOARD INTERFACE (8) ---
+% --- CLINICAL DASHBOARD INTERFACE ---
 \begin{frame}{Interactive Clinician Dashboard UI}
     \begin{block}{Doctor's Bedside Diagnostic View (Live Patient Care)}
         \begin{columns}[t]
@@ -509,7 +628,7 @@
     \end{block}
 \end{frame}
 
-% --- CLINICIAN DASHBOARD: DOCTOR PORTAL (9) ---
+% --- CLINICIAN DASHBOARD: DOCTOR PORTAL ---
 \begin{frame}{Clinician Dashboard Interface (Doctor Portal)}
     \begin{columns}
         \begin{column}{0.52\textwidth}
@@ -532,7 +651,7 @@
     \end{columns}
 \end{frame}
 
-% --- CLINICIAN DASHBOARD: ADMIN PORTAL (10) ---
+% --- CLINICIAN DASHBOARD: ADMIN PORTAL ---
 \begin{frame}{Clinician Dashboard Interface (Admin Portal)}
     \begin{columns}
         \begin{column}{0.52\textwidth}
@@ -554,7 +673,7 @@
     \end{columns}
 \end{frame}
 
-% --- SUMMARY & ROADMAP COMPLIANCE (8) ---
+% --- SUMMARY & ROADMAP COMPLIANCE ---
 \begin{frame}{Summary of Completed Phase II Works}
     \begin{itemize}
         \small
@@ -570,7 +689,7 @@
     \end{block}
 \end{frame}
 
-% --- REFERENCES (9) ---
+% --- REFERENCES ---
 \begin{frame}[allowframebreaks]{References}
     \tiny
     \nocite{churaev2023,jothimurugesan2022,arivazhagan2020,mcmahan2017,liu2022}
@@ -582,7 +701,7 @@
     \bibliography{latex/ref}
 \end{frame}
 
-% --- THANK YOU (10) ---
+% --- THANK YOU ---
 \begin{frame}
     \centering
     {\Huge \textbf{\textcolor{amritaMaroon}{Thank You}}}
