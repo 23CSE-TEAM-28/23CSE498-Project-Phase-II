@@ -1,16 +1,35 @@
 import os
-import sys
 import sqlite3
+import uuid
+import datetime
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List, Dict, Any
+from pydantic import BaseModel
 
-app = FastAPI(title="Clinical Warehouse CDSS API", version="2.0.0")
+class NoteCreate(BaseModel):
+    author: str
+    role: str
+    content: str
+    category: str = "Observation"
 
-# Enable CORS for React dashboard requests
+app = FastAPI(
+    title="FPDAF Clinical Warehouse CDSS API",
+    description="Backend clinical data warehouse powering the FPDAF ICU Bedside Workstation",
+    version="2.0.0"
+)
+
+# Standard-compliant CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:5174",
+        "http://127.0.0.1:5174",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000"
+    ],
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -18,10 +37,49 @@ app.add_middleware(
 
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "clinical_warehouse.db")
 
+def ensure_db_exists():
+    if not os.path.exists(DB_PATH):
+        try:
+            from backend.init_db import init_database
+            init_database()
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Database initialization failed: {str(e)}")
+
 def get_db_connection():
+    ensure_db_exists()
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
+
+# ----------------- SYSTEM & HEALTH ENDPOINTS -----------------
+
+@app.get("/")
+def root():
+    return {
+        "system": "FPDAF Clinical Decision Support System API",
+        "version": "2.0.0",
+        "status": "online",
+        "docs": "/docs"
+    }
+
+@app.get("/health")
+@app.get("/api/health")
+def health_check():
+    ensure_db_exists()
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM patients")
+        patient_count = cursor.fetchone()[0]
+        conn.close()
+        return {
+            "status": "healthy",
+            "database": "connected",
+            "patients_loaded": patient_count,
+            "timestamp": datetime.datetime.now().isoformat()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Health check failed: {str(e)}")
 
 # ----------------- API ENDPOINTS -----------------
 
@@ -33,12 +91,18 @@ def get_patients():
     conn = get_db_connection()
     cursor = conn.cursor()
     
-    # Query patients and join with their scores
+    # Query patients and join with their scores and latest vitals
     query = """
     SELECT p.id, p.age, p.gender, p.hospital, p.ward, p.admitted_at, p.status, p.risk_level, p.confidence,
-           pr.centralized, pr.fedavg, pr.fedprox, pr.ditto, pr.fpdaf
+           pr.centralized, pr.fedavg, pr.fedprox, pr.ditto, pr.fpdaf, pr.fpdaf_v2,
+           v.heart_rate, v.spo2
     FROM patients p
     JOIN predictions pr ON p.id = pr.patient_id
+    LEFT JOIN (
+        SELECT patient_id, heart_rate, spo2 
+        FROM vitals 
+        WHERE hour = 24
+    ) v ON p.id = v.patient_id
     """
     try:
         cursor.execute(query)
@@ -58,12 +122,17 @@ def get_patients():
           "admittedAt": r["admitted_at"],
           "status": r["status"],
           "riskLevel": r["risk_level"],
+          "latestVitals": {
+              "heartRate": r["heart_rate"],
+              "spo2": r["spo2"]
+          },
           "scores": {
             "centralized": r["centralized"],
             "fedavg": r["fedavg"],
             "fedprox": r["fedprox"],
             "ditto": r["ditto"],
-            "fpdaf": r["fpdaf"]
+            "fpdaf": r["fpdaf"],
+            "fpdaf_v2": r["fpdaf_v2"]
           },
           "confidence": r["confidence"]
         })
@@ -120,6 +189,65 @@ def get_attention(pat_id: str):
         raise HTTPException(status_code=404, detail=f"Patient {pat_id} attention score not found")
         
     return [{"hour": r["hour"], "attentionScore": r["attention_score"]} for r in rows]
+
+@app.get("/api/patients/{pat_id}/notes")
+def get_clinical_notes(pat_id: str):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    query = """
+    SELECT id, author, role, timestamp, content, category
+    FROM clinical_notes
+    WHERE patient_id = ?
+    ORDER BY timestamp DESC
+    """
+    cursor.execute(query, (pat_id,))
+    rows = cursor.fetchall()
+    conn.close()
+    
+    if not rows:
+        return []
+        
+    return [{
+        "id": r["id"],
+        "author": r["author"],
+        "role": r["role"],
+        "timestamp": r["timestamp"],
+        "content": r["content"],
+        "category": r["category"]
+    } for r in rows]
+
+@app.post("/api/patients/{pat_id}/notes")
+def create_clinical_note(pat_id: str, note: NoteCreate):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    note_id = f"NOTE-{uuid.uuid4().hex[:6].upper()}"
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    
+    try:
+        cursor.execute(
+            """
+            INSERT INTO clinical_notes (id, patient_id, author, role, timestamp, content, category)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (note_id, pat_id, note.author, note.role, timestamp, note.content, note.category)
+        )
+        conn.commit()
+    except Exception as e:
+        conn.close()
+        raise HTTPException(status_code=500, detail=f"Failed to insert clinical note: {str(e)}")
+        
+    conn.close()
+    return {
+        "id": note_id,
+        "patientId": pat_id,
+        "author": note.author,
+        "role": note.role,
+        "timestamp": timestamp,
+        "content": note.content,
+        "category": note.category
+    }
 
 @app.get("/api/drift")
 def get_drift():
@@ -182,23 +310,33 @@ def get_ablation():
     
     formatted = {}
     config_keys = {
+        "FPDAF w/o AD-CUSUM Trigger": "fpdaf_no_cusum",
         "FPDAF w/o CUSUM": "fpdaf_no_cusum",
+        "FPDAF w/o Temporal Attention": "fpdaf_no_attention",
         "FPDAF w/o Attention": "fpdaf_no_attention",
         "FPDAF w/o Personalization": "fpdaf_no_personalization",
-        "Full FPDAF (Proposed)": "full_fpdaf"
+        "FPDAF v1 (Baseline)": "fpdaf_v1",
+        "Full FPDAF (Proposed)": "full_fpdaf",
+        "FPDAF-v2 (Enhanced DDP-ERP)": "fpdaf_v2"
     }
     
     for r in rows:
         c_name = r["config_name"]
+        item = {
+          "config_name": c_name,
+          "accuracy": r["accuracy"],
+          "precision": r["precision"],
+          "recall": r["recall"],
+          "f1_score": r["f1"],
+          "auroc": r["auroc"]
+        }
         if c_name in config_keys:
             key = config_keys[c_name]
-            formatted[key] = {
-              "accuracy": r["accuracy"],
-              "precision": r["precision"],
-              "recall": r["recall"],
-              "f1_score": r["f1"],
-              "auroc": r["auroc"]
-            }
+            formatted[key] = item
+            if key == "fpdaf_v1":
+                formatted["full_fpdaf"] = item
+        # Also store with raw name
+        formatted[c_name] = item
     return formatted
 
 @app.get("/api/stats")

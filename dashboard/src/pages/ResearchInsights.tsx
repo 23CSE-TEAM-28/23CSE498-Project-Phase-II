@@ -6,7 +6,7 @@ import {
   HelpCircle,
   Award
 } from 'lucide-react';
-import { fetchAblationData } from '../services/mockDataService';
+import { fetchAblationData } from '../services/api';
 
 export const ResearchInsights: React.FC = () => {
   const [ablationData, setAblationData] = useState<any>(null);

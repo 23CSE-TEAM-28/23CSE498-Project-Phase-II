@@ -11,8 +11,8 @@ import {
   ReferenceLine
 } from 'recharts';
 import { ShieldAlert, LineChart as ChartIcon, Zap, ShieldCheck, Flame, RotateCcw, Sparkles, Activity, Layers } from 'lucide-react';
-import { fetchDriftData } from '../services/mockDataService';
-import type { DriftRecord } from '../services/mockDataService';
+import { fetchDriftData } from '../services/api';
+import type { DriftRecord } from '../services/api';
 
 export const DriftMonitor: React.FC = () => {
   const [cusumData, setCusumData] = useState<DriftRecord[]>([]);
