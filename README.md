@@ -245,7 +245,7 @@ Physicians distrust black-box predictions. FPDAF decomposes neural activations i
 | **Q1 Journal Paper (Format 2)** | Elsevier Computer Methods and Programs in Biomedicine (CMPB) | Ready for Submission | elsarticle 15-page PDF |
 | **Q1 Journal Paper (Format 3)** | Springer Nature Scientific Reports | Ready for Submission | Springer Nature 17-page PDF |
 | **Patent Specification Draft** | Indian Patent Office (IPO) Form 2 Specification | Complete Draft | 13-page, 15 legal claims, 5 drawing sheets |
-| **Turnitin Originality Report** | Institutional Ethics Review | Verified | **4% Similarity Index** (100% Original Work) |
+| **Project Documentation Dossier** | Comprehensive System Specification | Complete | 32-page engineering dossier & schema |
 
 ---
 
