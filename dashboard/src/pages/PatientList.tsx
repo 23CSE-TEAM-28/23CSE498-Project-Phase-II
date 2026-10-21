@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Search, Filter, ShieldAlert, User, Activity, FileText, ArrowUpDown } from 'lucide-react';
-import type { Patient } from '../services/mockDataService';
+import type { Patient } from '../services/api';
 
 interface PatientListProps {
   patients: Patient[];
@@ -151,29 +151,53 @@ export const PatientList: React.FC<PatientListProps> = ({ patients, onSelectPati
                   </td>
 
                   <td className="px-5 py-4">
-                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold ${
-                      patient.status === 'Critical'
-                        ? 'bg-red-500/10 text-red-500 border border-red-500/20'
-                        : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                    }`}>
-                      <span className={`h-1.5 w-1.5 rounded-full ${patient.status === 'Critical' ? 'bg-red-500 animate-pulse' : 'bg-emerald-500'}`}></span>
-                      {patient.status}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className={`telemetry-mono text-xs font-black ${
+                        (patient.latestVitals?.heartRate || 80) > 100 ? 'text-red-500' : 'text-slate-700 dark:text-slate-300'
+                      }`}>
+                        HR {patient.latestVitals?.heartRate || '--'} bpm
+                      </span>
+                      <span className="text-slate-400">&bull;</span>
+                      <span className={`telemetry-mono text-xs font-black ${
+                        (patient.latestVitals?.spo2 || 96) < 92 ? 'text-red-500' : 'text-cyan-500 dark:text-cyan-400'
+                      }`}>
+                        SpO₂ {patient.latestVitals?.spo2 || '--'}%
+                      </span>
+                    </div>
                   </td>
 
                   <td className="px-5 py-4">
-                    <div className="flex items-center gap-2">
-                      <span className={`text-xs font-extrabold flex items-center gap-1.5 ${
-                        patient.riskLevel === 'High' 
-                          ? 'text-red-500' 
-                          : patient.riskLevel === 'Medium' 
-                          ? 'text-amber-500' 
-                          : 'text-emerald-400'
-                      }`}>
-                        {patient.riskLevel === 'High' && <ShieldAlert className="h-3.5 w-3.5" />}
-                        {patient.riskLevel} ({(patient.scores.fpdaf * 100).toFixed(0)}%)
-                      </span>
-                    </div>
+                    {(() => {
+                      const fpdafScore = patient.scores.fpdaf_v2 ?? patient.scores.fpdaf;
+                      const scorePct = Math.round((fpdafScore || 0.1) * 100);
+                      return (
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className={`font-black flex items-center gap-1 ${
+                              patient.riskLevel === 'High' 
+                                ? 'text-red-500' 
+                                : patient.riskLevel === 'Medium' 
+                                ? 'text-amber-500' 
+                                : 'text-emerald-500'
+                            }`}>
+                              {patient.riskLevel === 'High' && <ShieldAlert className="h-3.5 w-3.5" />}
+                              {patient.riskLevel}
+                            </span>
+                            <span className={`telemetry-mono font-bold ${patient.riskLevel === 'High' ? 'text-red-400' : 'text-slate-400'}`}>
+                              {scorePct}%
+                            </span>
+                          </div>
+                          <div className="w-24 bg-slate-200 dark:bg-[#152238] h-1.5 rounded-full overflow-hidden">
+                            <div 
+                              className={`h-full ${
+                                patient.riskLevel === 'High' ? 'bg-red-500' : patient.riskLevel === 'Medium' ? 'bg-amber-500' : 'bg-emerald-500'
+                              }`}
+                              style={{ width: `${scorePct}%` }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })()}
                   </td>
 
                   <td className="px-5 py-4 text-right">

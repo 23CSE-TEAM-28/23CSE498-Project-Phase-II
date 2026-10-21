@@ -11,8 +11,8 @@ import { DriftMonitor } from './pages/DriftMonitor';
 import { FLMonitor } from './pages/FLMonitor';
 import { ModelComparison } from './pages/ModelComparison';
 import { ResearchInsights } from './pages/ResearchInsights';
-import { fetchPatients } from './services/mockDataService';
-import type { Patient } from './services/mockDataService';
+import { fetchPatients } from './services/api';
+import type { Patient } from './services/api';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -83,7 +83,12 @@ function App() {
         />
 
         <main className="flex-1 overflow-hidden bg-slate-100 dark:bg-[#080e1a] transition-colors relative">
-          {activeTab === 'dashboard' && <DashboardCDSS />}
+          {activeTab === 'dashboard' && (
+            <DashboardCDSS 
+              onSelectPatient={setSelectedPatient} 
+              setActiveTab={setActiveTab} 
+            />
+          )}
           
           {activeTab === 'patients' && (
             <PatientList 

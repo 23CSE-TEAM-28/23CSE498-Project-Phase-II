@@ -75,9 +75,13 @@
                     \item \textbf{Comment 1: Start Implementation} \\
                     The implementation phase of the proposed federated framework must be initiated.
                     
-                    \vspace{0.4cm}
+                    \vspace{0.3cm}
                     \item \textbf{Comment 2: Working Prototype \& Dashboard} \\
                     Build a functional clinician dashboard and working prototype to demonstrate live clinical decision support.
+                    
+                    \vspace{0.3cm}
+                    \item \textbf{Comment 3: Concept Drift Detection} \\
+                    How will the framework detect and handle concept drift across different hospital sites?
                 \end{itemize}
             \end{block}
         \end{column}
@@ -86,14 +90,15 @@
             \begin{block}{Action Taken \& Implementation Status}
                 \scriptsize
                 \begin{itemize}
-                    \item \textbf{Implemented Federated Pipelines:}
+                    \item \textbf{Implemented Federated Pipelines (Comments 1 \& 3):}
                     \begin{itemize}
                         \scriptsize
-                        \item Built decentralized PyTorch algorithms (FedAvg, FedProx, Ditto).
-                        \item Implemented local AD-CUSUM drift detection and Client-Side Selective Personalization.
+                        \item Built decentralized PyTorch algorithms (FedAvg, FedProx).
+                        \item Invented and integrated the \textbf{Dynamic Dual-Phase (DDP)} Cross-Attention algorithm.
+                        \item Implemented local \textbf{AD-CUSUM drift detection} (Adaptive Divergence-Weighted CUSUM) to identify clinical shifts in real-time.
                     \end{itemize}
                     \vspace{0.2cm}
-                    \item \textbf{Built Production-Grade CDSS Workstation:}
+                    \item \textbf{Built Production-Grade CDSS Workstation (Comment 2):}
                     \begin{itemize}
                         \scriptsize
                         \item \textbf{Data Warehouse}: Local SQLite clinical database.
@@ -115,18 +120,18 @@
                 \textbf{Adaptive Divergence-Weighted CUSUM}: Combines loss residuals, Jensen-Shannon entropy divergence ($D_{\text{JSD}}$), and gradient variance weighting ($w_{\text{grad}}$) to detect population drift without mini-batch noise false alarms.
             \end{alertblock}
             
-            \begin{alertblock}{2. DDP-ERP Personalization Algorithm (New Invention)}
+            \begin{alertblock}{2. Client-Side Selective Personalization (CSSP)}
                 \scriptsize
-                \textbf{Dynamic Dual-Phase \& Entropy Regularization}: Integrates 2D temporal-vital cross-attention ($\alpha_t \otimes \beta_v$) with KL-Divergence soft-personalization, boosting test accuracy to \textbf{96.42\%} (>95\% target) and \textbf{0.9418 AUROC}.
+                Freezes backbone weights during drift adaptation rounds, saving \textbf{38\% in communication bandwidth} (1.52 GB vs 2.48 GB) and cutting adaptation time to \textbf{6 minutes}.
             \end{alertblock}
         \end{column}
         
         \begin{column}{0.48\textwidth}
-            \begin{alertblock}{3. Client-Side Selective Personalization (CSSP)}
+            \begin{alertblock}{3. Dynamic Dual-Phase (DDP) Cross-Attention}
                 \scriptsize
-                Freezes backbone weights during drift adaptation rounds, saving \textbf{38\% in communication bandwidth} (1.52 GB vs 2.48 GB) and cutting adaptation time to \textbf{6 minutes}.
+                Integrated 2D cross-attention pooling mechanism capturing 24-hour sequence time steps ($\alpha_t$) AND vital co-dependencies ($\beta_v$) to capture multi-modal interactions.
             \end{alertblock}
-            
+
             \begin{alertblock}{4. Production Clinical CDSS Workstation}
                 \scriptsize
                 Full-stack bedside decision support system linking React/Vite, FastAPI REST server, and SQLite database with 24-hour sequence hour scrubbers and SSC Hour-1 bundle checklists.
@@ -136,7 +141,7 @@
 \end{frame}
 
 % --- CLINICAL CONTEXT & COMPLETED GOALS (2) ---
-\begin{frame}{Clinical Deterioration \& Phase II Completed Goals}
+\begin{frame}{Clinical Deterioration \& Phase II Completed Goals (60\% Met)}
     \begin{columns}
         \begin{column}{0.55\textwidth}
             \textbf{Clinical Context:}
@@ -160,7 +165,7 @@
                 \begin{itemize}
                     \item \textbf{1. Data Engineering:} Cleansed, Imputed, Standardized PhysioNet 2019 logs into active PyTorch sequence arrays.
                     \item \textbf{2. Federated Baselines:} Implemented \textit{FedAvg} and \textit{FedProx} securely over PyTorch.
-                    \item \textbf{3. Personalized FPDAF Model:} Trained temporal self-attentions with localized personalization.
+                    \item \textbf{3. Personalized FPDAF Model:} Invented and trained the \textbf{Dynamic Dual-Phase (DDP)} cross-attention algorithm with localized personalization.
                     \item \textbf{4. Clinical Workstation App:} Developed a dynamic FastAPI + SQLite + React Vite ICU dashboard overlay.
                 \end{itemize}
             \end{block}
@@ -275,18 +280,14 @@
             \hline
             \textbf{FedProx (Li et al.)} & Proximal penalty: $\frac{\mu}{2}\|w - w_{\text{global}}\|^2$ & Constrain update drift & Reduces weight divergence under Non-IID splits (+7.91\% Acc). \\
             \hline
-            \textbf{Ditto / FedPer (Li et al.)} & Bi-level local head optimization & Local personalization & Uncoupling classifier head ($v_k$) adapts to hospital age profiles. \\
-            \hline
-            \textbf{FPDAF-v1 (Baseline)} & Attention + AD-CUSUM drift trigger & Baseline drift model & Real-time drift detection prevents online model degradation. \\
-            \hline
-            \textbf{FPDAF-v2 (Proposed)} & DDP-ERP (2D CA + KL/Cos) + CSSP & Final novel framework & Achieves \textbf{96.42\% Acc} \& \textbf{0.9418 AUROC} saving \textbf{38\% bandwidth}. \\
+            \textbf{FPDAF (Proposed)} & Attention + AD-CUSUM drift trigger & Novel drift model & Real-time drift detection prevents online model degradation. \\
             \hline
         \end{tabular}}
     \end{table}
     \vspace{0.1cm}
     \begin{block}{Methodological Evolution}
         \tiny
-        By combining the decentralized privacy of FedAvg, the drift stability of FedProx, the local head personalization of Ditto, and our new DDP-ERP cross-attention algorithm, FPDAF-v2 achieves superior predictive performance while strictly guaranteeing patient data privacy.
+        By combining the decentralized privacy of FedAvg and drift stability of FedProx with our new \textbf{Dynamic Dual-Phase (DDP) Cross-Attention} and \textbf{AD-CUSUM mechanism}, FPDAF achieves superior predictive stability while strictly guaranteeing patient data privacy.
     \end{block}
 \end{frame}
 
@@ -338,55 +339,6 @@
                 \[ \alpha_i = \frac{\exp(e_i)}{\sum_{j=1}^t \exp(e_j)} \]
                 Attributes risk probabilities to specific ICU sequence hours.
             \end{block}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-% --- DEDICATED SLIDE 2: 3-HOSPITAL FEDERATED UPDATE LIFECYCLE ---
-\begin{frame}{Decentralized Model Update Lifecycle (3-Hospital Loop)}
-    \begin{columns}[t]
-        \begin{column}{0.5\textwidth}
-            \begin{block}{5-Step Iterative Communication Loop}
-                \scriptsize
-                \begin{enumerate}
-                    \item \textbf{Step 1: Global Model Broadcast} \\
-                    Central server initializes $W_{\text{global}}^0$ and broadcasts weights to Hospital 1, Hospital 2, and Hospital 3.
-                    
-                    \item \textbf{Step 2: On-Device Data \& Local Training} \\
-                    Hospitals collect bedside ICU vitals locally. Each node trains for $E=2$ local SGD epochs, computing local weight updates $\Delta w_k$.
-                    
-                    \item \textbf{Step 3: Privacy Update Transmission} \\
-                    Hospitals send \textbf{ONLY mathematical weight updates} ($\Delta w_k$) over secure TLS. Zero raw patient records ever leave the hospital!
-                    
-                    \item \textbf{Step 4: Central Server Aggregation} \\
-                    Central server aggregates updates via weighted averaging: $W_{\text{global}}^{t+1} = \sum_{k=1}^3 \frac{n_k}{N} W_k^{t+1}$.
-                    
-                    \item \textbf{Step 5: Round Synchronization} \\
-                    Server sends $W_{\text{global}}^{t+1}$ back to all 3 hospitals, continuously updating bedside clinical risk dials.
-                \end{enumerate}
-            \end{block}
-        \end{column}
-        
-        \begin{column}{0.5\textwidth}
-            \begin{block}{3-Hospital Architecture Nodes}
-                \scriptsize
-                \begin{itemize}
-                    \item \textbf{Hospital 1 (Client Node 0):} 92,613 training samples, 3.24\% sepsis positive rate.
-                    \item \textbf{Hospital 2 (Client Node 1):} 151,916 training samples, 3.09\% sepsis positive rate.
-                    \item \textbf{Hospital 3 (Client Node 2):} 233,140 training samples, 2.07\% sepsis positive rate.
-                \end{itemize}
-            \end{block}
-            \centering
-            \begin{tikzpicture}[scale=0.8, every node/.style={transform shape}]
-                \node (server) [fill=amritaMaroon!20, draw=amritaMaroon, thick, rounded corners=4pt, font=\bfseries\scriptsize, align=center, inner sep=6pt] at (0,2) {Central Federated Server\\(Aggregation: $W_{\text{global}}^{t+1} = \sum \frac{n_k}{N} W_k$)};
-                \node (h1) [fill=blue!15, draw=blue, thick, rounded corners=4pt, font=\tiny\bfseries, align=center] at (-2.5,-0.8) {Hospital 1\\(Client Node 0)\\Local SGD $E=2$};
-                \node (h2) [fill=green!15, draw=green!60!black, thick, rounded corners=4pt, font=\tiny\bfseries, align=center] at (0,-0.8) {Hospital 2\\(Client Node 1)\\Local SGD $E=2$};
-                \node (h3) [fill=orange!15, draw=orange!80!black, thick, rounded corners=4pt, font=\tiny\bfseries, align=center] at (2.5,-0.8) {Hospital 3\\(Client Node 2)\\Local SGD $E=2$};
-                
-                \draw[<->, thick, draw=blue] (server) -- (h1) node[midway, left, font=\tiny\bfseries] {$\Delta w_1$};
-                \draw[<->, thick, draw=green!60!black] (server) -- (h2) node[midway, fill=white, font=\tiny\bfseries] {$\Delta w_2$};
-                \draw[<->, thick, draw=orange!80!black] (server) -- (h3) node[midway, right, font=\tiny\bfseries] {$\Delta w_3$};
-            \end{tikzpicture}
         \end{column}
     \end{columns}
 \end{frame}
@@ -479,24 +431,12 @@
     \end{block}
 \end{frame}
 
-% --- DEVELOPED FPDAF-V2 ALGORITHM DDP-ERP ---
-\begin{frame}{Our New FPDAF-v2 Invention: DDP-ERP Algorithm}
-    \begin{block}{Dynamic Dual-Phase Saliency \& Entropy-Regularized Personalization}
-        \scriptsize
-        To further push predictive precision, we invented the \textbf{DDP-ERP algorithm} for FPDAF-v2:
-        \begin{enumerate}
-            \item \textbf{Dual-Phase Cross-Attention (DP-CA):} Computes 2D attention matrices capturing both 24-hour sequence time steps ($\alpha_t$) and vital co-dependencies ($\beta_v$, e.g., Heart Rate vs. Blood Pressure correlation).
-            \item \textbf{Entropy-Regularized Soft-Personalization (ER-SP):} Replaces rigid Ditto quadratic penalties with an adaptive KL-Divergence and Cosine Contrastive Regularizer:
-            \[ \mathcal{L}_{\text{DDP-ERP}} = \mathcal{L}_{\text{ce}}(y, \hat{y}) + \lambda D_{\text{KL}}\left(P_k \parallel P_{\text{global}}\right) + \eta (1 - \cos(\phi^k, \theta_{\text{global}})) \]
-            \item \textbf{Performance Surge:} Elevates model accuracy from 86.51\% to \textbf{96.42\% Accuracy} (>95\% target) and \textbf{0.9418 AUROC}.
-        \end{enumerate}
-    \end{block}
-\end{frame}
+
 
 % --- EXPERIMENTAL OVERVIEW & BENCHMARK TABLE ---
-\begin{frame}{Six-Way Model Benchmarking Results (FPDAF v1 vs. FPDAF v2)}
+\begin{frame}{Four-Way Model Benchmarking Results (FPDAF Framework)}
     \scriptsize
-    We evaluated our framework against centralized baselines, standard federated learning algorithms, and our enhanced FPDAF-v2 architecture:
+    We evaluated our framework against centralized baselines and standard federated learning algorithms:
     \vspace{0.2cm}
     \begin{table}
         \centering
@@ -509,17 +449,15 @@
             Centralized Baseline & 75.09\% & 7.14\% & 72.17\% & 0.1299 & 0.8058 & 0 MB (N/A) \\
             FedAvg Baseline & 75.94\% & 6.94\% & 67.19\% & 0.1259 & 0.7844 & 1.24 GB \\
             FedProx Baseline & 78.85\% & 8.12\% & 60.64\% & 0.1432 & 0.7933 & 1.24 GB \\
-            Ditto (Personalized) & 82.45\% & 8.98\% & 63.58\% & 0.1574 & 0.7989 & 2.48 GB \\
-            FPDAF (v1 Baseline) & 86.51\% & 9.81\% & 65.33\% & 0.1706 & 0.8214 & 1.52 GB (CSSP saved 38\%) \\
-            \textbf{FPDAF-v2 (Enhanced DDP-ERP)} & \textbf{96.42\%} & \textbf{18.75\%} & \textbf{82.50\%} & \textbf{0.3056} & \textbf{0.9418} & \textbf{1.52 GB (CSSP saved 38\%)} \\
+            \textbf{FPDAF (Proposed)} & \textbf{86.51\%} & \textbf{9.81\%} & \textbf{65.33\%} & \textbf{0.1706} & \textbf{0.8214} & \textbf{1.52 GB} \\
             \hline
         \end{tabular}}
     \end{table}
     \vspace{0.1cm}
     \begin{block}{Key Performance Breakthroughs}
         \begin{itemize}
-            \item \textbf{Surpasses Target (>95\% Accuracy):} FPDAF-v2 achieves \textbf{96.42\% test accuracy} (+9.91\% over FPDAF v1).
-            \item \textbf{AUROC Surge (+0.1204):} AUROC jumps from 0.8214 to \textbf{0.9418}, achieving near-perfect clinical sepsis risk stratification.
+            \item \textbf{High Stability Accuracy:} FPDAF achieves \textbf{86.51\% test accuracy}, robustly handling client non-IID conditions.
+            \item \textbf{AUROC Improvement:} Strong predictive discrimination with an AUROC of \textbf{0.8214} while safeguarding hospital data privacy.
         \end{itemize}
     \end{block}
 \end{frame}
@@ -539,9 +477,7 @@
             \hline
             FPDAF w/o AD-CUSUM Trigger & 83.51\% & 8.51\% & 55.33\% & 0.1475 & 0.7603 \\
             FPDAF w/o Temporal Attention & 80.01\% & 8.13\% & 52.81\% & 0.1412 & 0.7878 \\
-            FPDAF w/o Personalization & 78.87\% & 8.05\% & 63.58\% & 0.1430 & 0.7887 \\
-            FPDAF v1 (Baseline) & 86.51\% & 9.81\% & 65.33\% & 0.1706 & 0.8214 \\
-            \textbf{FPDAF-v2 (Enhanced DDP-ERP)} & \textbf{96.42\%} & \textbf{18.75\%} & \textbf{82.50\%} & \textbf{0.3056} & \textbf{0.9418} \\
+            \textbf{FPDAF (Proposed)} & \textbf{86.51\%} & \textbf{9.81\%} & \textbf{65.33\%} & \textbf{0.1706} & \textbf{0.8214} \\
             \hline
         \end{tabular}}
     \end{table}
@@ -673,20 +609,137 @@
     \end{columns}
 \end{frame}
 
+% --- CLINICIAN DASHBOARD: DATABASE SCHEMA ---
+\begin{frame}{Clinical Data Warehouse \& Schema (`clinical\_warehouse.db`)}
+    \begin{columns}
+        \begin{column}{0.52\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{images/dashboard_drift.png}
+            \vspace{0.1cm}
+            \scriptsize \textbf{Figure 4:} Relational Schema and Active Database Telemetry Tables.
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{Database Table Specifications}
+                \scriptsize
+                \begin{itemize}
+                    \item \textbf{patients}: Stores bed IDs, demographics, and clinical sepsis status.
+                    \item \textbf{vitals}: 24-hour sequence vitals decoded with \texttt{scaler.pkl}.
+                    \item \textbf{predictions}: Model probability outputs across FedAvg/FedProx/FPDAF.
+                    \item \textbf{attentions}: Temporal \& DDP cross-attention weights ($\alpha_t \otimes \beta_v$).
+                    \item \textbf{drift\_metrics}: Real-time AD-CUSUM residuals ($S_r$) and CSSP flags.
+                    \item \textbf{model\_comparison}: Benchmark metrics across all paradigms.
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- DEDICATED SLIDE 2: 3-HOSPITAL FEDERATED UPDATE LIFECYCLE ---
+\begin{frame}{Decentralized Model Update Lifecycle (Future Implementation)}
+    \begin{columns}[t]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{Proposed 5-Step Iterative Communication Loop}
+                \scriptsize
+                \begin{enumerate}
+                    \item \textbf{Step 1: Global Model Broadcast} \\
+                    Central server initializes $W_{\text{global}}^0$ and broadcasts weights to Hospital 1, Hospital 2, and Hospital 3.
+                    
+                    \item \textbf{Step 2: On-Device Data \& Local Training} \\
+                    Hospitals collect bedside ICU vitals locally. Each node trains for $E=2$ local SGD epochs, computing local weight updates $\Delta w_k$.
+                    
+                    \item \textbf{Step 3: Privacy Update Transmission} \\
+                    Hospitals send \textbf{ONLY mathematical weight updates} ($\Delta w_k$) over secure TLS. Zero raw patient records ever leave the hospital!
+                    
+                    \item \textbf{Step 4: Central Server Aggregation} \\
+                    Central server aggregates updates via weighted averaging: $W_{\text{global}}^{t+1} = \sum_{k=1}^3 \frac{n_k}{N} W_k^{t+1}$.
+                    
+                    \item \textbf{Step 5: Round Synchronization} \\
+                    Server sends $W_{\text{global}}^{t+1}$ back to all 3 hospitals, continuously updating bedside clinical risk dials.
+                \end{enumerate}
+            \end{block}
+        \end{column}
+        
+        \begin{column}{0.5\textwidth}
+            \begin{block}{3-Hospital Architecture Nodes}
+                \scriptsize
+                \begin{itemize}
+                    \item \textbf{Hospital 1 (Client Node 0):} 92,613 training samples, 3.24\% sepsis positive rate.
+                    \item \textbf{Hospital 2 (Client Node 1):} 151,916 training samples, 3.09\% sepsis positive rate.
+                    \item \textbf{Hospital 3 (Client Node 2):} 233,140 training samples, 2.07\% sepsis positive rate.
+                \end{itemize}
+            \end{block}
+            \centering
+            \begin{tikzpicture}[scale=0.8, every node/.style={transform shape}]
+                \node (server) [fill=amritaMaroon!20, draw=amritaMaroon, thick, rounded corners=4pt, font=\bfseries\scriptsize, align=center, inner sep=6pt] at (0,2) {Central Federated Server\\(Aggregation: $W_{\text{global}}^{t+1} = \sum \frac{n_k}{N} W_k$)};
+                \node (h1) [fill=blue!15, draw=blue, thick, rounded corners=4pt, font=\tiny\bfseries, align=center] at (-2.5,-0.8) {Hospital 1\\(Client Node 0)\\Local SGD $E=2$};
+                \node (h2) [fill=green!15, draw=green!60!black, thick, rounded corners=4pt, font=\tiny\bfseries, align=center] at (0,-0.8) {Hospital 2\\(Client Node 1)\\Local SGD $E=2$};
+                \node (h3) [fill=orange!15, draw=orange!80!black, thick, rounded corners=4pt, font=\tiny\bfseries, align=center] at (2.5,-0.8) {Hospital 3\\(Client Node 2)\\Local SGD $E=2$};
+                
+                \draw[<->, thick, draw=blue] (server) -- (h1) node[midway, left, font=\tiny\bfseries] {$\Delta w_1$};
+                \draw[<->, thick, draw=green!60!black] (server) -- (h2) node[midway, fill=white, font=\tiny\bfseries] {$\Delta w_2$};
+                \draw[<->, thick, draw=orange!80!black] (server) -- (h3) node[midway, right, font=\tiny\bfseries] {$\Delta w_3$};
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
 % --- SUMMARY & ROADMAP COMPLIANCE ---
-\begin{frame}{Summary of Completed Phase II Works}
-    \begin{itemize}
-        \small
-        \item \textbf{Data Preprocessing Completed:} Decoded sparse vitals logs to construct clean sequence windows.
-        \item \textbf{PyTorch Implementations Completed:} Trained standard baselines alongside our proposed FPDAF model.
-        \item \textbf{Database Schema Integrated:} SQLite warehouse populated with real patients, hourly vitals, and predictions.
-        \item \textbf{Clinical WORKSTATION Finished:} Production-quality React Vite interface with tailored user views.
-        \item \textbf{Deliverables Pushed to Git:} Full Phase II codebase pushed to main repository.
-    \end{itemize}
-    \vspace{0.3cm}
-    \begin{block}{Roadmap Compliance}
-        Our completed milestones match the project objectives, delivering a privacy-preserving and explainable Sepsis prediction pipeline.
+\begin{frame}{Project Roadmap \& Future Work (60\% Project Objectives Met)}
+    \scriptsize
+    \begin{table}
+        \centering
+        \renewcommand{\arraystretch}{1.4}
+        \resizebox{0.95\textwidth}{!}{%
+        \begin{tabular}{|l|l|c|}
+            \hline
+            \textbf{Project Phase} & \textbf{Key Milestones \& Tasks} & \textbf{Status} \\
+            \hline
+            \textbf{Phase I} & Literature Survey, Dataset Extraction, System Architecture Design & \textbf{\textcolor{green!60!black}{Completed}} \\
+            \hline
+            \textbf{Phase II (Review 3)} & Implemented AD-CUSUM Drift Detection \textit{(FPDAF-v1 Baseline)} & \textbf{\textcolor{green!60!black}{Completed}} \\
+            \hline
+            \textbf{Phase II (Review 3)} & Developed production-ready Full-Stack Clinician CDSS Dashboard & \textbf{\textcolor{green!60!black}{Completed}} \\
+            \hline
+            \textbf{Phase II (Review 3)} & Invented \textit{Dynamic Dual-Phase (DDP)} Cross-Attention Algorithm & \textbf{\textcolor{green!60!black}{Completed}} \\
+            \hline
+            \textbf{Future Work} & \textbf{Next Step:} Implement \textit{Entropy-Regularized Personalization (ERP)} & \textbf{\textcolor{blue}{Pending}} \\
+            \hline
+            \textbf{Future Work} & \textbf{Next Step:} Final 6-Way Benchmarking (aiming for $>95\%$ Accuracy) & \textbf{\textcolor{blue}{Pending}} \\
+            \hline
+            \textbf{Future Work} & \textbf{Next Step:} Full 3-Hospital Decentralized Loop Simulation & \textbf{\textcolor{blue}{Pending}} \\
+            \hline
+        \end{tabular}}
+    \end{table}
+    \vspace{0.2cm}
+    \begin{block}{Roadmap Alignment}
+        100\% of Review 3 objectives have been completed, representing \textbf{60\% completion of total project objectives}. Future work involves pushing predictive accuracy beyond the current baseline by formulating advanced multi-modal attention mechanisms.
     \end{block}
+\end{frame}
+
+% --- INDIVIDUAL CONTRIBUTIONS ---
+\begin{frame}{Individual Team Contributions}
+    \scriptsize
+    \begin{table}
+        \centering
+        \renewcommand{\arraystretch}{1.4}
+        \resizebox{0.95\textwidth}{!}{%
+        \begin{tabular}{|l|l|p{7.5cm}|}
+            \hline
+            \textbf{S.No} & \textbf{Team Member} & \textbf{Core Responsibilities \& Work Done (Review 3)} \\
+            \hline
+            1 & Sheela Akshar Sakhi & Federated framework architecture design, Dynamic Dual-Phase (DDP) Cross-Attention, Centralized BiLSTM baselines, Full-Stack Clinician Dashboard integration. \\
+            \hline
+            2 & Hasini Reddy M & Formulated AD-CUSUM logic, implemented JS-Divergence triggers, evaluated prediction stability metrics. \\
+            \hline
+            3 & Kousik Sarma Lakkaraju & Managed hospital data splitting (Nodes 1, 2, 3), preprocessing pipeline, and client environment setup. \\
+            \hline
+            4 & Haswitha K & Integrated temporal attention weights, designed the 'What-If' vital simulator backend logic, and Literature Review. \\
+            \hline
+            5 & V. Chakravarthy & Supervised server aggregation protocols (FedAvg/FedProx), managed dataset curation (PhysioNet Sepsis). \\
+            \hline
+        \end{tabular}}
+    \end{table}
 \end{frame}
 
 % --- REFERENCES ---

@@ -60,3 +60,14 @@ runs/
 *.fls
 *.fdb_latexmk
 *.blg
+*.aux
+*.bbl
+*.blg
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+
+*.mp4
+MSME/msmepresentation.pptx

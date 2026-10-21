@@ -28,6 +28,14 @@ if [ ! -z "$PORT_8000_PID" ]; then
     sleep 1
 fi
 
+# Check if port 5173 is occupied and terminate conflicting process to ensure port 5173 binding
+PORT_5173_PID=$(lsof -t -i :5173)
+if [ ! -z "$PORT_5173_PID" ]; then
+    echo "⚠️ Port 5173 is occupied by process ID $PORT_5173_PID. Freeing port 5173..."
+    kill -9 $PORT_5173_PID
+    sleep 1
+fi
+
 # 1. Start FastAPI Backend in the background
 echo "🚀 1. Booting FastAPI Clinical Warehouse Server on port 8000..."
 python3 -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 &

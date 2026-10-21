@@ -1,0 +1,580 @@
+\documentclass[aspectratio=169, 11pt]{beamer}
+
+% --- Packages & Setup ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usetikzlibrary{calc, shadows, positioning, arrows.meta, shapes.geometric}
+
+% Branding Colors (Premium MedTech Palette)
+\definecolor{darkSlate}{HTML}{F8FAFC}    % Clean Clinical Canvas
+\definecolor{cardBg}{HTML}{FFFFFF}       % Pure White Card Background
+\definecolor{neonCyan}{HTML}{0284C7}     % Medical Sky Blue (Primary)
+\definecolor{neonTeal}{HTML}{0D9488}     % Medical Teal (Secondary)
+\definecolor{neonAmber}{HTML}{EA580C}    % Clinical Amber (Warning)
+\definecolor{neonRose}{HTML}{DC2626}     % Sepsis Red (Critical)
+\definecolor{textColor}{HTML}{0F172A}    % Slate-900 Dark Gray for text
+\definecolor{mutedText}{HTML}{475569}    % Slate-600 Muted Text
+
+% Block Header Tints (Aesthetics)
+\definecolor{lightCyanBg}{HTML}{E0F2FE}   % Sky-100
+\definecolor{lightAmberBg}{HTML}{FFEDD5}  % Orange-100
+\definecolor{lightTealBg}{HTML}{CCFBF1}   % Teal-100
+\definecolor{lightRoseBg}{HTML}{FEE2E2}   % Red-100
+
+% Theme Setup
+\usetheme{default}
+\setbeamertemplate{navigation symbols}{}
+
+% Global Color Mapping
+\setbeamercolor{background canvas}{bg=darkSlate}
+\setbeamercolor{normal text}{fg=textColor}
+\setbeamercolor{structure}{fg=neonCyan}
+
+% Custom Minimalist Frametitle with Neon Accent Line
+\setbeamertemplate{frametitle}{
+    \vspace{0.1cm}
+    \begin{minipage}{\textwidth}
+        \normalsize\bfseries\textcolor{neonCyan}{\insertframetitle} \\
+        \vspace{-0.1cm}
+        \tikz[baseline] \draw [neonCyan, line width=1.5pt] (0,0) -- (1.5,0);
+        \tikz[baseline] \draw [mutedText!40, line width=0.5pt] (0,0) -- (\textwidth,0);
+    \end{minipage}
+    \vspace{0.05cm}
+}
+
+% Custom Minimalist Footline
+\setbeamertemplate{footline}{
+    \hfill
+    \tiny\textcolor{mutedText}{FPDAF MedTech Project \quad | \quad Slide \insertframenumber\ / \inserttotalframenumber}
+    \hspace{0.6cm}
+    \vspace{0.15cm}
+}
+
+% Customize Beamer Blocks
+\setbeamertemplate{blocks}[rounded][shadow=false]
+\setbeamercolor{block title}{bg=lightCyanBg, fg=neonCyan}
+\setbeamercolor{block body}{bg=cardBg, fg=textColor}
+\setbeamercolor{block title alerted}{bg=lightAmberBg, fg=neonAmber}
+\setbeamercolor{block body alerted}{bg=cardBg, fg=textColor}
+\setbeamercolor{block title example}{bg=lightTealBg, fg=neonTeal}
+\setbeamercolor{block body example}{bg=cardBg, fg=textColor}
+
+\addtobeamertemplate{block begin}{\vspace{0.03cm}\pgfsetfillopacity{0.95}}{\pgfsetfillopacity{1}}
+\addtobeamertemplate{block alerted begin}{\vspace{0.03cm}\pgfsetfillopacity{0.95}}{\pgfsetfillopacity{1}}
+
+\begin{document}
+
+% =========================================================================================
+% SLIDE 1: TITLE PAGE
+% =========================================================================================
+\begin{frame}[plain]
+    \begin{tikzpicture}[remember picture,overlay]
+        \shade[inner color=neonCyan!12, outer color=darkSlate!0] (current page.center) circle (5cm);
+        \node[fill=neonAmber, text=white, font=\bfseries\tiny, anchor=north east, rounded corners=2pt, inner sep=4pt]
+        at ($(current page.north east) + (-0.5cm,-0.5cm)$)
+        {SUB-THEME 6: FRONTIER TECHNOLOGIES};
+    \end{tikzpicture}
+
+    \centering
+    \vspace{0.3cm}
+    \includegraphics[width=1.5cm]{images/clinical_logo.png} 
+    \vspace{0.2cm}
+
+    {\Large \textbf{\textcolor{neonCyan}{FPDAF HealthTech: Edge-AI Bedside Workstation for Sepsis Crash Prediction}}} \\
+    \vspace{0.1cm}
+    {\normalsize \textcolor{textColor!80}{Privacy-Preserving Federated Clinical Decision Support System}} \\
+    \vspace{0.3cm}
+
+    \begin{minipage}{0.88\textwidth}
+        \begin{block}{}
+            \centering
+            \vspace{0.05cm}
+            \scriptsize
+            \textcolor{neonAmber}{\textbf{MSME Idea Hackathon 6.0 Presentation}} \quad | \quad \textcolor{neonCyan}{\textbf{Amrita Vishwa Vidyapeetham}}\\
+            \vspace{0.1cm}
+            \textcolor{textColor}{\textbf{Student Founders \& Innovators:} Sheela Akshar Sakhi \& Vemula Chakravarthy}\\
+            \textcolor{mutedText}{\textbf{Faculty Mentors:} Dr. Ramya G. R. (Lead Mentor) \& Dr. Vandhana S. (Co-Mentor)}\\
+            \tiny \textcolor{neonTeal}{\textbf{Department of Computer Science and Engineering, Amrita School of Computing}}
+            \vspace{0.05cm}
+        \end{block}
+    \end{minipage}
+\end{frame}
+
+% =========================================================================================
+% SLIDE 2: CLINICAL PATHOLOGY & PROBLEM (WHAT IS SEPSIS? WITH SEPSIS PATHOPHYSIOLOGY IMAGE)
+% =========================================================================================
+\begin{frame}{Clinical Pathology: What is Sepsis \& Why Time Matters}
+    \begin{columns}[c]
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textcolor{neonRose}{Clinical Definition of Sepsis [1,2]}}
+                \tiny
+                \begin{itemize}
+                    \item \textbf{Dysregulated Immune Response:} Systemic immune reaction causing organ dysfunction, capillary leakage, MODS \& septic shock.
+                    \item \textbf{The Golden Window:} Patient survival drops by \textbf{8\% for every hour} treatment is delayed.
+                \end{itemize}
+            \end{block}
+            
+            \begin{block}{\textcolor{neonAmber}{Why Current ICU Alarms Fail [4]}}
+                \tiny
+                \begin{itemize}
+                    \item \textbf{Alarm Fatigue:} \textbf{85\%--95\%} of bedside alerts are false positives from rigid static thresholds.
+                    \item \textbf{Missed Temporal Signals:} Fails to track complex multi-vital co-dependencies.
+                \end{itemize}
+            \end{block}
+
+            \begin{alertblock}{\textcolor{neonCyan}{Indian Healthcare Mortality Burden [3]}}
+                \tiny
+                Sepsis causes \textbf{3.0M deaths/yr in India} (\textbf{30\%} of hospital mortality).
+            \end{alertblock}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textcolor{neonCyan}{Sepsis Pathophysiology \& Infection Mechanism}}
+                \centering
+                \begin{tikzpicture}
+                    \node[draw=neonCyan!50, fill=cardBg, rounded corners=4pt, inner sep=2pt, drop shadow] {
+                        \includegraphics[width=0.92\textwidth,height=0.38\textheight,keepaspectratio]{images/sepsisdiagram.png}
+                    };
+                \end{tikzpicture}
+            \end{block}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.01cm}
+    \begin{block}{}
+        \tiny \textcolor{neonCyan}{\textbf{Clinical References:}} \textcolor{mutedText}{[1] Singer et al., JAMA 2016 (Sepsis-3). [2] Kumar et al., Crit Care Med 2006 (8\%/hr mortality rise). [3] Rudd et al., Lancet 2020 (3.0M Indian deaths/yr). [4] Drew et al., PLoS ONE 2014.}
+    \end{block}
+\end{frame}
+
+% =========================================================================================
+% SLIDE 3: MARKET SIZE (TAM / SAM / SOM) & DPDPA REGULATORY MOAT (WITH TIKZ DIAGRAM)
+% =========================================================================================
+\begin{frame}{Market Opportunity (TAM / SAM / SOM) \& Regulatory Moat}
+    \begin{columns}[c]
+        \begin{column}{0.52\textwidth}
+            \begin{block}{\textcolor{neonCyan}{Market Opportunity \& TAM/SAM/SOM [8]}}
+                \tiny
+                Addressing India's critical ICU monitoring shortage:
+                \begin{itemize}
+                    \item \textbf{TAM (Total Addressable):} \textbf{Rs. 8,500 Cr} (150k+ beds, 70k hospitals).
+                    \item \textbf{SAM (Serviceable):} \textbf{Rs. 1,200 Cr} (30k tertiary care beds).
+                    \item \textbf{SOM (3-Yr Target):} \textbf{Rs. 40 Cr} (2,500 beds across 12 chains).
+                \end{itemize}
+            \end{block}
+
+            \begin{block}{\textcolor{neonAmber}{DPDPA Privacy-by-Design Architecture [8]}}
+                \tiny
+                \begin{itemize}
+                    \item \textbf{Minimizing Exposure:} Avoids routine transfer of raw patient telemetry to an external cloud, keeping data within the hospital.
+                    \item \textbf{FPDAF Solution:} Architecture designed to support compliance requirements via on-device Edge-AI federated learning.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        
+        \begin{column}{0.44\textwidth}
+            \begin{block}{\textcolor{neonTeal}{Bedside Edge-AI Node Concept}}
+                \centering
+                \vspace{0.2cm}
+                \begin{tikzpicture}[
+                    node distance=1.2cm,
+                    box/.style={draw=neonTeal, fill=lightTealBg, rounded corners, text width=2.5cm, align=center, font=\tiny\bfseries, minimum height=0.8cm},
+                    arrow/.style={->, >=stealth, thick, draw=mutedText}
+                ]
+                    \node[box, fill=lightCyanBg, draw=neonCyan] (patient) {ICU Patient\\Vitals (HL7)};
+                    \node[box] (edge) [below=of patient] {Edge-AI Node\\(Jetson Nano)};
+                    \node[box, fill=lightRoseBg, draw=neonRose] (cloud) [right=1cm of edge] {External Cloud\\(Blocked by DPDPA)};
+                    
+                    \draw[arrow] (patient) -- node[right, font=\tiny, text=mutedText] {Local Stream} (edge);
+                    \draw[arrow, dashed, draw=neonRose] (edge) -- node[above, font=\tiny, text=neonRose] {Raw Data Blocked} (cloud);
+                    
+                    \node[below=0.4cm of edge, font=\tiny\bfseries, text=neonTeal] {100\% Data Stays in Hospital};
+                \end{tikzpicture}
+                \vspace{0.2cm}
+            \end{block}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.01cm}
+    \begin{block}{}
+        \tiny \textcolor{neonCyan}{\textbf{Market \& Legal References:}} \textcolor{mutedText}{[8] Digital Personal Data Protection (DPDPA) Act, MeitY, Gazette of India 2023. NITI Aayog Healthcare Report 2023.}
+    \end{block}
+\end{frame}
+
+% =========================================================================================
+% SLIDE 4: PRODUCT ARCHITECTURE & EDGE HARDWARE FLOW (ENLARGED DIAGRAM)
+% =========================================================================================
+\begin{frame}{Product Architecture \& Edge Node Dataflow}
+    \centering
+    \begin{tikzpicture}
+        \node[draw=neonCyan!50, fill=cardBg, rounded corners=6pt, inner sep=4pt, drop shadow] {
+            \includegraphics[height=0.62\textheight,width=0.92\textwidth,keepaspectratio]{images/fpdafarcdiagram.png}
+        };
+    \end{tikzpicture}
+    
+    \vspace{0.02cm}
+    \begin{block}{}
+        \centering
+        \tiny \textcolor{neonCyan}{\textbf{Edge Architecture [11]:}} Bedside Jetson nodes process local 24h telemetry streams through BiLSTM + DDP attention layers. Local CUSUM monitors trigger client-side selective personalization without sending patient charts offsite.
+        \newline
+        \textcolor{mutedText}{\textbf{Standards:} ISO/IEEE 11073 \& HL7 FHIR Release 4 Medical Data Transfer Standards. NVIDIA Jetson Orin Nano Specs 2024.}
+    \end{block}
+\end{frame}
+
+% =========================================================================================
+% SLIDE 5: PROPRIETARY IP & INNOVATION MOAT (WITH TIKZ HEATMAP DIAGRAM)
+% =========================================================================================
+\begin{frame}{Proprietary IP \& Technological Innovation Moat}
+    \begin{columns}[c]
+        \begin{column}{0.50\textwidth}
+            \begin{block}{\textcolor{neonCyan}{1. Dynamic Dual-Phase (DDP) Attention [13]}}
+                \tiny
+                2D cross-attention ($\alpha_t \otimes \beta_v$) tracking 24h sequence hours AND multi-modal vital co-dependencies (e.g., HR vs BP).
+            \end{block}
+            
+            \begin{block}{\textcolor{neonTeal}{2. AD-CUSUM Drift Auditing [14]}}
+                \tiny
+                Real-time loss residual control charts flagging patient population shifts on edge nodes before model degradation occurs.
+            \end{block}
+
+            \begin{block}{\textcolor{neonAmber}{3. Client-Side Selective Personalization [7]}}
+                \tiny
+                Freezes shared LSTM backbones upon drift alerts, fine-tuning only local heads with \textbf{38\% Bandwidth Savings}.
+            \end{block}
+        \end{column}
+        
+        \begin{column}{0.46\textwidth}
+            \begin{block}{\textcolor{neonRose}{4. Temporal XAI Saliency Heatmaps}}
+                \centering
+                \vspace{0.2cm}
+                \begin{tikzpicture}[scale=0.6, every node/.style={font=\tiny}]
+                    % Y-axis labels
+                    \node[left] at (0, 3.5) {\textbf{HR}};
+                    \node[left] at (0, 2.5) {\textbf{MAP}};
+                    \node[left] at (0, 1.5) {\textbf{SpO2}};
+                    \node[left] at (0, 0.5) {\textbf{RR}};
+                    
+                    % X-axis labels
+                    \node[below] at (0.5, 0) {T-3h};
+                    \node[below] at (1.5, 0) {T-2h};
+                    \node[below] at (2.5, 0) {T-1h};
+                    \node[below] at (3.5, 0) {Now};
+                    
+                    % Grid colors (Heatmap representation)
+                    % HR
+                    \draw[fill=lightTealBg, draw=white] (0,3) rectangle (1,4);
+                    \draw[fill=lightAmberBg, draw=white] (1,3) rectangle (2,4);
+                    \draw[fill=neonAmber, draw=white] (2,3) rectangle (3,4);
+                    \draw[fill=neonRose, draw=white] (3,3) rectangle (4,4);
+                    
+                    % MAP
+                    \draw[fill=lightCyanBg, draw=white] (0,2) rectangle (1,3);
+                    \draw[fill=lightCyanBg, draw=white] (1,2) rectangle (2,3);
+                    \draw[fill=lightTealBg, draw=white] (2,2) rectangle (3,3);
+                    \draw[fill=lightAmberBg, draw=white] (3,2) rectangle (4,3);
+                    
+                    % SpO2
+                    \draw[fill=lightAmberBg, draw=white] (0,1) rectangle (1,2);
+                    \draw[fill=neonAmber, draw=white] (1,1) rectangle (2,2);
+                    \draw[fill=neonRose, draw=white] (2,1) rectangle (3,2);
+                    \draw[fill=neonRose, draw=white] (3,1) rectangle (4,2);
+                    
+                    % RR
+                    \draw[fill=lightCyanBg, draw=white] (0,0) rectangle (1,1);
+                    \draw[fill=lightTealBg, draw=white] (1,0) rectangle (2,1);
+                    \draw[fill=lightTealBg, draw=white] (2,0) rectangle (3,1);
+                    \draw[fill=lightAmberBg, draw=white] (3,0) rectangle (4,1);
+                    
+                    % Grid lines
+                    \draw[step=1cm, white, thick] (0,0) grid (4,4);
+                    
+                    \node[above=0.2cm of {(2,4)}, font=\tiny\bfseries, text=textColor] {Sepsis Attention Weights};
+                \end{tikzpicture}
+                \vspace{0.1cm}
+            \end{block}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.01cm}
+    \begin{block}{}
+        \tiny \textcolor{neonCyan}{\textbf{Algorithmic References:}} \textcolor{mutedText}{[13] Vaswani et al., NeurIPS 2017 (2D Cross-Attention). [14] Page E.S., Biometrika 1954 (CUSUM Control Charts). [7] Li et al., MLSys 2020.}
+    \end{block}
+\end{frame}
+
+% =========================================================================================
+% SLIDE 6: COMPETITOR ANALYSIS & COST BENCHMARKING (UPGRADED HIGH-CONTRAST TABLE VIEW)
+% =========================================================================================
+\begin{frame}{Competitor Analysis \& Cost Benchmarking}
+    \centering
+    \tiny
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{p{3.2cm} p{2.6cm} p{3.2cm} p{2.2cm} c}
+    \hline
+    \rowcolor{lightCyanBg}
+    \textbf{\textcolor{neonCyan}{Competitor System [12]}} & \textbf{\textcolor{neonCyan}{Deployment Model}} & \textbf{\textcolor{neonCyan}{Privacy \& Data Limits}} & \textbf{\textcolor{neonCyan}{Est. Cost Outlay}} & \textbf{\textcolor{neonCyan}{Edge-AI}} \\
+    \hline
+    \textbf{Epic Deterioration Index} & Cloud SaaS EHR scoring & Cloud-only (Violates DPDPA) & \$50,000+/yr ($\sim$Rs 40L) & \textcolor{neonRose}{\textbf{No}} \\
+    \textbf{Philips IntelliVue} & Bedside hardware monitor & Threshold alarms (No AI) & Rs. 15--20 Lakhs/bed & \textcolor{neonRose}{\textbf{No}} \\
+    \textbf{GE Healthcare CARESCAPE} & Enterprise server software & Vendor lock-in, No privacy & Rs. 25--30 Lakhs/setup & \textcolor{neonRose}{\textbf{No}} \\
+    \rowcolor{lightTealBg}
+    \textbf{\textcolor{textColor}{FPDAF HealthTech (Ours)}} & \textbf{\textcolor{textColor}{Federated Edge-AI Node}} & \textbf{\textcolor{textColor}{Privacy-by-Design, Real-time Drift}} & \textbf{\textcolor{neonTeal}{Rs. 1.5--2.0 L/node}} & \textbf{\textcolor{neonTeal}{YES}} \\
+    \hline
+    \end{tabular}
+    
+    \vspace{0.12cm}
+    \begin{columns}[t]
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textcolor{neonAmber}{Cost Disruption for Indian Hospitals}}
+                \tiny
+                \begin{itemize}
+                    \item \textbf{85\%-90\% Capital Cost Savings:} Rs. 1.5L - 2.0L per node vs Rs. 15L-40L for global legacy systems.
+                    \item \textbf{Plug-and-Play Integration:} Edge Jetson node connects via standard HL7/FHIR APIs with zero infrastructure overhaul.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textcolor{neonTeal}{Commercial Differentiation}}
+                \tiny
+                \begin{itemize}
+                    \item \textbf{Privacy-by-Design Architecture [8]:} Minimizes data exposure by keeping raw clinical telemetry within the hospital network.
+                    \item \textbf{Bedside Explainability:} XAI saliency heatmaps display exact hourly vital triggers for clinician validation.
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.02cm}
+    \begin{block}{}
+        \tiny \textcolor{neonCyan}{\textbf{Market Benchmarks:}} \textcolor{mutedText}{[12] Epic Systems EDI Specs (2022); Philips IntelliVue MX800 Guide (2023); GE CARESCAPE B850 Catalog (2023). [8] DPDPA Act 2023.}
+    \end{block}
+\end{frame}
+
+% =========================================================================================
+% SLIDE 7: PROTOTYPE VALIDATION & SOFTWARE STACK ARCHITECTURE
+% =========================================================================================
+\begin{frame}{Software Architecture \& Retrospective Validation}
+    \begin{columns}[t]
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textcolor{neonCyan}{Retrospective Benchmark Performance [5]}}
+                \tiny
+                (Experimental baseline built on PhysioNet retrospective data)
+                \begin{itemize}
+                    \item \textbf{86.51\% Accuracy:} Outperforms FedAvg (75.94\%) [6] and FedProx (78.85\%) [7] under non-IID data splits.
+                    \item \textbf{0.8214 AUROC Score:} High predictive discrimination for early sepsis crash detection.
+                    \item \textbf{38\% Bandwidth Savings:} 1.52 GB vs 2.48 GB in standard FL.
+                \end{itemize}
+            \end{block}
+            
+            \begin{block}{\textcolor{neonTeal}{Commercial Software Stack}}
+                \tiny
+                \begin{itemize}
+                    \item \textbf{FastAPI REST Engine:} Local REST API serving inferencing sub-10ms.
+                    \item \textbf{SQLite Warehouse:} Structured telemetry storage (\texttt{clinical\_warehouse.db}).
+                    \item \textbf{React Vite Touch UI:} Bedside touchscreen interface for ICU nurses.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textcolor{neonAmber}{Clinician Bedside Decision Modules}}
+                \tiny
+                Bedside decision support functionalities:
+                \begin{itemize}
+                    \item \textbf{Real-Time Vital Stream:} Continuous 24h timeline tracking HR, MAP, SpO2, and RR.
+                    \item \textbf{Dynamic Risk Dial:} Sepsis Crash Risk Gauge (Green, Amber, Critical Red).
+                    \item \textbf{Temporal XAI Heatmaps:} Visual hourly vital contribution breakdown.
+                \end{itemize}
+            \end{block}
+
+            \begin{block}{\textcolor{neonRose}{Admin Telemetry \& Drift Audit Portal}}
+                \tiny
+                Hospital network administration \& monitoring:
+                \begin{itemize}
+                    \item \textbf{AD-CUSUM Control Charts [14]:} Live statistical residual tracking for demographic shifts.
+                    \item \textbf{Federated Health Status:} Round-by-round client sync status and node health.
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.02cm}
+    \begin{block}{}
+        \tiny \textcolor{neonCyan}{\textbf{Validation References:}} \textcolor{mutedText}{[5] Reyna et al., PhysioNet Challenge 2019 (40,000 ICU records). [6] McMahan et al., AISTATS 2017. [7] Li et al., MLSys 2020.}
+    \end{block}
+\end{frame}
+
+% =========================================================================================
+% SLIDE 8: FINANCIAL PLAN & RS. 10.0 LAKHS TECH EXPENDITURE ITEMIZATION
+% =========================================================================================
+\begin{frame}{Itemized Technology Expenditure Breakdown (\textbf{Rs. 10.0 Lakhs})}
+    \tiny
+    \setlength{\tabcolsep}{3.5pt}
+    \renewcommand{\arraystretch}{1.1}
+    \begin{tabular}{p{3.2cm} p{5.5cm} c}
+    \hline
+    \rowcolor{lightCyanBg}
+    \textbf{\textcolor{neonCyan}{Component Category}} & \textbf{\textcolor{neonCyan}{Itemized Component Specs \& Market Quote}} & \textbf{\textcolor{neonCyan}{Cost Outlay}} \\
+    \hline
+    \textbf{A. Edge Hardware Prototyping \& MSME Assembly} & 
+    $\bullet$ 3x NVIDIA Jetson Orin Nano (8GB) Kits @ Rs 48K/ea = \textbf{1.44L} \newline
+    $\bullet$ 3x Medical 15.6" Touch Monitors \& HDMI Controllers = \textbf{0.66L} \newline
+    $\bullet$ 3x NEMA Metallic Bedside Cabinets (Regional MSME) = \textbf{0.75L} \newline
+    $\bullet$ Custom SMT Carrier PCB \& Medical Power Assembly = \textbf{0.75L} & 
+    \textbf{\textcolor{neonCyan}{Rs. 3.60 Lakhs}} \\
+    \hline
+    \textbf{B. EHR Data Curation \& Clinical Annotation} & 
+    $\bullet$ PhysioNet ICU Cohort Cleaning (40,000 vital records) = \textbf{1.40L} \newline
+    $\bullet$ Senior ICU Specialist Onset Audit (70h @ Rs 2,500/h) = \textbf{1.75L} \newline
+    $\bullet$ Vital Stream Generator Calibration (\texttt{scaler.pkl}) = \textbf{0.25L} & 
+    \textbf{\textcolor{neonTeal}{Rs. 3.40 Lakhs}} \\
+    \hline
+    \textbf{C. Cybersecurity \& Compliance Audits} & 
+    $\bullet$ CERT-In External Vulnerability \& Penetration Audit = \textbf{1.80L} \newline
+    $\bullet$ DPDPA 2023 Data Privacy Encryption Compliance Audit = \textbf{1.20L} & 
+    \textbf{\textcolor{neonAmber}{Rs. 3.00 Lakhs}} \\
+    \hline
+    \rowcolor{lightTealBg}
+    \textbf{\textcolor{textColor}{TOTAL TECH EXPENDITURE}} & \textbf{\textcolor{textColor}{100\% Itemized Market Research Quote Total}} & \textbf{\textcolor{neonCyan}{Rs. 10.00 Lakhs}} \\
+    \hline
+    \end{tabular}
+
+    \vspace{0.02cm}
+    \begin{block}{}
+        \tiny \textcolor{neonCyan}{\textbf{Expenditure Quotes:}} \textcolor{mutedText}{NVIDIA India Authorized Distributor 2024 Quotes. CERT-In Empanelled Auditor Fee Schedule 2024. Regional MSME Electronics Assembly Quotes 2024.}
+    \end{block}
+\end{frame}
+
+% =========================================================================================
+% SLIDE 9: BUSINESS MODEL, UNIT ECONOMICS & MSME MANUFACTURING NETWORK (WITH TIKZ DIAGRAM)
+% =========================================================================================
+\begin{frame}{Business Model, Unit Economics \& MSME Ecosystem}
+    \begin{columns}[c]
+        \begin{column}{0.50\textwidth}
+            \begin{block}{\textcolor{neonCyan}{\textbf{Monetization \& Revenue Model}}}
+                \tiny
+                \begin{itemize}
+                    \item \textbf{B2B Edge Node Appliance:} \textbf{Rs. 1.50L -- 2.00L / node}.
+                    \item \textbf{SaaS Telemetry Subscription:} \textbf{Rs. 25,000 / node / year}.
+                    \item \textbf{OEM Engine Licensing:} Licensing PyTorch FL engine.
+                \end{itemize}
+            \end{block}
+            
+            \begin{block}{\textcolor{neonTeal}{\textbf{Node Unit Economics}}}
+                \tiny
+                \textbf{Selling Price:} Rs. 1,75,000 \quad | \quad \textbf{BOM Cost:} Rs. 65,000 \\
+                \textbf{Gross Margin per Node:} \textbf{\textcolor{neonTeal}{63\% Gross Margin}}
+            \end{block}
+        \end{column}
+        
+        \begin{column}{0.46\textwidth}
+            \begin{block}{\textcolor{neonAmber}{\textbf{Domestic MSME Manufacturing Network}}}
+                \centering
+                \vspace{0.2cm}
+                \begin{tikzpicture}[
+                    node distance=0.6cm,
+                    box/.style={draw=neonAmber, fill=lightAmberBg, rounded corners, text width=2.5cm, align=center, font=\tiny\bfseries, minimum height=0.6cm},
+                    arrow/.style={->, >=stealth, thick, draw=mutedText}
+                ]
+                    \node[box] (pcb) {1. PCB Fabrication\\(Electronics MSME)};
+                    \node[box] (casing) [below=of pcb] {2. Enclosure Machining\\(Metal MSME)};
+                    \node[box, fill=lightCyanBg, draw=neonCyan] (assembly) [below=of casing] {3. FPDAF Final Assembly\\\& Quality Testing};
+                    
+                    \draw[arrow] (pcb) -- (casing);
+                    \draw[arrow] (casing) -- (assembly);
+                \end{tikzpicture}
+                \vspace{0.2cm}
+            \end{block}
+        \end{column}
+    \end{columns}
+    
+    \vspace{0.01cm}
+    \begin{block}{}
+        \tiny \textcolor{neonCyan}{\textbf{Regulatory Standards:}} \textcolor{mutedText}{[9] Anticipated Regulatory Pathway: CDSCO Medical Device Rules 2017 (Risk-based Classification). [10] ISO 13485:2016 Quality Management System.}
+    \end{block}
+\end{frame}
+
+% =========================================================================================
+% SLIDE 10: DEDICATED REFERENCES SLIDE (FULL FORMAL CITATIONS - COMPACT FIT)
+% =========================================================================================
+\begin{frame}{Key Clinical Publications, Datasets \& Regulatory References}
+    \begin{columns}[t]
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textcolor{neonCyan}{Clinical Pathology \& Sepsis Guidelines}}
+                \tiny
+                \begin{itemize}
+                    \item \textbf{[1] Sepsis-3 Consensus:} Singer M, et al., "Sepsis-3 Consensus", \textit{JAMA}, 315(8):801--810, 2016.
+                    \item \textbf{[2] Golden Hour Window:} Kumar A, et al., \textit{Crit Care Med}, 34(6):1589--1596, 2006.
+                    \item \textbf{[3] Global Burden:} Rudd KE, et al., \textit{The Lancet}, 395:200--211, 2020.
+                    \item \textbf{[4] Alarm Fatigue:} Drew BJ, et al., \textit{PLoS ONE}, 9(10):e110274, 2014.
+                \end{itemize}
+            \end{block}
+            
+            \begin{block}{\textcolor{neonTeal}{Datasets \& Federated Learning Engine}}
+                \tiny
+                \begin{itemize}
+                    \item \textbf{[5] PhysioNet ICU Cohort:} Reyna MA, et al., \textit{Crit Care Med}, 2019.
+                    \item \textbf{[6] FedAvg Engine:} McMahan B, et al., \textit{AISTATS}, 2017.
+                    \item \textbf{[7] FedProx Framework:} Li T, et al., \textit{MLSys}, 2020.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{block}{\textcolor{neonAmber}{Regulatory, Legal \& Quality Standards}}
+                \tiny
+                \begin{itemize}
+                    \item \textbf{[8] DPDPA Act 2023:} \textit{Digital Personal Data Protection Rules}, MeitY.
+                    \item \textbf{[9] CDSCO Guidelines:} \textit{Medical Device Rules 2017 (Risk-based Classification)}, CDSCO, MoHFW.
+                    \item \textbf{[10] ISO 13485:2016:} \textit{Medical devices -- QMS Standards}, ISO.
+                \end{itemize}
+            \end{block}
+
+            \begin{block}{\textcolor{neonRose}{Hardware \& Industry Benchmarks}}
+                \tiny
+                \begin{itemize}
+                    \item \textbf{[11] Edge AI Hardware:} NVIDIA Jetson Orin Nano Technical Guide, NVIDIA Corp, 2024.
+                    \item \textbf{[12] Commercial Systems:} Epic EDI Specs (2022); Philips IntelliVue Guide (2023); GE CARESCAPE Catalog (2023).
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% =========================================================================================
+% SLIDE 11: PRESENTATION CLOSING
+% =========================================================================================
+\begin{frame}[plain]
+    \begin{tikzpicture}[remember picture,overlay]
+        \shade[inner color=neonTeal!12, outer color=darkSlate!0] (current page.center) circle (5cm);
+    \end{tikzpicture}
+    
+    \centering
+    \vspace{0.8cm}
+    {\Huge \textbf{\textcolor{neonCyan}{Thank You}}} \\
+    \vspace{0.2cm}
+    {\large \textcolor{textColor!80}{FPDAF HealthTech: Building India's Next-Gen Privacy-Preserving MedTech AI}} \\
+    \vspace{0.5cm}
+    
+    \begin{minipage}{0.8\textwidth}
+        \begin{block}{MSME Idea Hackathon 6.0 Presentation}
+            \centering
+            \scriptsize
+            \textbf{Sub-Theme 6: Frontier Technologies} \quad | \quad \textbf{Amrita Vishwa Vidyapeetham}\\
+            \vspace{0.1cm}
+            \textcolor{textColor}{\textbf{Student Founders \& Innovators:} Sheela Akshar Sakhi \& Vemula Chakravarthy}\\
+            \textcolor{mutedText}{\textbf{Faculty Mentors:} Dr. Ramya G. R. (Lead Mentor) \& Dr. Vandhana S. (Co-Mentor)}
+        \end{block}
+    \end{minipage}
+    
+    \vspace{0.3cm}
+    {\normalsize \textcolor{neonTeal}{\textbf{Questions \& Discussion}}}
+\end{frame}
+
+\end{document}
