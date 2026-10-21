@@ -1,0 +1,24 @@
+note: Running TeX ...
+warning: algorithm.sty:11: 
+Invalid UTF-8 byte or sequence at line 11 replaced by U+FFFD.
+warning: algorithmic.sty:11: 
+Invalid UTF-8 byte or sequence at line 11 replaced by U+FFFD.
+warning: main.tex:158: Underfull \hbox (badness 1540) in paragraph at lines 157--158
+warning: main.tex:288: Underfull \vbox (badness 1831) has occurred while \output is active
+warning: main.bbl:69: Underfull \hbox (badness 2818) in paragraph at lines 66--69
+note: Running BibTeX on main.aux ...
+warning: errors were issued by BibTeX, but were ignored; use --print and/or --keep-logs for details.
+note: Rerunning TeX because bibtex was run ...
+warning: algorithm.sty:11: 
+Invalid UTF-8 byte or sequence at line 11 replaced by U+FFFD.
+warning: algorithmic.sty:11: 
+Invalid UTF-8 byte or sequence at line 11 replaced by U+FFFD.
+warning: main.tex:158: Underfull \hbox (badness 1540) in paragraph at lines 157--158
+warning: main.tex:288: Underfull \vbox (badness 1831) has occurred while \output is active
+warning: main.bbl:69: Underfull \hbox (badness 2818) in paragraph at lines 66--69
+warning: warnings were issued by the TeX engine; use --print and/or --keep-logs for details.
+note: Running xdvipdfmx ...
+warning: ICC profile format spec. version 4.3.0 not supported in current PDF version setting.
+warning: ICC profile not embedded.
+note: Writing `main.pdf` (1.2365550994873047 MiB)
+note: Skipped writing 3 intermediate files (use --keep-intermediates to keep them)

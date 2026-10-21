@@ -1,0 +1,111 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Explainable Federated Learning for Healthcare Time-Series Forecasting with Personalized Drift Adaptation\\
+}
+
+\author{\IEEEauthorblockN{1\textsuperscript{st} SHEELA AKSHAR SAKHI}
+\IEEEauthorblockA{\textit{Department of CSE} \\
+\textit{Amrita Vishwa Vidyapeetham}\\
+Coimbatore, India \\
+CB.SC.U4CSE23547}
+\and
+\IEEEauthorblockN{2\textsuperscript{nd} HASINI REDDY M}
+\IEEEauthorblockA{\textit{Department of CSE} \\
+\textit{Amrita Vishwa Vidyapeetham}\\
+Coimbatore, India \\
+CB.SC.U4CSE23529}
+\and
+\IEEEauthorblockN{3\textsuperscript{rd} KOUSIK SARMA LAKKARAJU}
+\IEEEauthorblockA{\textit{Department of CSE} \\
+\textit{Amrita Vishwa Vidyapeetham}\\
+Coimbatore, India \\
+CB.SC.U4CSE23761}
+\and
+\IEEEauthorblockN{4\textsuperscript{th} HASWITHA K}
+\IEEEauthorblockA{\textit{Department of CSE} \\
+\textit{Amrita Vishwa Vidyapeetham}\\
+Coimbatore, India \\
+CB.SC.U4CSE23363}
+\and
+\IEEEauthorblockN{5\textsuperscript{th} V. CHAKRAVARTHY}
+\IEEEauthorblockA{\textit{Department of CSE} \\
+\textit{Amrita Vishwa Vidyapeetham}\\
+Coimbatore, India \\
+CB.SC.U4CSE23753}
+}
+
+\maketitle
+
+\begin{abstract}
+Sepsis is a life-threatening medical emergency where every hour of delayed diagnosis drastically increases mortality. Continuous monitoring of Intensive Care Unit (ICU) vitals offers the potential for early warning systems. However, developing robust predictive models is hindered by stringent healthcare privacy regulations and the occurrence of concept drift across different hospital demographics. In this paper, we propose a Federated Personalized Drift-Aware Attention Framework (FPDAF) that enables privacy-preserving, decentralized training across hospital nodes. To combat population shifts, we introduce the Adaptive Divergence-Weighted CUSUM (AD-CUSUM) trigger, which audits prediction loss residuals locally to detect drift and executes Client-Side Selective Personalization (CSSP). Our experimental results, trained on the PhysioNet ICU dataset, demonstrate that the proposed FPDAF baseline achieves an accuracy of 86.51\% and an AUROC of 0.8214, outperforming FedAvg, FedProx, and standard personalized models (Ditto) while simultaneously saving 38\% in communication bandwidth.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Federated Learning, Sepsis Prediction, Concept Drift, Time-Series Forecasting, Healthcare
+\end{IEEEkeywords}
+
+\section{Introduction}
+Sepsis is characterized by an extreme, systemic immune response to an infection, often leading to multi-organ failure. In clinical critical care environments, specifically Indian ICUs, severe sepsis mortality rates exceed 34\%. Every single hour of delayed treatment increases a patient's risk of death by approximately 8\%. While deep learning sequence models like Bidirectional LSTMs can accurately forecast sepsis hours before clinical onset, centralizing raw patient data violates strict privacy laws such as HIPAA and DPDPA (Section 8). 
+
+Federated Learning (FL) mitigates privacy risks by sharing only neural network weights rather than raw data. However, applying standard algorithms like FedAvg to healthcare data faces a critical challenge: Non-IID data distribution and Concept Drift. Demographics vary drastically between regional hospital nodes, causing static global models to degrade over time.
+
+To address these challenges, we propose the Federated Personalized Drift-Aware Attention Framework (FPDAF). Our framework not only personalizes classification heads to local hospital distributions but proactively detects structural data shifts using an online neural drift monitor (AD-CUSUM). 
+
+\section{Methodology}
+
+\subsection{Federated Learning Baselines}
+We established standard decentralized baselines to benchmark performance:
+\begin{itemize}
+    \item \textbf{FedAvg}: Aggregates models using a weighted server average. 
+    \item \textbf{FedProx}: Introduces a proximal penalty term to constrain local updates from deviating too far from the global model, reducing weight divergence.
+    \item \textbf{Ditto (Personalized)}: Employs bi-level optimization where the global model acts as a regularization point for training a decoupled local classifier head.
+\end{itemize}
+
+\subsection{Proposed FPDAF Framework (v1)}
+The core architecture extracts temporal features using a shared BiLSTM and attributes risk probabilities to specific ICU sequence hours using a Multi-Head Attention layer. To handle dynamic shifts without immense communication overhead, we developed the \textbf{Adaptive Divergence-Weighted CUSUM (AD-CUSUM)} algorithm.
+
+AD-CUSUM tracks local validation loss residuals round-by-round. It computes a drift score $S_r$ by combining loss residuals, Jensen-Shannon entropy divergence, and gradient variance weights. When the drift score exceeds a threshold ($S_r > 3.0$), the system executes \textbf{Client-Side Selective Personalization (CSSP)}. CSSP freezes the shared BiLSTM backbone and exclusively fine-tunes the local classifier head, significantly saving communication bandwidth compared to constant aggregation cycles.
+
+\section{Experimental Results}
+
+We evaluated our models on highly sparse time-series data extracted from PhysioNet 2019 logs, distributing the data across a 3-hospital federated network. 
+
+The results of our comparative benchmarking are presented in Table \ref{tab1}. The Centralized BiLSTM, serving as the upper bound for centralized learning, achieved 75.09\% accuracy but violates privacy constraints. FedAvg and FedProx maintained privacy but suffered due to Non-IID variance. 
+
+Our proposed \textbf{FPDAF (v1 Baseline)} significantly outperformed prior approaches, achieving an \textbf{86.51\% Accuracy} and an \textbf{0.8214 AUROC}. Crucially, by utilizing the AD-CUSUM trigger and CSSP, the FPDAF model froze backbones during stable rounds, requiring only \textbf{1.52 GB} of communication bandwidth compared to the \textbf{2.48 GB} required by the Ditto baseline, resulting in a \textbf{38\% bandwidth saving}.
+
+\begin{table}[htbp]
+\caption{Model Benchmarking Results}
+\begin{center}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{|l|c|c|c|c|c|c|}
+\hline
+\textbf{Model Config.} & \textbf{Acc.} & \textbf{Prec.} & \textbf{Recall} & \textbf{F1} & \textbf{AUROC} & \textbf{Bandwidth} \\
+\hline
+Centralized Baseline & 75.09\% & 7.14\% & 72.17\% & 0.1299 & 0.8058 & 0 MB (N/A) \\
+FedAvg Baseline & 75.94\% & 6.94\% & 67.19\% & 0.1259 & 0.7844 & 1.24 GB \\
+FedProx Baseline & 78.85\% & 8.12\% & 60.64\% & 0.1432 & 0.7933 & 1.24 GB \\
+Ditto (Personalized) & 82.45\% & 8.98\% & 63.58\% & 0.1574 & 0.7989 & 2.48 GB \\
+\textbf{FPDAF (v1 Baseline)} & \textbf{86.51\%} & \textbf{9.81\%} & \textbf{65.33\%} & \textbf{0.1706} & \textbf{0.8214} & \textbf{1.52 GB} \\
+\hline
+\end{tabular}
+}
+\end{center}
+\end{table}
+
+\section{Conclusion and Future Work}
+In this paper, we presented FPDAF, a decentralized framework for early sepsis prediction that dynamically adapts to concept drift using AD-CUSUM. The current implementation demonstrates strong predictive capabilities while minimizing communication overhead. Future work will focus on advancing to full 100\% implementation through the DDP-ERP (Dynamic Dual-Phase \& Entropy Regularization) algorithm, integrating multi-modal unstructured clinical notes, and deploying the models to resource-constrained bedside edge devices.
+
+\end{document}

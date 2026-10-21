@@ -25,7 +25,7 @@
     \begin{tikzpicture}[remember picture,overlay]
         \node[fill=amritaMaroon, text=white, font=\bfseries\scriptsize, anchor=north east, rounded corners=2pt, inner sep=5pt]
         at ($(current page.north east) + (-0.5cm,-0.5cm)$)
-        {Type 1: Research Project | Phase II Review 3};
+        {Type 1: Research Project | Phase II Review 4};
     \end{tikzpicture}
 
     \centering
@@ -65,7 +65,16 @@
     }
 \end{frame}
 
-% --- PREVIOUS REVIEW COMMENTS & ACTION TAKEN (2) ---
+% --- PROJECT GUIDE APPROVAL (SLIDE 2) ---
+\begin{frame}{Project Guide Approval}
+    \centering
+    \includegraphics[width=0.92\textwidth, height=0.76\textheight, keepaspectratio]{images/guide_approval_ss.png}
+    \vspace{0.1cm}
+    
+    {\scriptsize \textbf{Official Review Approval from Project Guide Dr. G. R. Ramya (Co-Guide: Dr. Vandhana S)}}
+\end{frame}
+
+% --- PREVIOUS REVIEW COMMENTS & ACTION TAKEN (3) ---
 \begin{frame}{Previous Review Comments \& Action Taken}
     \begin{columns}[t]
         \begin{column}{0.48\textwidth}
@@ -102,6 +111,58 @@
                     \end{itemize}
                 \end{itemize}
             \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- RESEARCH OBJECTIVES ---
+\begin{frame}{Research Objectives \& Problem Identification}
+    \begin{block}{Problem Identified}
+        \scriptsize
+        Standard Federated Learning fails in clinical settings because of \textbf{Concept Drift}---patient demographics and vitals vary heavily across different hospitals (Non-IID data), causing static models to degrade.
+    \end{block}
+    \vspace{0.2cm}
+    \textbf{Research Objectives:}
+    \begin{itemize}
+        \scriptsize
+        \item \textbf{Objective 1:} To develop a privacy-preserving Federated Learning architecture for ICU time-series forecasting.
+        \item \textbf{Objective 2:} To design an adaptive drift detection mechanism (\textbf{AD-CUSUM}) that dynamically handles demographic shifts.
+        \item \textbf{Objective 3:} To provide Clinical Explainability (XAI) using Multi-Head Temporal Attention.
+        \item \textbf{Objective 4:} To implement a production-ready Clinical Decision Support System (CDSS) workstation.
+    \end{itemize}
+\end{frame}
+
+% --- MERGED CLINICAL PROFILE & BURDEN ---
+\begin{frame}{Clinical Profile \& Sepsis Burden in India}
+    \begin{columns}[t]
+        \begin{column}{0.48\textwidth}
+            \begin{block}{What is Sepsis?}
+                \scriptsize
+                A life-threatening systemic immune response to infection that rapidly degrades vital organs. 
+                \\[0.1cm]
+                \textbf{\textcolor{amritaMaroon}{The Time-Window Challenge:}} \\
+                Every single hour of delayed antibiotic treatment increases patient mortality risk by \textbf{8\%}. Early warning is the \textit{only} defense.
+            \end{block}
+            
+            \begin{alertblock}{Our Clinical Objective}
+                \scriptsize
+                Develop the FPDAF early-warning system to continuously analyze ICU vital signals and alert doctors \textbf{hours before} deterioration.
+            \end{alertblock}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{block}{The Crisis in Indian ICUs}
+                \centering
+                \vspace{0.2cm}
+                \begin{tikzpicture}[scale=0.85]
+                    \node[fill=amritaMaroon!20, draw=amritaMaroon, thick, rounded corners, inner sep=6pt, align=center, text width=3.5cm] at (0, 2.8) {\textbf{\Large 3.0 Million} \\ \scriptsize Deaths Annually};
+                    \node[fill=amritaMaroon!20, draw=amritaMaroon, thick, rounded corners, inner sep=6pt, align=center, text width=3.5cm] at (0, 1.2) {\textbf{\Large 30\%} \\ \scriptsize of ALL National Deaths};
+                    \node[fill=amritaMaroon!20, draw=amritaMaroon, thick, rounded corners, inner sep=6pt, align=center, text width=3.5cm] at (0, -0.4) {\textbf{\Large 50\%+} \\ \scriptsize ICU Mortality Rate};
+                \end{tikzpicture}
+                \vspace{0.2cm}
+            \end{block}
+            \vspace{-0.1cm}
+            \centering \tiny \textcolor{gray}{Sources: The George Institute for Global Health (2020) \& ISCCM}
         \end{column}
     \end{columns}
 \end{frame}
@@ -168,70 +229,9 @@
     \end{columns}
 \end{frame}
 
-% --- CLINICAL PROFILE OF SEPSIS ---
-\begin{frame}{Clinical Profile of ICU Sepsis}
-    \begin{block}{What Sepsis is}
-        \scriptsize
-        Sepsis is a life-threatening medical emergency caused by the body's extreme, systemic immune response to an infection, which ends up damaging its own tissues, blood vessels, and vital organs.
-    \end{block}
-    
-    \begin{block}{Why it is Dangerous}
-        \scriptsize
-        If not diagnosed immediately, it rapidly progresses to Septic Shock, leading to multi-organ failure, a sudden drop in blood pressure, and high mortality rates.
-    \end{block}
-    
-    \begin{block}{The Clinical Time-Window Challenge}
-        \scriptsize
-        Sepsis is notoriously difficult to detect early because its initial symptoms resemble general infections. However, every single hour of delayed treatment increases a patient's risk of death by approximately 8\%.
-    \end{block}
-    
-    \begin{alertblock}{Role of Our Project}
-        \scriptsize
-        By continuously analyzing ICU vital signals, our FPDAF (Federated Personalized Drift-Aware Attention Framework) early-warning system acts as an early-warning radar system, alerting doctors hours before a patient clinically deteriorates, giving clinicians a vital head-start to administer antibiotics and fluids.
-    \end{alertblock}
-\end{frame}
-
-% --- SEPSIS STATS IN INDIA ---
-\begin{frame}{Sepsis Burden \& Impact in India}
-    \begin{columns}[t]
-        \begin{column}{0.5\textwidth}
-            \begin{block}{National Mortality \& Case Load}
-                \scriptsize
-                Sepsis represents a critical public health crisis in India:
-                \begin{itemize}
-                    \scriptsize
-                    \item \textbf{2.9 to 3.0 Million Deaths:} Estimated annually across India due to Sepsis.
-                    \item \textbf{11.0 to 11.3 Million Cases:} Recorded annually nationwide.
-                    \item \textbf{Proportional Mortality:} Sepsis accounts for roughly \textbf{30\% (3 in 10)} of all deaths in India.
-                \end{itemize}
-                \vspace{0.1cm}
-                Source: \href{https://www.georgeinstitute.org.in/projects/sepsis-in-india-prevalence-study-sips}{\textcolor{amritaMaroon}{\underline{The George Institute for Global Health, 2020}}}
-            \end{block}
-        \end{column}
-        
-        \begin{column}{0.5\textwidth}
-            \begin{block}{Indian ICU Mortality Metrics}
-                \scriptsize
-                Within clinical critical care environments:
-                \begin{itemize}
-                    \scriptsize
-                    \item \textbf{34\% to 50\%+ Mortality Rate:} Severe sepsis patients in Indian ICUs face high clinical mortality.
-                    \item \textbf{Antimicrobial Resistance (AMR):} High AMR rates complicate treatment, making hours-early detection crucial.
-                \end{itemize}
-                \vspace{0.1cm}
-                Source: \href{https://pubmed.ncbi.nlm.nih.gov/30704986/}{\textcolor{amritaMaroon}{\underline{Indian Society of Critical Care Medicine (ISCCM)}}}
-            \end{block}
-        \end{column}
-    \end{columns}
-    
-    \begin{alertblock}{Clinical Significance \& Research Objective}
-        \scriptsize
-        Given that severe sepsis mortality in Indian ICUs exceeds 34\%, implementing a localized, real-time early warning system is the most critical and clinically viable strategy to save patient lives.
-    \end{alertblock}
-\end{frame}
-
 % --- PROPOSED FRAMEWORK: FPDAF WHAT/HOW ---
 \begin{frame}{Proposed Framework: FPDAF}
+    \let\thefootnote\relax\footnotetext{\textbf{Maps to:} Objective 1 (Privacy-preserving Architecture)}
     \begin{block}{WHAT is FPDAF (Federated Personalized Drift-Aware Attention Framework)?}
         \scriptsize
         A privacy-preserving Clinical Decision Support System (CDSS) for Sepsis early warning. Enables collaborative, HIPAA-compliant training across decentralized hospital ICU nodes without centralizing raw records.
@@ -290,205 +290,74 @@
     \end{block}
 \end{frame}
 
-% --- DEDICATED SLIDE: OUR NOVELTY ---
-\begin{frame}{Core Scientific \& Technical Novelties}
-    \begin{alertblock}{1. Multi-Head Attention Saliency (Clinical Explainability)}
-        \scriptsize
-        Integrates a 4-head query-key temporal self-attention mechanism to output dynamic sequence saliency weights, mapping exactly which hourly vitals contributed to Sepsis alarms at the bedside.
-    \end{alertblock}
-    
-    \begin{alertblock}{2. Online AD-CUSUM Residual Neural Drift Monitor}
-        \scriptsize
-        Tracks local validation loss residuals round-by-round ($S_r > 3.0$). Concept drift is detected entirely client-side, avoiding constant full-parameter aggregation cycles.
-    \end{alertblock}
-    
-    \begin{alertblock}{3. Client-Side Selective Personalization (CSSP)}
-        \scriptsize
-        Freezes the shared BiLSTM/attention layers upon drift triggers to train local classifier heads exclusively.
-        \begin{itemize}
-            \scriptsize
-            \item Bypasses global parameter uploads, saving \textbf{38\% in communication bandwidth} (1.52 GB vs 2.48 GB).
-            \item Cuts client-side adaptation training time to \textbf{6 minutes} (down from 25 minutes).
-        \end{itemize}
-    \end{alertblock}
-\end{frame}
-
 % --- SYSTEM DESIGN & SPLIT WEIGHT FORMULAS ---
 \begin{frame}{Unified System Design \& Neural Formulations}
-    \begin{columns}
-        \begin{column}{0.48\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{images/ArcDigram.jpeg}
-            \vspace{0.1cm}
-            \scriptsize \textbf{Figure 1:} FPDAF Split-Weight Model Architecture.
-        \end{column}
-        \begin{column}{0.52\textwidth}
-            \begin{block}{Decoupled bi-level Optimization Model}
-                \scriptsize
-                \[ \hat{y}_t^k = h_{\phi^k} \left( \sum_{i=1}^{t} \alpha_i \cdot g_{\theta}(X_{i}^k) \right) \]
-                \begin{itemize}
-                    \item $g_{\theta}$: Shared global LSTM backbone ($\theta$).
-                    \item $h_{\phi^k}$: Local private classifier head ($\phi^k$).
-                \end{itemize}
-            \end{block}
-            
-            \begin{block}{Temporal Multi-Head Self-Attention}
-                \scriptsize
-                \[ e_i = v_a^T \tanh(W_s s_i + b_a) \]
-                \[ \alpha_i = \frac{\exp(e_i)}{\sum_{j=1}^t \exp(e_j)} \]
-                Attributes risk probabilities to specific ICU sequence hours.
-            \end{block}
-        \end{column}
-    \end{columns}
+    \centering
+    \vspace{-0.2cm}
+    \includegraphics[width=0.75\textwidth]{images/ArcDigram.jpeg}
+    
+    \vspace{0.1cm}
+    \footnotesize \textbf{Figure 1:} FPDAF Split-Weight Model Architecture (Shared global feature extraction, local private classification heads).
 \end{frame}
 
-% --- DEDICATED SLIDE 2: 3-HOSPITAL FEDERATED UPDATE LIFECYCLE ---
-\begin{frame}{Decentralized Model Update Lifecycle (3-Hospital Loop)}
+% --- MERGED ALGORITHM COMPARISON ---
+\begin{frame}{Algorithm Comparison: Existing vs. Proposed AD-CUSUM}
     \begin{columns}[t]
-        \begin{column}{0.5\textwidth}
-            \begin{block}{5-Step Iterative Communication Loop}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{Existing CUSUM (The Problem)}
+                \scriptsize
+                \textbf{Standard Mechanism:} Accumulates raw prediction loss over time to trigger a drift alert. The recurrence relation is:
+                
+                \vspace{0.1cm}
+                $ S_r \leftarrow \max(0, S_{r-1} + s_r - \kappa) $
+                \vspace{0.1cm}
+                
+                where $s_r$ is the loss and $\kappa$ is a fixed slack parameter.
+                \\[0.2cm]
+                \textbf{Why it fails in Deep Learning:} \\
+                Standard SGD mini-batches have incredibly high variance. This causes the baseline $S_r$ score to fluctuate wildly, generating \textbf{\textcolor{amritaMaroon}{constant false positive alerts}} in the ICU, leading to alarm fatigue.
+            \end{block}
+        \end{column}
+        
+        \begin{column}{0.52\textwidth}
+            \begin{alertblock}{Our Proposed Algorithm: AD-CUSUM}
                 \scriptsize
                 \begin{enumerate}
-                    \item \textbf{Step 1: Global Model Broadcast} \\
-                    Central server initializes $W_{\text{global}}^0$ and broadcasts weights to Hospital 1, Hospital 2, and Hospital 3.
-                    
-                    \item \textbf{Step 2: On-Device Data \& Local Training} \\
-                    Hospitals collect bedside ICU vitals locally. Each node trains for $E=2$ local SGD epochs, computing local weight updates $\Delta w_k$.
-                    
-                    \item \textbf{Step 3: Privacy Update Transmission} \\
-                    Hospitals send \textbf{ONLY mathematical weight updates} ($\Delta w_k$) over secure TLS. Zero raw patient records ever leave the hospital!
-                    
-                    \item \textbf{Step 4: Central Server Aggregation} \\
-                    Central server aggregates updates via weighted averaging: $W_{\text{global}}^{t+1} = \sum_{k=1}^3 \frac{n_k}{N} W_k^{t+1}$.
-                    
-                    \item \textbf{Step 5: Round Synchronization} \\
-                    Server sends $W_{\text{global}}^{t+1}$ back to all 3 hospitals, continuously updating bedside clinical risk dials.
+                    \item \textbf{Input:} Val loss $\mathcal{L}_{val}$, Probabilities $P$
+                    \item \textbf{Dynamic Slack:} Auto-calibrate noise:\\
+                    $ \kappa_r \leftarrow \max(0.01, \mu_{loss} + \alpha \cdot \sigma_{loss}) $
+                    \item \colorbox{yellow!40}{\textbf{Innovation 1 (Entropy):}} Shift:\\
+                    $ D_{\text{JSD}}^{(r)} \leftarrow \text{JSD}\left(P^{(r)} \parallel P^{(r-1)}\right) $
+                    \item \colorbox{yellow!40}{\textbf{Innovation 2 (Grad Wt):}} Noise:\\
+                    $ w_{\text{grad}}^{(r)} \leftarrow 1.0 + \tanh\left(\gamma \cdot \text{Var}(\nabla_\theta \mathcal{L})\right) $
+                    \item \textbf{Update Drift Score:}\\
+                    $ S_r \leftarrow \max\left(0, S_{r-1} + w_{\text{grad}}^{(r)} \cdot \left(\dots + \beta D_{\text{JSD}}^{(r)} - \kappa_r\right)\right) $
                 \end{enumerate}
-            \end{block}
-        \end{column}
-        
-        \begin{column}{0.5\textwidth}
-            \begin{block}{3-Hospital Architecture Nodes}
-                \scriptsize
-                \begin{itemize}
-                    \item \textbf{Hospital 1 (Client Node 0):} 92,613 training samples, 3.24\% sepsis positive rate.
-                    \item \textbf{Hospital 2 (Client Node 1):} 151,916 training samples, 3.09\% sepsis positive rate.
-                    \item \textbf{Hospital 3 (Client Node 2):} 233,140 training samples, 2.07\% sepsis positive rate.
-                \end{itemize}
-            \end{block}
-            \centering
-            \begin{tikzpicture}[scale=0.8, every node/.style={transform shape}]
-                \node (server) [fill=amritaMaroon!20, draw=amritaMaroon, thick, rounded corners=4pt, font=\bfseries\scriptsize, align=center, inner sep=6pt] at (0,2) {Central Federated Server\\(Aggregation: $W_{\text{global}}^{t+1} = \sum \frac{n_k}{N} W_k$)};
-                \node (h1) [fill=blue!15, draw=blue, thick, rounded corners=4pt, font=\tiny\bfseries, align=center] at (-2.5,-0.8) {Hospital 1\\(Client Node 0)\\Local SGD $E=2$};
-                \node (h2) [fill=green!15, draw=green!60!black, thick, rounded corners=4pt, font=\tiny\bfseries, align=center] at (0,-0.8) {Hospital 2\\(Client Node 1)\\Local SGD $E=2$};
-                \node (h3) [fill=orange!15, draw=orange!80!black, thick, rounded corners=4pt, font=\tiny\bfseries, align=center] at (2.5,-0.8) {Hospital 3\\(Client Node 2)\\Local SGD $E=2$};
-                
-                \draw[<->, thick, draw=blue] (server) -- (h1) node[midway, left, font=\tiny\bfseries] {$\Delta w_1$};
-                \draw[<->, thick, draw=green!60!black] (server) -- (h2) node[midway, fill=white, font=\tiny\bfseries] {$\Delta w_2$};
-                \draw[<->, thick, draw=orange!80!black] (server) -- (h3) node[midway, right, font=\tiny\bfseries] {$\Delta w_3$};
-            \end{tikzpicture}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-% --- DEDICATED SLIDE 3: CONCEPT DRIFT & AD-CUSUM DEEP-DIVE ---
-\begin{frame}{Concept Drift Detection \& AD-CUSUM Architecture}
-    \begin{columns}[t]
-        \begin{column}{0.5\textwidth}
-            \begin{block}{What is Concept Drift in Clinical ICUs?}
-                \scriptsize
-                Patient demographics, seasonal virus surges, changing admission criteria, and evolving clinical guidelines cause hospital data distributions to shift over time, rendering static models inaccurate.
-            \end{block}
-            
-            \begin{block}{Why Classical CUSUM Fails in Deep Learning}
-                \scriptsize
-                Standard CUSUM process charts trigger constant false positive drift alerts due to high variance in mini-batch stochastic gradient descent loss residuals.
-            \end{block}
-        \end{column}
-        
-        \begin{column}{0.5\textwidth}
-            \begin{alertblock}{Our Innovation: AD-CUSUM Recurrence Relation}
-                \scriptsize
-                \[ S_r = \max\left(0, S_{r-1} + w_{\text{grad}}^{(r)} \cdot \left(\mathcal{L}_{\text{val}, r} + \beta D_{\text{JSD}}^{(r)} - \kappa_r\right)\right) \]
-                \begin{itemize}
-                    \scriptsize
-                    \item \textbf{Prediction Entropy ($D_{\text{JSD}}$):} Measures logit probability distribution shifts using Jensen-Shannon Divergence.
-                    \item \textbf{Gradient Variance Weight ($w_{\text{grad}}$):} Scales update progression by classifier head gradient variance, suppressing mini-batch noise false alarms.
-                    \item \textbf{Dynamic Slack ($\kappa_r$):} Auto-calibrates noise threshold ($\mu_{\text{loss}} + \alpha \sigma_{\text{loss}}$).
-                \end{itemize}
             \end{alertblock}
-            
-            \begin{block}{Drift Response via CSSP Protocol}
-                \scriptsize
-                When $S_r > H=3.0$, client executes \textbf{Client-Side Selective Personalization (CSSP)}, freezing backbone layers (`requires\_grad = False`) and fine-tuning classifier heads locally for 5 epochs without uploading weights. Saves \textbf{38\% bandwidth} and cuts adaptation to \textbf{6 minutes}!
-            \end{block}
         \end{column}
     \end{columns}
 \end{frame}
 
 % --- DRIFT & AD-CUSUM NEURAL TRIGGER ---
-\begin{frame}{Proactive Drift Adaptation: AD-CUSUM Neural Trigger}
-    \begin{columns}
-        \begin{column}{0.52\textwidth}
-            \textbf{Concept Drift Challenge:}
-            \scriptsize
-            A static global model degrades when client ICU patient distributions shift over time. 
-            Standard Personalized FL (e.g. Ditto) constantly aggregates and fine-tunes all nodes, resulting in immense network overhead.
-            
-            \vspace{0.2cm}
-            \textbf{The Proposed AD-CUSUM Neural Trigger:}
-            \begin{itemize}
-                \item Novel \textbf{Adaptive Divergence-Weighted CUSUM} updates drift score $S_r$:
-                \[ S_r = \max\left(0, S_{r-1} + w_{\text{grad}}^{(r)} \cdot \left(\mathcal{L}_{val, r} + \beta D_{\text{JSD}}^{(r)} - \kappa_r\right)\right) \]
-                \item Combines loss residuals, prediction entropy divergence ($D_{\text{JSD}}$), and gradient variance weights ($w_{\text{grad}}$).
-                \item Auto-calibrating dynamic slack $\kappa_r = \mu_{loss} + \alpha \sigma_{loss}$ suppresses mini-batch noise.
-                \item If $S_r > H$ (threshold $H = 3.0$), triggers \textbf{Client-Side Selective Personalization (CSSP)}: freezes backbone layers $\theta$ and adapts classification head $\phi^k$ locally.
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.48\textwidth}
-            \begin{block}{Bandwidth Savings Benefits}
-                \scriptsize
-                \begin{itemize}
-                    \item Aggregation is bypassed during stable performance rounds.
-                    \item Communication bandwidth is saved by 38\% compared to standard personalized systems (1.52 GB vs 2.48 GB).
-                    \item Local personalization head fine-tuning takes only 6 minutes (down from 25 minutes).
-                \end{itemize}
-            \end{block}
-            \centering
-            \includegraphics[width=0.9\textwidth]{images/Dataflow2.png}
-        \end{column}
-    \end{columns}
-\end{frame}
 
-% --- DEVELOPED AD-CUSUM ALGORITHM PSEUDOCODE ---
-\begin{frame}{Our Developed Algorithm: AD-CUSUM Pseudocode}
-    \begin{block}{AD-CUSUM (Adaptive Divergence-Weighted CUSUM) Algorithmic Procedure}
-        \scriptsize
-        \begin{enumerate}
-            \item \textbf{Input:} Client validation loss $\mathcal{L}_{val, r}$, output probabilities $P^{(r)}$, baseline loss $\mu_0$, threshold $H = 3.0$.
-            \item \textbf{Dynamic Slack Calculation:} Auto-calibrate slack threshold:
-            \[ \kappa_r \leftarrow \max(0.01, \mu_{loss} + \alpha \cdot \sigma_{loss} - \mu_0) \]
-            \item \textbf{Entropy Divergence ($D_{\text{JSD}}$):} Measure prediction distribution shift:
-            \[ D_{\text{JSD}}^{(r)} \leftarrow \text{JSD}\left(P^{(r)} \parallel P^{(r-1)}\right) \]
-            \item \textbf{Gradient Variance Weight ($w_{\text{grad}}$):} Scale progression by head gradient variance:
-            \[ w_{\text{grad}}^{(r)} \leftarrow 1.0 + \tanh\left(\gamma \cdot \text{Var}(\nabla_\theta \mathcal{L})\right) \]
-            \item \textbf{Recurrence Accumulation:} Update online score:
-            \[ S_r \leftarrow \max\left(0, S_{r-1} + w_{\text{grad}}^{(r)} \cdot \left((\mathcal{L}_{val, r} - \mu_0) + \beta D_{\text{JSD}}^{(r)} - \kappa_r\right)\right) \]
-            \item \textbf{Drift Trigger Rule:} If $S_r > H$, flag concept drift ($\text{drift\_flag} \leftarrow \text{True}$), reset $S_r \leftarrow 0.0$, and execute Client-Side Selective Personalization (CSSP).
-        \end{enumerate}
-    \end{block}
-\end{frame}
+
 
 % --- DEVELOPED FPDAF-V2 ALGORITHM DDP-ERP ---
-\begin{frame}{Our New FPDAF-v2 Invention: DDP-ERP Algorithm}
+\begin{frame}{Proposed DDP-ERP Algorithm}
     \begin{block}{Dynamic Dual-Phase Saliency \& Entropy-Regularized Personalization}
         \scriptsize
-        To further push predictive precision, we invented the \textbf{DDP-ERP algorithm} for FPDAF-v2:
+        To further push predictive precision, we invented the \textbf{DDP-ERP algorithm} for FPDAF-v2. Our core innovations are highlighted below:
         \begin{enumerate}
-            \item \textbf{Dual-Phase Cross-Attention (DP-CA):} Computes 2D attention matrices capturing both 24-hour sequence time steps ($\alpha_t$) and vital co-dependencies ($\beta_v$, e.g., Heart Rate vs. Blood Pressure correlation).
-            \item \textbf{Entropy-Regularized Soft-Personalization (ER-SP):} Replaces rigid Ditto quadratic penalties with an adaptive KL-Divergence and Cosine Contrastive Regularizer:
-            \[ \mathcal{L}_{\text{DDP-ERP}} = \mathcal{L}_{\text{ce}}(y, \hat{y}) + \lambda D_{\text{KL}}\left(P_k \parallel P_{\text{global}}\right) + \eta (1 - \cos(\phi^k, \theta_{\text{global}})) \]
-            \item \textbf{Performance Surge:} Elevates model accuracy from 86.51\% to \textbf{96.42\% Accuracy} (>95\% target) and \textbf{0.9418 AUROC}.
+            \item \colorbox{yellow!40}{\textbf{Innovation 1: Dual-Phase Cross-Attention (DP-CA)}} \\
+            Computes 2D attention matrices capturing both 24-hour sequence time steps ($\alpha_t$) and vital co-dependencies ($\beta_v$, e.g., Heart Rate vs. Blood Pressure correlation).
+            
+            \vspace{0.2cm}
+            \item \colorbox{yellow!40}{\textbf{Innovation 2: Entropy-Regularized Soft-Personalization (ER-SP)}} \\
+            Replaces rigid Ditto quadratic penalties with an adaptive KL-Divergence and Cosine Contrastive Regularizer to prevent client model drift while preserving localized decision accuracy.
+            
+            \vspace{0.2cm}
+            \item \textbf{Performance Surge:} \\
+            Elevates model accuracy from 86.51\% to \textbf{96.42\% Accuracy} (>95\% target) and \textbf{0.9418 AUROC}.
         \end{enumerate}
     \end{block}
 \end{frame}
@@ -589,47 +458,9 @@
     \end{columns}
 \end{frame}
 
-% --- CLINICAL DASHBOARD INTERFACE ---
-\begin{frame}{Interactive Clinician Dashboard UI}
-    \begin{block}{Doctor's Bedside Diagnostic View (Live Patient Care)}
-        \begin{columns}[t]
-            \begin{column}{0.48\textwidth}
-                \scriptsize
-                \begin{itemize}
-                    \item \textbf{Timeline Telemetry:} Plots hourly ICU vital segments (HR, SBP, Temp, Resp, SpO$_2$) using Recharts.
-                    \item \textbf{Live Predictions Dials:} Overlays risk probability scores for all federated baselines.
-                \end{itemize}
-            \end{column}
-            \begin{column}{0.48\textwidth}
-                \scriptsize
-                \begin{itemize}
-                    \item \textbf{Attention Saliency Maps:} Attributes risk alerts to specific sequence hours (e.g. onset hours 16--22) for bedside interpretability.
-                \end{itemize}
-            \end{column}
-        \end{columns}
-    \end{block}
-    
-    \begin{block}{Admin's Federated Telemetry View (System Operations)}
-        \begin{columns}[t]
-            \begin{column}{0.48\textwidth}
-                \scriptsize
-                \begin{itemize}
-                    \item \textbf{Drift Controls:} Plots AD-CUSUM curves, tracking drift accumulation limits ($S_r > 3.0$) and CSSP backbone freezes.
-                    \item \textbf{Round Tracker:} Animates client-server parameter upload/download loops using Framer Motion.
-                \end{itemize}
-            \end{column}
-            \begin{column}{0.48\textwidth}
-                \scriptsize
-                \begin{itemize}
-                    \item \textbf{Design System:} Tailwind CSS v4 class-based toggling supporting light/dark medical navy workstation styles.
-                \end{itemize}
-            \end{column}
-        \end{columns}
-    \end{block}
-\end{frame}
-
 % --- CLINICIAN DASHBOARD: DOCTOR PORTAL ---
 \begin{frame}{Clinician Dashboard Interface (Doctor Portal)}
+    \let\thefootnote\relax\footnotetext{\textbf{Maps to:} Objective 3 (Clinical Explainability) \& Objective 4}
     \begin{columns}
         \begin{column}{0.52\textwidth}
             \centering
@@ -652,7 +483,7 @@
 \end{frame}
 
 % --- CLINICIAN DASHBOARD: ADMIN PORTAL ---
-\begin{frame}{Clinician Dashboard Interface (Admin Portal)}
+\begin{frame}{MLOps \& Telemetry Dashboard (Admin Portal)}
     \begin{columns}
         \begin{column}{0.52\textwidth}
             \centering
@@ -674,19 +505,137 @@
 \end{frame}
 
 % --- SUMMARY & ROADMAP COMPLIANCE ---
-\begin{frame}{Summary of Completed Phase II Works}
-    \begin{itemize}
+
+% --- FUTURE PLAN ---
+\begin{frame}{Future Plan: Towards 100\% Implementation}
+    \begin{block}{Current Status: 70\% Implementation}
         \small
-        \item \textbf{Data Preprocessing Completed:} Decoded sparse vitals logs to construct clean sequence windows.
-        \item \textbf{PyTorch Implementations Completed:} Trained standard baselines alongside our proposed FPDAF model.
-        \item \textbf{Database Schema Integrated:} SQLite warehouse populated with real patients, hourly vitals, and predictions.
-        \item \textbf{Clinical WORKSTATION Finished:} Production-quality React Vite interface with tailored user views.
-        \item \textbf{Deliverables Pushed to Git:} Full Phase II codebase pushed to main repository.
-    \end{itemize}
-    \vspace{0.3cm}
-    \begin{block}{Roadmap Compliance}
-        Our completed milestones match the project objectives, delivering a privacy-preserving and explainable Sepsis prediction pipeline.
+        We have successfully established the foundational federated learning pipelines, the personalized AD-CUSUM drift detection mechanism, and the core clinical CDSS workstation.
     \end{block}
+    
+    \vspace{0.2cm}
+    
+    \begin{block}{Next Steps for 100\% Implementation}
+        \begin{itemize}
+            \small
+            \item \textbf{Edge Device Deployment}: Compressing and deploying localized models onto resource-constrained bedside monitoring hardware.
+            \item \textbf{Multi-modal Integration}: Extending the attention mechanism to process unstructured clinical text notes alongside vital signs.
+            \item \textbf{Live Hospital Shadow Testing}: Connecting the FastAPI backend to live streaming data sources for real-time inference validation.
+            \item \textbf{Advanced Privacy Mechanisms}: Investigating differential privacy during the global parameter aggregation phase.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% --- DEDICATED SLIDE 2: 3-HOSPITAL FEDERATED UPDATE LIFECYCLE ---
+\begin{frame}{Decentralized Model Update Lifecycle (3-Hospital Loop)}
+    \begin{columns}[t]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{5-Step Iterative Communication Loop}
+                \scriptsize
+                \begin{enumerate}
+                    \item \textbf{Step 1: Global Model Broadcast} \\
+                    Central server initializes $W_{\text{global}}^0$ and broadcasts weights to Hospital 1, Hospital 2, and Hospital 3.
+                    
+                    \item \textbf{Step 2: On-Device Data \& Local Training} \\
+                    Hospitals collect bedside ICU vitals locally. Each node trains for $E=2$ local SGD epochs, computing local weight updates $\Delta w_k$.
+                    
+                    \item \textbf{Step 3: Privacy Update Transmission} \\
+                    Hospitals send \textbf{ONLY mathematical weight updates} ($\Delta w_k$) over secure TLS. Zero raw patient records ever leave the hospital!
+                    
+                    \item \textbf{Step 4: Central Server Aggregation} \\
+                    Central server aggregates updates via weighted averaging: $W_{\text{global}}^{t+1} = \sum_{k=1}^3 \frac{n_k}{N} W_k^{t+1}$.
+                    
+                    \item \textbf{Step 5: Round Synchronization} \\
+                    Server sends $W_{\text{global}}^{t+1}$ back to all 3 hospitals, continuously updating bedside clinical risk dials.
+                \end{enumerate}
+            \end{block}
+        \end{column}
+        
+        \begin{column}{0.5\textwidth}
+            \begin{block}{3-Hospital Architecture Nodes}
+                \scriptsize
+                \begin{itemize}
+                    \item \textbf{Hospital 1 (Client Node 0):} 92,613 training samples, 3.24\% sepsis positive rate.
+                    \item \textbf{Hospital 2 (Client Node 1):} 151,916 training samples, 3.09\% sepsis positive rate.
+                    \item \textbf{Hospital 3 (Client Node 2):} 233,140 training samples, 2.07\% sepsis positive rate.
+                \end{itemize}
+            \end{block}
+            \centering
+            \vspace{-0.2cm}
+            \begin{tikzpicture}[scale=0.75, every node/.style={transform shape}]
+                \node (server) [fill=amritaMaroon!20, draw=amritaMaroon, thick, rounded corners=4pt, font=\bfseries\scriptsize, align=center, inner sep=6pt] at (0,2) {Central Federated Server\\(Aggregation: $W_{\text{global}}^{t+1} = \sum \frac{n_k}{N} W_k$)};
+                \node (h1) [fill=blue!15, draw=blue, thick, rounded corners=4pt, font=\tiny\bfseries, align=center] at (-2.5,-0.8) {Hospital 1\\(Client Node 0)\\Local SGD $E=2$};
+                \node (h2) [fill=green!15, draw=green!60!black, thick, rounded corners=4pt, font=\tiny\bfseries, align=center] at (0,-0.8) {Hospital 2\\(Client Node 1)\\Local SGD $E=2$};
+                \node (h3) [fill=orange!15, draw=orange!80!black, thick, rounded corners=4pt, font=\tiny\bfseries, align=center] at (2.5,-0.8) {Hospital 3\\(Client Node 2)\\Local SGD $E=2$};
+                
+                \draw[<->, thick, draw=blue] (server) -- (h1) node[midway, left, font=\tiny\bfseries] {$\Delta w_1$};
+                \draw[<->, thick, draw=green!60!black] (server) -- (h2) node[midway, fill=white, font=\tiny\bfseries] {$\Delta w_2$};
+                \draw[<->, thick, draw=orange!80!black] (server) -- (h3) node[midway, right, font=\tiny\bfseries] {$\Delta w_3$};
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- INDIVIDUAL CONTRIBUTIONS ---
+\begin{frame}{Individual Contributions}
+    \begin{table}
+        \centering
+        \scriptsize
+        \renewcommand{\arraystretch}{1.3}
+        \resizebox{\textwidth}{!}{
+        \begin{tabular}{|l|l|p{7.2cm}|}
+            \hline
+            \textbf{Student Name} & \textbf{Project Role} & \textbf{Core Contributions} \\
+            \hline
+            \textbf{SHEELA AKSHAR SAKHI} & Team Lead / ML Engineer & Project coordination, core centralized \& FPDAF PyTorch model engineering, DDP-ERP algorithm development. \\
+            \hline
+            \textbf{HASINI REDDY M} & Federated Learning Engineer & Implemented decentralized FedAvg/FedProx aggregation pipelines and local head optimization. \\
+            \hline
+            \textbf{KOUSIK S. LAKKARAJU} & Explainable AI Researcher & Engineered multi-head temporal self-attention components and AD-CUSUM drift thresholds. \\
+            \hline
+            \textbf{HASWITHA K} & Backend \& Eval Developer & Developed FastAPI clinical warehouse, evaluation metrics extraction, and performance benchmarking. \\
+            \hline
+            \textbf{V. CHAKRAVARTHY} & Quality Assurance \& Testing & React Vite dashboard integration, preprocessing quality audits, and end-to-end bug verification. \\
+            \hline
+        \end{tabular}
+        }
+    \end{table}
+\end{frame}
+% --- TECHNICAL ENRICHMENT ACTIVITY CHOICES ---
+\begin{frame}{4. Technical Enrichment Activity Choices}
+    \small \textbf{Professional Online Certification Details (Individual Mandatory: 10--20 Hours)}
+    
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item \textbf{Individual MOOC / Online Certification Selection:}
+    \end{itemize}
+    
+    \begin{table}
+        \centering
+        \scriptsize
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular}{|c|l|l|l|l|}
+            \hline
+            \textbf{S.No} & \textbf{Student Name} & \textbf{Chosen MOOC / Course Title} & \textbf{Platform} & \textbf{Hours} \\
+            \hline
+            1 & SHEELA A. SAKHI & Deep Learning Specialization & Coursera & 20 Hrs \\
+            \hline
+            2 & HASINI REDDY M & Developing APIs with FastAPI & Coursera & 16 Hrs \\
+            \hline
+            3 & KOUSIK S. LAKKARAJU & Explainable AI in Healthcare & edX & 12 Hrs \\
+            \hline
+            4 & HASWITHA K & Federated Learning Principles & Coursera & 15 Hrs \\
+            \hline
+            5 & V. CHAKRAVARTHY & Time Series Analysis and Forecasting & Coursera & 15 Hrs \\
+            \hline
+        \end{tabular}
+    \end{table}
+
+    \vspace{0.2cm}
+    \begin{itemize}
+        \scriptsize
+        \item \textbf{Requirement:} Each student must complete one approved 10--20 hour online certification from a recognized platform (Coursera, NPTEL, edX, etc.) relevant to the project.
+    \end{itemize}
 \end{frame}
 
 % --- REFERENCES ---
