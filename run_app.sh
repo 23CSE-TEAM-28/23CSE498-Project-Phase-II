@@ -28,11 +28,11 @@ if [ ! -z "$PORT_8000_PID" ]; then
     sleep 1
 fi
 
-# Check if port 5173 is occupied and terminate conflicting process to ensure port 5173 binding
-PORT_5173_PID=$(lsof -t -i :5173)
-if [ ! -z "$PORT_5173_PID" ]; then
-    echo "⚠️ Port 5173 is occupied by process ID $PORT_5173_PID. Freeing port 5173..."
-    kill -9 $PORT_5173_PID
+# Check if port 5175 is occupied and terminate conflicting process to ensure port 5175 binding
+PORT_5175_PID=$(lsof -t -i :5175)
+if [ ! -z "$PORT_5175_PID" ]; then
+    echo "⚠️ Port 5175 is occupied by process ID $PORT_5175_PID. Freeing port 5175..."
+    kill -9 $PORT_5175_PID
     sleep 1
 fi
 
@@ -51,9 +51,9 @@ if [ ! -d "$BASE_DIR/dashboard/node_modules" ]; then
 fi
 
 # 3. Start React Vite Frontend
-echo "🚀 2. Launching React Vite Clinician Dashboard Interface..."
+echo "🚀 2. Launching React Vite Clinician Dashboard Interface on port 5175..."
 cd "$BASE_DIR/dashboard"
-npm run dev
+npm run dev -- --port 5175
 
 # Keep process open to clean up on interrupts
 wait $BACKEND_PID
