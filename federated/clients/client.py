@@ -1,4 +1,5 @@
 import logging
+import numpy as np
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -183,15 +184,6 @@ class FederatedClient:
             lam=lam,
             global_state_dict=global_state_dict
         )
-        # CUSUM & AD-CUSUM drift detection variables for FPDAF
-        self.cusum_score = 0.0
-        self.cusum_history = []
-        self.ad_cusum_score = 0.0
-        self.ad_cusum_history = []
-        self.prev_val_probs = None
-        self.val_loss_history = []
-        self.drift_triggered = False
-        self.skip_global_upload = False
         
         # 5. Evaluate personalized model locally on validation split
         val_loss, val_acc = self.trainer.validate(
@@ -209,14 +201,77 @@ class FederatedClient:
             
         return val_loss, val_acc
 
-    def ddp_erp_personalize(self, model: nn.Module, global_state_dict: dict, kl_weight: float = 0.2, eta: float = 0.1) -> tuple:
+    def ddp_erp_personalize(
+        self, 
+        model: nn.Module, 
+        global_state_dict: dict, 
+        lam: float = 0.1, 
+        entropy_weight: float = 0.05,
+        freeze_backbone: bool = False,
+        custom_epochs: int = None
+    ) -> tuple:
         """
-        [NOVEL ALGORITHM 2: DDP-ERP]
-        Dynamic Dual-Phase Saliency & Entropy-Regularized Personalization.
-        Combines Dual-Phase Cross Attention (Temporal + Vital co-dependency) with KL-Divergence
-        & Cosine Contrastive Regularization, boosting model accuracy to 96.42% (>95%).
+        [ALGORITHM: DDP-ERP] Dynamic Dual-Phase Saliency & Entropy-Regularized Personalization.
+        Combines localized class-weighted optimization with global parameter anchoring
+        and predictive entropy regularization to prevent overconfident drift errors.
         """
-        val_loss, val_acc = self.fit_ditto(model, global_state_dict, lambda_reg=0.1, pers_epochs=5)
+        # 1. Initialize local personalized parameters if not already present
+        if self.personalized_weights is None:
+            self.personalized_weights = {k: v.clone() for k, v in global_state_dict.items()}
+            
+        # 2. Load persistent personalized state
+        model.load_state_dict(self.personalized_weights)
+        
+        # 3. Handle backbone freezing if requested under CSSP
+        if freeze_backbone:
+            logger.info(f"  [CSSP Active] Freezing feature extractor backbone on Client {self.client_id} for head-only DDP-ERP personalization.")
+            for name, param in model.named_parameters():
+                if "lstm" in name or "attention" in name:
+                    param.requires_grad = False
+                else:
+                    param.requires_grad = True
+            optimizer = torch.optim.Adam(
+                filter(lambda p: p.requires_grad, model.parameters()),
+                lr=self.lr,
+                weight_decay=self.weight_decay
+            )
+        else:
+            for param in model.parameters():
+                param.requires_grad = True
+            optimizer = torch.optim.Adam(
+                model.parameters(),
+                lr=self.lr,
+                weight_decay=self.weight_decay
+            )
+            
+        # 4. Perform local DDP-ERP epochs
+        epochs_to_run = custom_epochs if custom_epochs is not None else self.local_epochs
+        self.trainer.train_ddp_erp(
+            model=model,
+            train_loader=self.train_loader,
+            criterion=self.criterion,
+            optimizer=optimizer,
+            local_epochs=epochs_to_run,
+            client_id=self.client_id,
+            lam=lam,
+            entropy_weight=entropy_weight,
+            global_state_dict=global_state_dict
+        )
+        
+        # 5. Evaluate personalized model locally on validation split
+        val_loss, val_acc = self.trainer.validate(
+            model=model,
+            val_loader=self.val_loader,
+            criterion=self.criterion
+        )
+        
+        # 6. Save persistent personalized weights locally
+        self.personalized_weights = {k: v.cpu().clone() for k, v in model.state_dict().items()}
+        
+        # 7. Reset requires_grad for all parameters before returning
+        for param in model.parameters():
+            param.requires_grad = True
+            
         return val_loss, val_acc
 
     def update_cusum(self, val_loss: float, base_loss_threshold: float = 0.25, kappa: float = 0.02, h_threshold: float = 3.0) -> bool:
