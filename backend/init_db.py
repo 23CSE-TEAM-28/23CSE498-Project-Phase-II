@@ -333,12 +333,12 @@ def init_database():
         comp = json.load(f)
         
     models_data = [
-        ("Centralized Baseline", 75.09, 7.14, 72.17, 0.1299, 0.8058, "0 MB (N/A)", "1h 45m", "N/A", "#64748b"),
-        ("FedAvg Baseline", 75.94, 6.94, 67.19, 0.1259, 0.7844, "1.24 GB", "2h 10m", "N/A", "#f97316"),
-        ("FedProx Baseline", 78.85, 8.12, 60.64, 0.1432, 0.7933, "1.24 GB", "2h 35m", "N/A", "#3b82f6"),
-        ("Ditto (Personalized)", 82.45, 8.98, 63.58, 0.1574, 0.7989, "2.48 GB", "4h 20m", "25m", "#10b981"),
-        ("FPDAF (v1 Baseline)", 86.51, 9.81, 65.33, 0.1706, 0.8214, "1.52 GB (CSSP saved 38%)", "3h 05m", "6m (Head-Only)", "#0d9488"),
-        ("FPDAF-v2 (Enhanced DDP-ERP)", 96.42, 18.75, 82.50, 0.3056, 0.9418, "1.52 GB (CSSP saved 38%)", "2h 50m", "4m (Dual-Phase)", "#8b5cf6")
+        ("Centralized Baseline", 90.38, 8.94, 29.72, 0.1375, 0.7309, "0 MB (N/A)", "1h 45m", "N/A", "#64748b"),
+        ("FedAvg Baseline", 88.89, 9.35, 37.98, 0.1500, 0.7559, "1.24 GB", "2h 10m", "N/A", "#f97316"),
+        ("FedProx Baseline", 88.93, 9.35, 37.98, 0.1500, 0.7588, "1.24 GB", "2h 35m", "N/A", "#3b82f6"),
+        ("Ditto (Personalized)", 88.47, 10.70, 44.12, 0.1722, 0.7796, "2.48 GB", "4h 20m", "25m", "#10b981"),
+        ("FPDAF (v1 Baseline)", 90.07, 12.53, 44.36, 0.1955, 0.7921, "1.52 GB (CSSP saved 38%)", "3h 05m", "6m (Head-Only)", "#0d9488"),
+        ("FPDAF-v2 (Enhanced DDP-ERP)", 88.33, 11.26, 47.79, 0.1822, 0.7821, "1.52 GB (CSSP saved 38%)", "2h 50m", "4m (Dual-Phase)", "#8b5cf6")
     ]
     
     for row in models_data:
@@ -347,15 +347,15 @@ def init_database():
             row
         )
         
-    # Populate Ablation metrics matching Review 4 Presentation Slide 13
-    print("Populating Ablation Metrics table (Slide 13 Verification)...")
+    # Populate Ablation metrics matching verified ablation study and master experiment results
+    print("Populating Ablation Metrics table (Empirically Verified)...")
     cursor.execute("DELETE FROM ablation_metrics")
     ablation_data = [
         ("FPDAF w/o AD-CUSUM Trigger", 83.51, 8.51, 55.33, 0.1475, 0.7603),
         ("FPDAF w/o Temporal Attention", 80.01, 8.13, 52.81, 0.1412, 0.7878),
         ("FPDAF w/o Personalization", 78.87, 8.05, 63.58, 0.1430, 0.7887),
-        ("FPDAF v1 (Baseline)", 86.51, 9.81, 65.33, 0.1706, 0.8214),
-        ("FPDAF-v2 (Enhanced DDP-ERP)", 96.42, 18.75, 82.50, 0.3056, 0.9418)
+        ("FPDAF v1 (Baseline)", 90.07, 12.53, 44.36, 0.1955, 0.7921),
+        ("FPDAF-v2 (Enhanced DDP-ERP)", 88.33, 11.26, 47.79, 0.1822, 0.7821)
     ]
     for row in ablation_data:
         cursor.execute(

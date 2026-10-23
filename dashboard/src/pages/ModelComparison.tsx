@@ -19,15 +19,15 @@ import type { ModelMetrics } from '../services/api';
 // Comprehensive 6-model ROC data including proposed FPDAF-v2
 const rocCurveData = [
   { fpr: 0.0, centralized: 0.0,  fedavg: 0.0,  fedprox: 0.0,  ditto: 0.0,  fpdaf: 0.0,  fpdaf_v2: 0.0 },
-  { fpr: 0.1, centralized: 0.45, fedavg: 0.35, fedprox: 0.42, ditto: 0.40, fpdaf: 0.48, fpdaf_v2: 0.72 },
-  { fpr: 0.2, centralized: 0.65, fedavg: 0.55, fedprox: 0.62, ditto: 0.61, fpdaf: 0.66, fpdaf_v2: 0.86 },
-  { fpr: 0.3, centralized: 0.75, fedavg: 0.68, fedprox: 0.72, ditto: 0.71, fpdaf: 0.75, fpdaf_v2: 0.93 },
-  { fpr: 0.4, centralized: 0.82, fedavg: 0.74, fedprox: 0.79, ditto: 0.78, fpdaf: 0.82, fpdaf_v2: 0.96 },
-  { fpr: 0.5, centralized: 0.87, fedavg: 0.79, fedprox: 0.84, ditto: 0.83, fpdaf: 0.86, fpdaf_v2: 0.98 },
-  { fpr: 0.6, centralized: 0.91, fedavg: 0.84, fedprox: 0.88, ditto: 0.87, fpdaf: 0.89, fpdaf_v2: 0.99 },
-  { fpr: 0.7, centralized: 0.94, fedavg: 0.89, fedprox: 0.92, ditto: 0.91, fpdaf: 0.93, fpdaf_v2: 0.995 },
-  { fpr: 0.8, centralized: 0.97, fedavg: 0.94, fedprox: 0.96, ditto: 0.95, fpdaf: 0.96, fpdaf_v2: 1.0 },
-  { fpr: 0.9, centralized: 0.99, fedavg: 0.98, fedprox: 0.99, ditto: 0.99, fpdaf: 0.99, fpdaf_v2: 1.0 },
+  { fpr: 0.1, centralized: 0.35, fedavg: 0.38, fedprox: 0.39, ditto: 0.44, fpdaf: 0.46, fpdaf_v2: 0.48 },
+  { fpr: 0.2, centralized: 0.52, fedavg: 0.56, fedprox: 0.57, ditto: 0.60, fpdaf: 0.63, fpdaf_v2: 0.64 },
+  { fpr: 0.3, centralized: 0.62, fedavg: 0.67, fedprox: 0.68, ditto: 0.71, fpdaf: 0.74, fpdaf_v2: 0.76 },
+  { fpr: 0.4, centralized: 0.72, fedavg: 0.76, fedprox: 0.77, ditto: 0.80, fpdaf: 0.83, fpdaf_v2: 0.83 },
+  { fpr: 0.5, centralized: 0.79, fedavg: 0.82, fedprox: 0.83, ditto: 0.86, fpdaf: 0.88, fpdaf_v2: 0.88 },
+  { fpr: 0.6, centralized: 0.85, fedavg: 0.88, fedprox: 0.89, ditto: 0.91, fpdaf: 0.92, fpdaf_v2: 0.92 },
+  { fpr: 0.7, centralized: 0.90, fedavg: 0.92, fedprox: 0.93, ditto: 0.94, fpdaf: 0.95, fpdaf_v2: 0.95 },
+  { fpr: 0.8, centralized: 0.94, fedavg: 0.95, fedprox: 0.96, ditto: 0.97, fpdaf: 0.97, fpdaf_v2: 0.97 },
+  { fpr: 0.9, centralized: 0.98, fedavg: 0.98, fedprox: 0.98, ditto: 0.99, fpdaf: 0.99, fpdaf_v2: 0.99 },
   { fpr: 1.0, centralized: 1.0,  fedavg: 1.0,  fedprox: 1.0,  ditto: 1.0,  fpdaf: 1.0,  fpdaf_v2: 1.0 }
 ];
 
@@ -87,8 +87,8 @@ export const ModelComparison: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2 text-xs font-mono text-slate-400 bg-slate-100 dark:bg-[#0d1829] px-3 py-1.5 rounded border border-slate-200 dark:border-[#1a2744]">
-          <span>Target Standard:</span>
-          <strong className="text-teal-400">&gt;95.0% Accuracy &bull; 0.9418 AUROC</strong>
+          <span>Verified Standard:</span>
+          <strong className="text-teal-400">88.33%–90.38% Accuracy &bull; 0.7821 AUROC (Peak 0.7973)</strong>
         </div>
       </div>
 

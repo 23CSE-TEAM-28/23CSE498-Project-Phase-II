@@ -86,7 +86,7 @@ function App() {
       fedprox: 0.78,
       ditto: 0.79,
       fpdaf: 0.84,
-      fpdaf_v2: 0.9418
+      fpdaf_v2: 0.86
     },
     latestVitals: { heartRate: 122, spo2: 90 },
     confidence: 94

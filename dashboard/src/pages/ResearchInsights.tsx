@@ -125,7 +125,7 @@ export const ResearchInsights: React.FC = () => {
               S_r = max(0, S_(r-1) + w_grad * (L_val + β D_JSD - κ_r))
             </div>
             <p className="text-[10px] text-slate-450 leading-normal">
-              Combines prediction entropy divergence (D_JSD) and gradient variance weights (w_grad). Pairs with DDP-ERP 2D cross-attention to achieve **96.42% Accuracy** & **0.9418 AUROC**.
+              Combines prediction entropy divergence (D_JSD) and gradient variance weights (w_grad). Pairs with Dual-Phase cross-attention to achieve **88.33% Accuracy** & **0.7821 AUROC** with lowest calibration error (**Brier Score 0.0585**).
             </p>
           </div>
         </div>
@@ -152,35 +152,35 @@ export const ResearchInsights: React.FC = () => {
             <tbody className="divide-y divide-slate-100 dark:divide-[#1a2744]">
               <tr>
                 <td className="px-5 py-3 text-slate-800 dark:text-slate-200 font-semibold">FPDAF w/o AD-CUSUM</td>
-                <td className="px-5 py-3">{ablationData.fpdaf_no_cusum.accuracy.toFixed(2)}%</td>
-                <td className="px-5 py-3">{ablationData.fpdaf_no_cusum.precision.toFixed(2)}%</td>
-                <td className="px-5 py-3">{ablationData.fpdaf_no_cusum.recall.toFixed(2)}%</td>
-                <td className="px-5 py-3">{ablationData.fpdaf_no_cusum.f1_score.toFixed(4)}</td>
-                <td className="px-5 py-3">{ablationData.fpdaf_no_cusum.auroc.toFixed(4)}</td>
+                <td className="px-5 py-3">{(ablationData.fpdaf_no_cusum?.accuracy ?? 83.51).toFixed(2)}%</td>
+                <td className="px-5 py-3">{(ablationData.fpdaf_no_cusum?.precision ?? 8.51).toFixed(2)}%</td>
+                <td className="px-5 py-3">{(ablationData.fpdaf_no_cusum?.recall ?? 55.33).toFixed(2)}%</td>
+                <td className="px-5 py-3">{(ablationData.fpdaf_no_cusum?.f1_score ?? 0.1475).toFixed(4)}</td>
+                <td className="px-5 py-3">{(ablationData.fpdaf_no_cusum?.auroc ?? 0.7603).toFixed(4)}</td>
               </tr>
               <tr>
                 <td className="px-5 py-3 text-slate-800 dark:text-slate-200 font-semibold">FPDAF w/o Attention</td>
-                <td className="px-5 py-3">{ablationData.fpdaf_no_attention.accuracy.toFixed(2)}%</td>
-                <td className="px-5 py-3">{ablationData.fpdaf_no_attention.precision.toFixed(2)}%</td>
-                <td className="px-5 py-3">{ablationData.fpdaf_no_attention.recall.toFixed(2)}%</td>
-                <td className="px-5 py-3">{ablationData.fpdaf_no_attention.f1_score.toFixed(4)}</td>
-                <td className="px-5 py-3">{ablationData.fpdaf_no_attention.auroc.toFixed(4)}</td>
+                <td className="px-5 py-3">{(ablationData.fpdaf_no_attention?.accuracy ?? 80.01).toFixed(2)}%</td>
+                <td className="px-5 py-3">{(ablationData.fpdaf_no_attention?.precision ?? 8.13).toFixed(2)}%</td>
+                <td className="px-5 py-3">{(ablationData.fpdaf_no_attention?.recall ?? 52.81).toFixed(2)}%</td>
+                <td className="px-5 py-3">{(ablationData.fpdaf_no_attention?.f1_score ?? 0.1412).toFixed(4)}</td>
+                <td className="px-5 py-3">{(ablationData.fpdaf_no_attention?.auroc ?? 0.7878).toFixed(4)}</td>
               </tr>
               <tr>
                 <td className="px-5 py-3 text-slate-800 dark:text-slate-200 font-semibold">FPDAF (v1 Baseline)</td>
-                <td className="px-5 py-3">86.51%</td>
-                <td className="px-5 py-3">9.81%</td>
-                <td className="px-5 py-3">65.33%</td>
-                <td className="px-5 py-3">0.1706</td>
-                <td className="px-5 py-3">0.8214</td>
+                <td className="px-5 py-3">{(ablationData.fpdaf_v1?.accuracy ?? 90.07).toFixed(2)}%</td>
+                <td className="px-5 py-3">{(ablationData.fpdaf_v1?.precision ?? 12.53).toFixed(2)}%</td>
+                <td className="px-5 py-3">{(ablationData.fpdaf_v1?.recall ?? 44.36).toFixed(2)}%</td>
+                <td className="px-5 py-3">{(ablationData.fpdaf_v1?.f1_score ?? 0.1955).toFixed(4)}</td>
+                <td className="px-5 py-3">{(ablationData.fpdaf_v1?.auroc ?? 0.7921).toFixed(4)}</td>
               </tr>
               <tr className="bg-teal-500/5 dark:bg-teal-950/10">
                 <td className="px-5 py-3 text-slate-850 dark:text-slate-200 font-bold">FPDAF-v2 (Enhanced DDP-ERP)</td>
-                <td className="px-5 py-3 font-bold text-slate-850 dark:text-slate-200">96.42%</td>
-                <td className="px-5 py-3 font-bold text-slate-850 dark:text-slate-200">18.75%</td>
-                <td className="px-5 py-3 font-bold text-slate-850 dark:text-slate-200">82.50%</td>
-                <td className="px-5 py-3 font-bold text-slate-850 dark:text-slate-200">0.3056</td>
-                <td className="px-5 py-3 font-bold text-slate-850 dark:text-slate-200">0.9418</td>
+                <td className="px-5 py-3 font-bold text-slate-850 dark:text-slate-200">{(ablationData.fpdaf_v2?.accuracy ?? 88.33).toFixed(2)}%</td>
+                <td className="px-5 py-3 font-bold text-slate-850 dark:text-slate-200">{(ablationData.fpdaf_v2?.precision ?? 11.26).toFixed(2)}%</td>
+                <td className="px-5 py-3 font-bold text-slate-850 dark:text-slate-200">{(ablationData.fpdaf_v2?.recall ?? 47.79).toFixed(2)}%</td>
+                <td className="px-5 py-3 font-bold text-slate-850 dark:text-slate-200">{(ablationData.fpdaf_v2?.f1_score ?? 0.1822).toFixed(4)}</td>
+                <td className="px-5 py-3 font-bold text-slate-850 dark:text-slate-200">{(ablationData.fpdaf_v2?.auroc ?? 0.7821).toFixed(4)}</td>
               </tr>
             </tbody>
           </table>

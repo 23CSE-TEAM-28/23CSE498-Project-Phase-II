@@ -382,8 +382,8 @@ def get_hospital_nodes():
             "federatedMetadata": {
                 "cohortShare": "40.0% (Dirichlet α=0.5)",
                 "sampleCount": "16,131 Windows",
-                "localAuroc": 0.9418,
-                "localAccuracy": 96.42,
+                "localAuroc": 0.7821,
+                "localAccuracy": 88.33,
                 "driftStatisticSr": 1.24,
                 "driftThreshold": 3.0,
                 "driftStatus": "Normal (Stationary)",
@@ -411,8 +411,8 @@ def get_hospital_nodes():
             "federatedMetadata": {
                 "cohortShare": "35.0% (Dirichlet α=0.5)",
                 "sampleCount": "14,115 Windows",
-                "localAuroc": 0.9324,
-                "localAccuracy": 94.88,
+                "localAuroc": 0.7796,
+                "localAccuracy": 88.47,
                 "driftStatisticSr": 3.42,
                 "driftThreshold": 3.0,
                 "driftStatus": "Drift Alert (Concept Shift Detected)",
@@ -440,8 +440,8 @@ def get_hospital_nodes():
             "federatedMetadata": {
                 "cohortShare": "25.0% (Dirichlet α=0.5)",
                 "sampleCount": "10,081 Windows",
-                "localAuroc": 0.9280,
-                "localAccuracy": 93.95,
+                "localAuroc": 0.7761,
+                "localAccuracy": 88.05,
                 "driftStatisticSr": 2.15,
                 "driftThreshold": 3.0,
                 "driftStatus": "Normal (Stationary)",
@@ -490,7 +490,7 @@ def get_hospital_admin_metrics():
 
     # Generate cryptographic tamper-evident audit trail entries
     audit_events = [
-        ("08:00", "FPDAF Model Orchestrator", "Federated Round 10 Global Consensus Reached (AUROC 0.9418)"),
+        ("08:00", "FPDAF Model Orchestrator", "Federated Round 10 Global Consensus Reached (AUROC 0.7821)"),
         ("08:45", "AD-CUSUM Monitor", "Hospital Node 2 Concept Drift Alert: Sr = 3.42 > 3.0 Threshold"),
         ("09:12", "CSSP Adaptation Engine", "Activated Client-Side Selective Personalization for Hospital Node 2"),
         ("10:30", "Dr. S. K. (Attending)", "Dispatched Surviving Sepsis Campaign Hour-1 Bundle for Bed PAT-1003"),
