@@ -635,7 +635,7 @@ export const PredictionScreen: React.FC<PredictionScreenProps> = ({ patient }) =
               </button>
               {orderDispatched && (
                 <div className="p-2.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-semibold text-center flex items-center justify-center gap-2">
-                  <CheckCircle2 className="h-4 w-4" /> Stat orders dispatched to Amrita Hospital Pharmacy!
+                  <CheckCircle2 className="h-4 w-4" /> Stat orders dispatched to Medical Center Pharmacy!
                 </div>
               )}
             </div>
@@ -650,7 +650,7 @@ export const PredictionScreen: React.FC<PredictionScreenProps> = ({ patient }) =
             <div className="flex justify-between items-center border-b border-slate-200 dark:border-[#1a2744] pb-3">
               <div>
                 <h3 className="font-extrabold text-base text-slate-800 dark:text-white">
-                  AMRITA MEDICAL CENTER &bull; CDSS REPORT
+                  MEDICAL CENTER &bull; CDSS REPORT
                 </h3>
                 <span className="text-[10px] text-teal-400 font-mono">Confidential ICU Medical Chart</span>
               </div>

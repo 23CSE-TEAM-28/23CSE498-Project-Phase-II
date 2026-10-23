@@ -88,7 +88,7 @@ Stored as pre-processed PyTorch tensors in `datasets/processed/`:
 
 ### 3.2. Multi-Center Federated Dirichlet Partitioning (Non-IID Simulation)
 In real healthcare systems, hospitals have divergent demographics, patient acuities, and clinical protocols (statistical heterogeneity / Non-IID). We partitioned the training and test cohorts across **3 decentralized hospital clients** using a **Dirichlet distribution $\text{Dir}(\alpha)$ with concentration parameter $\alpha = 0.5$**:
-1. **Hospital 1 (Amrita Central Academic Medical Center — Node 0):**
+1. **Hospital 1 (Central Academic Medical Center — Node 0):**
    - **Cohort Share:** 40.0% of cohort (16,131 test windows).
    - **Clinical Profile:** Quaternary university teaching hospital, complex surgical ICU cases, balanced demographics.
    - **Federated Role:** Primary Aggregator & Participant Node.
@@ -193,7 +193,7 @@ Every window has been verified at **1920x1080 full HD resolution**. Below is the
 ![Hospital Network](file:///Users/aksharsakhi/.gemini/antigravity-ide/brain/31c4098c-c85c-4408-9ac2-d96724f48013/dashboard_screenshots/03_hospital_network_nodes.png)
 - **Clinical Purpose:** Decentralized hospital silo management for multi-hospital deployments.
 - **Key Features:**
-  - **Hospital 1 (Amrita Central — Tertiary):** 40% Dirichlet share, AUROC 0.942, AD-CUSUM $S_r = 1.24$ (Normal).
+  - **Hospital 1 (Central Medical Center — Tertiary):** 40% Dirichlet share, AUROC 0.942, AD-CUSUM $S_r = 1.24$ (Normal).
   - **Hospital 2 (Kochi General — Secondary):** 35% Dirichlet share, AUROC 0.932, AD-CUSUM $S_r = 3.42$ (Drift Alert).
   - **Hospital 3 (Ernakulam Outreach — Rural/Edge):** 25% Dirichlet share, AUROC 0.928, AD-CUSUM $S_r = 2.15$ (Normal).
   - **CSSP Decomposition Panel:** Displays status of the shared temporal backbone ($\theta_{\text{shared}}$) vs localized personalized head ($\phi_k$).

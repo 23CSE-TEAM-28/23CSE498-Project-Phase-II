@@ -160,7 +160,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
               </span>
             </div>
             <div className="text-[10px] text-slate-300 font-medium truncate">
-              Amrita Central ICU &bull; Node 01
+              Medical Center ICU &bull; Node 01
             </div>
           </div>
         )}

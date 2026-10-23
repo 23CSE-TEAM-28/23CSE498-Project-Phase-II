@@ -369,7 +369,7 @@ def get_hospital_nodes():
     nodes = [
         {
             "id": "node-1",
-            "name": "Amrita Central Academic Medical Center",
+            "name": "Central Academic Medical Center",
             "shortName": "Hospital 1 (Tertiary)",
             "tier": "Tier-1 Quaternary Academic Medical Center",
             "location": "Kochi, Kerala (South Zone)",
@@ -514,7 +514,7 @@ def get_hospital_admin_metrics():
         })
 
     return {
-        "hospitalName": "Amrita Institute of Medical Sciences & Associated Teaching ICUs",
+        "hospitalName": "Medical Center & Associated Teaching ICUs",
         "totalBeds": 50,
         "occupiedBeds": 44,
         "occupancyRate": 88.0,

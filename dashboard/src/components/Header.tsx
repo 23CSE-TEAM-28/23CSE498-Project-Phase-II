@@ -53,7 +53,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <span className="font-bold text-slate-900 dark:text-white text-xs md:text-sm tracking-tight">
-                AMRITA MEDICAL CENTER
+                MEDICAL CENTER
               </span>
               <span className="hidden sm:inline text-[10px] text-slate-400 font-medium px-1.5 py-0.5 rounded bg-slate-100 dark:bg-[#142236]">
                 ICU Central

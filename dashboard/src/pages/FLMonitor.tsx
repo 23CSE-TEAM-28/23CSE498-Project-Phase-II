@@ -163,7 +163,7 @@ export const FLMonitor: React.FC = () => {
     {
       id: 'node-1',
       name: 'Hospital 2 (Client Node 1)',
-      institution: 'Amrita University Medical Center',
+      institution: 'Central Medical Center',
       samples: 151916,
       sampleFormatted: '151,916 samples',
       weight: 31.8,

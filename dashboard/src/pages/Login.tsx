@@ -68,7 +68,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               <Hospital className="h-5 w-5 text-teal-400" />
             </div>
             <div>
-              <span className="text-white font-bold text-sm tracking-tight block">Amrita Medical Center</span>
+              <span className="text-white font-bold text-sm tracking-tight block">Medical Center</span>
               <span className="text-slate-500 text-[11px] font-medium">ICU Central Station &bull; {currentTime} IST</span>
             </div>
           </div>
