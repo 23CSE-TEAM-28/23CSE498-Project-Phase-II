@@ -22,7 +22,7 @@ import matplotlib.pyplot as plt
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from federated.utils.helpers import set_seed, load_config, setup_logging, get_device, split_non_iid_dataset
-from federated.models.attention_lstm import PersonalizedAttentionLSTM
+from federated.models.attention_lstm import PersonalizedAttentionLSTM, DualPhaseAttentionLSTM
 from baseline.models.lstm import CentralizedLSTM
 from federated.clients.client import FederatedClient
 from federated.server.server import FederatedServer, compute_state_dict_bytes
@@ -141,9 +141,8 @@ def main():
     val_dataset_eval = StratifiedSepsisDataset(global_val, max_samples=4000, seed=args.seed)
     val_loader = DataLoader(val_dataset_eval, batch_size=config['local_training']['batch_size'], shuffle=False)
     
-    num_neg_val = (val_dataset_eval.labels == 0).sum().item()
-    num_pos_val = (val_dataset_eval.labels == 1).sum().item()
-    pos_weight = torch.tensor([num_neg_val / max(1, num_pos_val)], device=device)
+    # Calibrated class weight to balance clinical recall without causing false positive explosion
+    pos_weight = torch.tensor([8.0], device=device)
     criterion = nn.BCEWithLogitsLoss(pos_weight=pos_weight)
     
     # Test DataLoader
@@ -242,6 +241,8 @@ def main():
                 weight_decay=1e-4,
                 local_epochs=args.local_epochs
             )
+            client.pos_weight = pos_weight
+            client.criterion = nn.BCEWithLogitsLoss(pos_weight=pos_weight)
             clients.append(client)
         return clients
 
@@ -354,9 +355,9 @@ def main():
     # EXPERIMENT 7: Full FPDAF-v2 (Proposed: AD-CUSUM + DDP-ERP + CSSP)
     # =========================================================================
     logger.info("\n--- [7/8] Running Full FPDAF-v2 (AD-CUSUM + DDP-ERP + CSSP Communication Optimization) ---")
-    fpdaf2_model = PersonalizedAttentionLSTM(config['model']['input_dim'], config['model']['hidden_dim'], config['model']['num_layers'], config['model']['dropout'], 1).to(device)
+    fpdaf2_model = DualPhaseAttentionLSTM(config['model']['input_dim'], config['model']['hidden_dim'], config['model']['num_layers'], config['model']['dropout'], 1).to(device)
     server_fpdaf2 = FederatedServer(fpdaf2_model, device=device, checkpoint_dir=checkpoint_dir)
-    clients_fpdaf2 = build_clients(PersonalizedAttentionLSTM)
+    clients_fpdaf2 = build_clients(DualPhaseAttentionLSTM)
     for c in clients_fpdaf2:
         server_fpdaf2.register_client(c)
         
@@ -392,7 +393,7 @@ def main():
     fpdaf2_probs = []
     fpdaf2_targets = []
     for c in clients_fpdaf2:
-        p_model = PersonalizedAttentionLSTM(config['model']['input_dim'], config['model']['hidden_dim'], config['model']['num_layers'], config['model']['dropout'], 1).to(device)
+        p_model = DualPhaseAttentionLSTM(config['model']['input_dim'], config['model']['hidden_dim'], config['model']['num_layers'], config['model']['dropout'], 1).to(device)
         p_model.load_state_dict(c.personalized_weights)
         c_test = StratifiedSepsisDataset(test_splits[c.client_id], max_samples=args.test_budget // 3, seed=args.seed)
         loader = DataLoader(c_test, batch_size=config['local_training']['batch_size'], shuffle=False)
@@ -465,7 +466,7 @@ def main():
     os.makedirs(fig_dir, exist_ok=True)
     
     # Compute Integrated Gradients using PyTorch explainer
-    best_client_model = PersonalizedAttentionLSTM(config['model']['input_dim'], config['model']['hidden_dim'], config['model']['num_layers'], config['model']['dropout'], 1).to(device)
+    best_client_model = DualPhaseAttentionLSTM(config['model']['input_dim'], config['model']['hidden_dim'], config['model']['num_layers'], config['model']['dropout'], 1).to(device)
     best_client_model.load_state_dict(clients_fpdaf2[0].personalized_weights)
     
     ig_results = compute_global_feature_importance(
@@ -620,6 +621,16 @@ def main():
                 v.pop('dca', None)
         json.dump(clean_res, f, indent=4)
     logger.info(f"\nSaved Master Experiment Results to: {results_json_path}")
+    
+    # Sync figures to revised manuscript directories
+    for paper_dir in ["journal paper/JMIR/images", "journal paper/IEEE/images"]:
+        target_img_dir = os.path.join(os.path.dirname(base_dir), paper_dir)
+        os.makedirs(target_img_dir, exist_ok=True)
+        for f in os.listdir(fig_dir):
+            if f.endswith('.png'):
+                import shutil
+                shutil.copy2(os.path.join(fig_dir, f), os.path.join(target_img_dir, f))
+    logger.info("Synchronized updated figures with JMIR and IEEE manuscript directories.")
     logger.info("=== All Master Experiments Completed Successfully! ===")
 
 if __name__ == "__main__":

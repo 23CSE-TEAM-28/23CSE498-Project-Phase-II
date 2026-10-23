@@ -12,6 +12,7 @@ import os
 import sys
 import json
 import logging
+import joblib
 import numpy as np
 import pandas as pd
 import torch
@@ -61,7 +62,7 @@ class ExternalTabularCohortDataset(Dataset):
     Each patient encounter is projected across a 24-hour baseline trajectory
     incorporating acute telemetry and standard ICU imputation.
     """
-    def __init__(self, df: pd.DataFrame, feature_mapping: dict, target_col: str, seq_len: int = 24):
+    def __init__(self, df: pd.DataFrame, feature_mapping: dict, target_col: str, seq_len: int = 24, scaler_path: str = None):
         self.seq_len = seq_len
         self.targets = df[target_col].values.astype(np.float32)
         
@@ -80,12 +81,18 @@ class ExternalTabularCohortDataset(Dataset):
             else:
                 data_matrix[:, idx] = PHYSIOLOGICAL_BASELINES[feat]
                 
-        # Z-score normalize using physiological standard deviations
+        # Apply standard scaling from training distribution if provided
+        if scaler_path and os.path.exists(scaler_path):
+            try:
+                scaler = joblib.load(scaler_path)
+                data_matrix = scaler.transform(data_matrix)
+            except Exception as e:
+                logger.warning(f"Could not load scaler from {scaler_path}: {e}")
+                
+        # Convert into [seq_len, 40] temporal sequence
         self.tensors = []
         for i in range(n_samples):
             row = data_matrix[i, :]
-            # Create [seq_len, 40] temporal sequence
-            # Add subtle physiological temporal variance across the 24-hour window
             temporal_profile = np.repeat(row[np.newaxis, :], seq_len, axis=0)
             noise = np.random.normal(0, 0.01, size=temporal_profile.shape).astype(np.float32)
             seq_tensor = torch.tensor(temporal_profile + noise, dtype=torch.float32)
@@ -129,7 +136,8 @@ def run_external_evaluation():
         'Platelets': 'Platelet_Count'
     }
     
-    dataset = ExternalTabularCohortDataset(df_mendeley, mendeley_mapping, target_col='Sepsis_Flag', seq_len=24)
+    scaler_path = os.path.join(base_dir, "datasets", "processed", "scaler.pkl")
+    dataset = ExternalTabularCohortDataset(df_mendeley, mendeley_mapping, target_col='Sepsis_Flag', seq_len=24, scaler_path=scaler_path)
     loader = DataLoader(dataset, batch_size=64, shuffle=False)
     
     # 2. Instantiate and evaluate models
