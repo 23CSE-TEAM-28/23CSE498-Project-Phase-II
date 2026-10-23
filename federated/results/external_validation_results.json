@@ -1,0 +1,272 @@
+{
+  "dataset_name": "Osun State University Teaching Hospital Sepsis Cohort",
+  "sample_size": 1700,
+  "positive_cases": 650,
+  "prevalence": 0.38235294117647056,
+  "evaluation_metrics": {
+    "FedAvg (Consensus)": {
+      "default_0_50": {
+        "auroc": 0.42369963369963365,
+        "auprc": 0.3309779179705463,
+        "sensitivity": 0.0,
+        "specificity": 0.9980952380952381,
+        "ppv": 0.0,
+        "f1_score": 0.0,
+        "brier_score": 0.2723343445841537,
+        "ece": 0.17031980213435255
+      },
+      "youden_optimal": {
+        "threshold": 0.43565656565656563,
+        "n_total": 1700,
+        "n_pos": 650,
+        "n_neg": 1050,
+        "prevalence": 0.38235294117647056,
+        "auroc": 0.42369963369963365,
+        "auprc": 0.3309779179705463,
+        "sensitivity": 0.006153846153846154,
+        "specificity": 0.9942857142857143,
+        "ppv": 0.4,
+        "npv": 0.6177514792899408,
+        "f1_score": 0.012121212121212121,
+        "accuracy": 0.6164705882352941,
+        "brier_score": 0.2723343445841537,
+        "ece": 0.17031980213435255,
+        "mce": 0.5468777418136597,
+        "calibration_slope": -0.6121284436836888,
+        "calibration_intercept": -1.2389246920841481,
+        "far_per_patient_day": 0.005714285714285714,
+        "confusion_matrix": {
+          "tp": 4,
+          "fp": 6,
+          "tn": 1044,
+          "fn": 646
+        }
+      },
+      "target_sens_80": {
+        "threshold": 0.15848484848484848,
+        "n_total": 1700,
+        "n_pos": 650,
+        "n_neg": 1050,
+        "prevalence": 0.38235294117647056,
+        "auroc": 0.42369963369963365,
+        "auprc": 0.3309779179705463,
+        "sensitivity": 0.7630769230769231,
+        "specificity": 0.17333333333333334,
+        "ppv": 0.36363636363636365,
+        "npv": 0.5416666666666666,
+        "f1_score": 0.4925521350546177,
+        "accuracy": 0.3988235294117647,
+        "brier_score": 0.2723343445841537,
+        "ece": 0.17031980213435255,
+        "mce": 0.5468777418136597,
+        "calibration_slope": -0.6121284436836888,
+        "calibration_intercept": -1.2389246920841481,
+        "far_per_patient_day": 0.8266666666666667,
+        "confusion_matrix": {
+          "tp": 496,
+          "fp": 868,
+          "tn": 182,
+          "fn": 154
+        }
+      }
+    },
+    "FedProx (Proximal)": {
+      "default_0_50": {
+        "auroc": 0.3889846153846154,
+        "auprc": 0.31512952625113433,
+        "sensitivity": 0.0,
+        "specificity": 1.0,
+        "ppv": 0.0,
+        "f1_score": 0.0,
+        "brier_score": 0.2665592303946927,
+        "ece": 0.17397340155699673
+      },
+      "youden_optimal": {
+        "threshold": 0.01,
+        "n_total": 1700,
+        "n_pos": 650,
+        "n_neg": 1050,
+        "prevalence": 0.38235294117647056,
+        "auroc": 0.3889846153846154,
+        "auprc": 0.31512952625113433,
+        "sensitivity": 1.0,
+        "specificity": 0.0,
+        "ppv": 0.38235294117647056,
+        "npv": 0.0,
+        "f1_score": 0.5531914893617021,
+        "accuracy": 0.38235294117647056,
+        "brier_score": 0.2665592303946927,
+        "ece": 0.17397340155699673,
+        "mce": 0.33468626653189426,
+        "calibration_slope": -1.0641734576392592,
+        "calibration_intercept": -1.5751968574585704,
+        "far_per_patient_day": 1.0,
+        "confusion_matrix": {
+          "tp": 650,
+          "fp": 1050,
+          "tn": 0,
+          "fn": 0
+        }
+      },
+      "target_sens_80": {
+        "threshold": 0.19808080808080808,
+        "n_total": 1700,
+        "n_pos": 650,
+        "n_neg": 1050,
+        "prevalence": 0.38235294117647056,
+        "auroc": 0.3889846153846154,
+        "auprc": 0.31512952625113433,
+        "sensitivity": 0.7907692307692308,
+        "specificity": 0.12095238095238095,
+        "ppv": 0.35768963117606123,
+        "npv": 0.4828897338403042,
+        "f1_score": 0.492573071394346,
+        "accuracy": 0.3770588235294118,
+        "brier_score": 0.2665592303946927,
+        "ece": 0.17397340155699673,
+        "mce": 0.33468626653189426,
+        "calibration_slope": -1.0641734576392592,
+        "calibration_intercept": -1.5751968574585704,
+        "far_per_patient_day": 0.8790476190476191,
+        "confusion_matrix": {
+          "tp": 514,
+          "fp": 923,
+          "tn": 127,
+          "fn": 136
+        }
+      }
+    },
+    "FPDAF Global (Attention)": {
+      "default_0_50": {
+        "auroc": 0.5889699633699633,
+        "auprc": 0.46378254038786154,
+        "sensitivity": 0.0,
+        "specificity": 1.0,
+        "ppv": 0.0,
+        "f1_score": 0.0,
+        "brier_score": 0.3822826801538517,
+        "ece": 0.38228074618093644
+      },
+      "youden_optimal": {
+        "threshold": 0.01,
+        "n_total": 1700,
+        "n_pos": 650,
+        "n_neg": 1050,
+        "prevalence": 0.38235294117647056,
+        "auroc": 0.5889699633699633,
+        "auprc": 0.46378254038786154,
+        "sensitivity": 0.0,
+        "specificity": 1.0,
+        "ppv": 0.0,
+        "npv": 0.6176470588235294,
+        "f1_score": 0.0,
+        "accuracy": 0.6176470588235294,
+        "brier_score": 0.3822826801538517,
+        "ece": 0.38228074618093644,
+        "mce": 0.38228074618093644,
+        "calibration_slope": 0.14943154127883568,
+        "calibration_intercept": 1.161796586055281,
+        "far_per_patient_day": 0.0,
+        "confusion_matrix": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1050,
+          "fn": 650
+        }
+      },
+      "target_sens_80": {
+        "threshold": 0.01,
+        "n_total": 1700,
+        "n_pos": 650,
+        "n_neg": 1050,
+        "prevalence": 0.38235294117647056,
+        "auroc": 0.5889699633699633,
+        "auprc": 0.46378254038786154,
+        "sensitivity": 0.0,
+        "specificity": 1.0,
+        "ppv": 0.0,
+        "npv": 0.6176470588235294,
+        "f1_score": 0.0,
+        "accuracy": 0.6176470588235294,
+        "brier_score": 0.3822826801538517,
+        "ece": 0.38228074618093644,
+        "mce": 0.38228074618093644,
+        "calibration_slope": 0.14943154127883568,
+        "calibration_intercept": 1.161796586055281,
+        "far_per_patient_day": 0.0,
+        "confusion_matrix": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1050,
+          "fn": 650
+        }
+      }
+    },
+    "FPDAF Personalized (Proposed)": {
+      "default_0_50": {
+        "auroc": 0.585047619047619,
+        "auprc": 0.4789130294397873,
+        "sensitivity": 0.0,
+        "specificity": 1.0,
+        "ppv": 0.0,
+        "f1_score": 0.0,
+        "brier_score": 0.37546397403095355,
+        "ece": 0.3740890942303025
+      },
+      "youden_optimal": {
+        "threshold": 0.01,
+        "n_total": 1700,
+        "n_pos": 650,
+        "n_neg": 1050,
+        "prevalence": 0.38235294117647056,
+        "auroc": 0.585047619047619,
+        "auprc": 0.4789130294397873,
+        "sensitivity": 0.3646153846153846,
+        "specificity": 0.7438095238095238,
+        "ppv": 0.4683794466403162,
+        "npv": 0.6541038525963149,
+        "f1_score": 0.4100346020761246,
+        "accuracy": 0.5988235294117648,
+        "brier_score": 0.37546397403095355,
+        "ece": 0.3740890942303025,
+        "mce": 0.3740890942303025,
+        "calibration_slope": 0.5807617268253543,
+        "calibration_intercept": 2.3663614460733347,
+        "far_per_patient_day": 0.2561904761904762,
+        "confusion_matrix": {
+          "tp": 237,
+          "fp": 269,
+          "tn": 781,
+          "fn": 413
+        }
+      },
+      "target_sens_80": {
+        "threshold": 0.01,
+        "n_total": 1700,
+        "n_pos": 650,
+        "n_neg": 1050,
+        "prevalence": 0.38235294117647056,
+        "auroc": 0.585047619047619,
+        "auprc": 0.4789130294397873,
+        "sensitivity": 0.3646153846153846,
+        "specificity": 0.7438095238095238,
+        "ppv": 0.4683794466403162,
+        "npv": 0.6541038525963149,
+        "f1_score": 0.4100346020761246,
+        "accuracy": 0.5988235294117648,
+        "brier_score": 0.37546397403095355,
+        "ece": 0.3740890942303025,
+        "mce": 0.3740890942303025,
+        "calibration_slope": 0.5807617268253543,
+        "calibration_intercept": 2.3663614460733347,
+        "far_per_patient_day": 0.2561904761904762,
+        "confusion_matrix": {
+          "tp": 237,
+          "fp": 269,
+          "tn": 781,
+          "fn": 413
+        }
+      }
+    }
+  }
+}

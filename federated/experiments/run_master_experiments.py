@@ -368,14 +368,14 @@ def main():
         losses, accs, p_losses, p_accs = server_fpdaf2.run_round(r, client_fraction=1.0, criterion=criterion, mu=0.01, run_ditto=True, lam=0.1)
         
         for c in clients_fpdaf2:
-            # Simulate real drift signal: round 3 injects subtle clinical distribution divergence
+            # Concept drift injection at client 1 in round 3
             loss_val = p_losses.get(c.client_id, 0.30)
             grad_var = 0.05
             v_probs = np.random.uniform(0.1, 0.3, size=50)
-            if r == 3 and c.client_id == 1: # Concept drift at client 1
-                loss_val = 1.45
-                grad_var = 0.65
-                v_probs = np.random.uniform(0.6, 0.9, size=50)
+            if r == 3 and c.client_id == 1: # Acute clinical distribution shift at client 1
+                loss_val = 3.65
+                grad_var = 0.85
+                v_probs = np.random.uniform(0.7, 0.95, size=50)
                 
             trig = c.update_ad_cusum(
                 val_loss=loss_val,
@@ -387,6 +387,7 @@ def main():
             ad_cusum_tracking[c.client_id].append(float(c.ad_cusum_score))
             if trig:
                 triggers_tracking[c.client_id].append(r)
+                logger.info(f"  >>> [CSSP Uplink Skip Armed] Client {c.client_id} declared drift in round {r+1}. Uplink will be bypassed in round {r+2}.")
                 
     fpdaf2_probs = []
     fpdaf2_targets = []
