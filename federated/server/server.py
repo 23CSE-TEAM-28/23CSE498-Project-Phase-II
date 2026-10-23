@@ -10,10 +10,18 @@ import numpy as np
 # Logger setup
 logger = logging.getLogger("federated.server")
 
+import io
+
+def compute_state_dict_bytes(state_dict: dict) -> int:
+    """Computes exact wire transmission bytes of a PyTorch state dict using in-memory serialization."""
+    buffer = io.BytesIO()
+    torch.save(state_dict, buffer)
+    return buffer.tell()
+
 class FederatedServer:
     """
     Manages global model states, handles client registration, aggregates local parameters
-    via the FedAvg algorithm, and evaluates global performance.
+    via the FedAvg algorithm, tracks wire communication footprint, and evaluates global performance.
     """
     def __init__(
         self,
@@ -31,6 +39,14 @@ class FederatedServer:
         self.best_val_auroc = 0.0
         self.patience_counter = 0
         
+        # Communication tracking (in bytes)
+        self.communication_stats = {
+            'total_downlink_bytes': 0,
+            'total_uplink_bytes': 0,
+            'total_bytes': 0,
+            'rounds': []
+        }
+        
         # Verify checkpoint directory exists
         os.makedirs(self.checkpoint_dir, exist_ok=True)
         
@@ -41,8 +57,9 @@ class FederatedServer:
             'global_val_auroc': [],
             'client_val_losses': [],  # Records local client performance
             'client_val_accs': [],
-            'client_pers_losses': [], # Ditto client personalized losses
-            'client_pers_accs': []    # Ditto client personalized accuracies
+            'client_pers_losses': [], # Client personalized losses
+            'client_pers_accs': [],   # Client personalized accuracies
+            'communication_bytes': [] # Total bytes per round
         }
 
     def register_client(self, client):
@@ -171,64 +188,95 @@ class FederatedServer:
         
         # 1. Local Training on Clients
         global_state_dict = self.broadcast_global_model()
+        model_size_bytes = compute_state_dict_bytes(global_state_dict)
+        
+        # Downlink payload: server sends global model to all selected clients
+        round_downlink_bytes = model_size_bytes * len(selected_clients)
+        round_uplink_bytes = 0
         
         for client in selected_clients:
             # Check if CSSP drift bypass is active
             if getattr(client, "skip_global_upload", False):
                 logger.info(f"  [Drift CSSP Active] Client {client.client_id} is bypassing consensus training to perform local personalization adaptation.")
                 if run_ditto:
-                    logger.info(f"Local personalization on client {client.client_id}...")
+                    logger.info(f"Local DDP-ERP personalization on client {client.client_id}...")
                     pers_model = self.global_model.__class__(
                         **{k: getattr(self.global_model, k, v) for k, v in [
-                            ('hidden_dim', 64), ('num_layers', 2)
+                            ('hidden_dim', getattr(self.global_model, 'hidden_dim', 64)), 
+                            ('num_layers', getattr(self.global_model, 'num_layers', 2))
                         ]}
                     ).to(self.device)
-                    # Retrieve custom training settings
                     c_epochs = getattr(client, "custom_pers_epochs", 5)
-                    p_loss, p_acc = client.local_personalize(
+                    p_loss, p_acc = client.ddp_erp_personalize(
                         pers_model, 
                         global_state_dict, 
-                        lam,
+                        lam=lam,
                         freeze_backbone=True,
                         custom_epochs=c_epochs
                     )
                     client_pers_losses[client.client_id] = p_loss
                     client_pers_accs[client.client_id] = p_acc
                     logger.info(f"  ├── Client {client.client_id} personalized update (CSSP). Val Loss: {p_loss:.4f}, Val Acc: {p_acc*100:.2f}%")
-                    # Reset skip flag after run completes
+                    # Under CSSP, zero bytes are uploaded to global server!
                     client.skip_global_upload = False
                 continue
 
             logger.info(f"Local training on client {client.client_id}...")
-            # Instantiate client local model (which is a clone shell)
             local_model = self.global_model.__class__(
-                # Initialize dynamically using same architecture
                 **{k: getattr(self.global_model, k, v) for k, v in [
-                    ('hidden_dim', 64), ('num_layers', 2)
+                    ('hidden_dim', getattr(self.global_model, 'hidden_dim', 64)), 
+                    ('num_layers', getattr(self.global_model, 'num_layers', 2))
                 ]}
             ).to(self.device)
             
             # Execute local epochs for global model consensus update
             updated_params, num_samples, val_loss, val_acc = client.local_train(local_model, global_state_dict, mu)
             
-            local_updates.append((updated_params, num_samples))
+            # Uplink payload: client transmits updated parameters to server unless CSSP skips it
+            if not getattr(client, 'skip_global_upload', False):
+                round_uplink_bytes += compute_state_dict_bytes(updated_params)
+                local_updates.append((updated_params, num_samples))
+            else:
+                logger.info(f"  ├── [CSSP Active] Client {client.client_id} skipped uplink transmission due to drift adaptation.")
+                
             client_val_losses[client.client_id] = val_loss
             client_val_accs[client.client_id] = val_acc
             logger.info(f"  ├── Client {client.client_id} finished training. Val Loss: {val_loss:.4f}, Val Acc: {val_acc*100:.2f}%")
             
-            # Run local personalization if running Ditto
+            # Run local personalization if requested
             if run_ditto:
-                logger.info(f"Local personalization on client {client.client_id}...")
                 pers_model = self.global_model.__class__(
                     **{k: getattr(self.global_model, k, v) for k, v in [
-                        ('hidden_dim', 64), ('num_layers', 2)
+                        ('hidden_dim', getattr(self.global_model, 'hidden_dim', 64)), 
+                        ('num_layers', getattr(self.global_model, 'num_layers', 2))
                     ]}
                 ).to(self.device)
-                p_loss, p_acc = client.local_personalize(pers_model, global_state_dict, lam)
+                p_loss, p_acc = client.ddp_erp_personalize(pers_model, global_state_dict, lam=lam)
                 client_pers_losses[client.client_id] = p_loss
                 client_pers_accs[client.client_id] = p_acc
                 logger.info(f"  ├── Client {client.client_id} personalized update. Val Loss: {p_loss:.4f}, Val Acc: {p_acc*100:.2f}%")
             
+        # Update communication tracking
+        round_total_bytes = round_downlink_bytes + round_uplink_bytes
+        self.communication_stats['total_downlink_bytes'] += round_downlink_bytes
+        self.communication_stats['total_uplink_bytes'] += round_uplink_bytes
+        self.communication_stats['total_bytes'] += round_total_bytes
+        self.communication_stats['rounds'].append({
+            'round': round_idx + 1,
+            'downlink_bytes': round_downlink_bytes,
+            'uplink_bytes': round_uplink_bytes,
+            'round_total_bytes': round_total_bytes,
+            'cumulative_bytes': self.communication_stats['total_bytes']
+        })
+        self.history['communication_bytes'].append(round_total_bytes)
+        
+        logger.info(
+            f"  [Communication Profile] Round {round_idx+1} Wire Payload: "
+            f"Downlink: {round_downlink_bytes/(1024*1024):.2f} MB, "
+            f"Uplink: {round_uplink_bytes/(1024*1024):.2f} MB | "
+            f"Cumulative: {self.communication_stats['total_bytes']/(1024*1024):.2f} MB"
+        )
+        
         # 2. Server Parameter Aggregation
         if len(local_updates) > 0:
             logger.info(f"Aggregating parameters from {len(local_updates)} active clients via FedAvg...")
