@@ -1,0 +1,261 @@
+{
+    "evaluation_scope": "Full Held-Out Test Cohort (N=102,994 windows, 6,050 patients)",
+    "models": {
+        "Centralized BiLSTM": {
+            "method": "Patient-Level Cluster Bootstrap (B=2000, Percentile CI)",
+            "resampling_unit": "patient_encounter",
+            "point_auroc": 0.8058,
+            "bootstrap_mean_auroc": 0.8058,
+            "standard_error": 0.0116,
+            "ci_95": [
+                0.783,
+                0.8284
+            ],
+            "ci_string": "0.8058 (95% CI: 0.7830\u20130.8284)",
+            "sample_size_windows": 102994,
+            "n_pos_windows": 2655,
+            "n_neg_windows": 100339,
+            "unique_patients_M": 6050,
+            "replicates_requested": 2000,
+            "replicates_computed": 2000,
+            "single_class_replicates_discarded": 0,
+            "random_seed": 42,
+            "auprc": 0.1016,
+            "brier_score": 0.1689,
+            "ece": 0.2935,
+            "accuracy": 0.7509,
+            "sensitivity": 0.7217,
+            "specificity": 0.7517,
+            "ppv": 0.0714,
+            "npv": 0.9903,
+            "f1_score": 0.13,
+            "tp": 1916,
+            "fp": 24917,
+            "tn": 75422,
+            "fn": 739,
+            "ci_95_unadjusted_window": [
+                0.7957,
+                0.8159
+            ],
+            "bootstrap_compute_time_sec": 25.6
+        },
+        "FedAvg Baseline": {
+            "method": "Patient-Level Cluster Bootstrap (B=2000, Percentile CI)",
+            "resampling_unit": "patient_encounter",
+            "point_auroc": 0.7883,
+            "bootstrap_mean_auroc": 0.7884,
+            "standard_error": 0.0115,
+            "ci_95": [
+                0.7656,
+                0.8106
+            ],
+            "ci_string": "0.7883 (95% CI: 0.7656\u20130.8106)",
+            "sample_size_windows": 102994,
+            "n_pos_windows": 2655,
+            "n_neg_windows": 100339,
+            "unique_patients_M": 6050,
+            "replicates_requested": 2000,
+            "replicates_computed": 2000,
+            "single_class_replicates_discarded": 0,
+            "random_seed": 42,
+            "auprc": 0.0949,
+            "brier_score": 0.0598,
+            "ece": 0.1277,
+            "accuracy": 0.8945,
+            "sensitivity": 0.4347,
+            "specificity": 0.9066,
+            "ppv": 0.1097,
+            "npv": 0.9838,
+            "f1_score": 0.1752,
+            "tp": 1154,
+            "fp": 9368,
+            "tn": 90971,
+            "fn": 1501,
+            "ci_95_unadjusted_window": [
+                0.778,
+                0.7987
+            ],
+            "bootstrap_compute_time_sec": 25.22
+        },
+        "FedProx Baseline": {
+            "method": "Patient-Level Cluster Bootstrap (B=2000, Percentile CI)",
+            "resampling_unit": "patient_encounter",
+            "point_auroc": 0.791,
+            "bootstrap_mean_auroc": 0.791,
+            "standard_error": 0.0118,
+            "ci_95": [
+                0.7678,
+                0.8134
+            ],
+            "ci_string": "0.7910 (95% CI: 0.7678\u20130.8134)",
+            "sample_size_windows": 102994,
+            "n_pos_windows": 2655,
+            "n_neg_windows": 100339,
+            "unique_patients_M": 6050,
+            "replicates_requested": 2000,
+            "replicates_computed": 2000,
+            "single_class_replicates_discarded": 0,
+            "random_seed": 42,
+            "auprc": 0.1016,
+            "brier_score": 0.063,
+            "ece": 0.1116,
+            "accuracy": 0.8807,
+            "sensitivity": 0.4881,
+            "specificity": 0.8911,
+            "ppv": 0.106,
+            "npv": 0.985,
+            "f1_score": 0.1742,
+            "tp": 1296,
+            "fp": 10931,
+            "tn": 89408,
+            "fn": 1359,
+            "ci_95_unadjusted_window": [
+                0.7806,
+                0.8013
+            ],
+            "bootstrap_compute_time_sec": 25.14
+        },
+        "Ditto Personalized": {
+            "method": "Patient-Level Cluster Bootstrap (B=2000, Percentile CI)",
+            "resampling_unit": "patient_encounter",
+            "point_auroc": 0.7989,
+            "bootstrap_mean_auroc": 0.7992,
+            "standard_error": 0.0122,
+            "ci_95": [
+                0.7753,
+                0.8235
+            ],
+            "ci_string": "0.7989 (95% CI: 0.7753\u20130.8235)",
+            "sample_size_windows": 102994,
+            "n_pos_windows": 2655,
+            "n_neg_windows": 100339,
+            "unique_patients_M": 6050,
+            "replicates_requested": 2000,
+            "replicates_computed": 2000,
+            "single_class_replicates_discarded": 0,
+            "random_seed": 42,
+            "auprc": 0.1006,
+            "brier_score": 0.1478,
+            "ece": 0.315,
+            "accuracy": 0.8245,
+            "sensitivity": 0.6358,
+            "specificity": 0.8295,
+            "ppv": 0.0898,
+            "npv": 0.9885,
+            "f1_score": 0.1574,
+            "tp": 1688,
+            "fp": 17106,
+            "tn": 83233,
+            "fn": 967,
+            "ci_95_unadjusted_window": [
+                0.7887,
+                0.8091
+            ],
+            "bootstrap_compute_time_sec": 25.36
+        },
+        "FPDAF-v2 (Proposed)": {
+            "method": "Patient-Level Cluster Bootstrap (B=2000, Percentile CI)",
+            "resampling_unit": "patient_encounter",
+            "point_auroc": 0.7923,
+            "bootstrap_mean_auroc": 0.7926,
+            "standard_error": 0.0122,
+            "ci_95": [
+                0.7686,
+                0.817
+            ],
+            "ci_string": "0.7923 (95% CI: 0.7686\u20130.8170)",
+            "sample_size_windows": 102994,
+            "n_pos_windows": 2655,
+            "n_neg_windows": 100339,
+            "unique_patients_M": 6050,
+            "replicates_requested": 2000,
+            "replicates_computed": 2000,
+            "single_class_replicates_discarded": 0,
+            "random_seed": 42,
+            "auprc": 0.1043,
+            "brier_score": 0.0548,
+            "ece": 0.0902,
+            "accuracy": 0.8872,
+            "sensitivity": 0.4512,
+            "specificity": 0.8988,
+            "ppv": 0.1055,
+            "npv": 0.9841,
+            "f1_score": 0.171,
+            "tp": 1198,
+            "fp": 10156,
+            "tn": 90183,
+            "fn": 1457,
+            "ci_95_unadjusted_window": [
+                0.782,
+                0.8026
+            ],
+            "bootstrap_compute_time_sec": 24.89
+        }
+    },
+    "paired_comparisons": {
+        "FPDAF-v2_vs_Centralized BiLSTM": {
+            "model_A": "FPDAF-v2 (Proposed)",
+            "model_B": "Centralized BiLSTM",
+            "point_delta": -0.0135,
+            "delta_mean_boot": -0.0132,
+            "delta_se": 0.0099,
+            "delta_95ci": [
+                -0.032,
+                0.0066
+            ],
+            "delta_ci_string": "-0.0135 (95% CI: -0.0320 to +0.0066)",
+            "empirical_p_value": 0.176,
+            "statistically_significant_at_05": false,
+            "replicates": 2000,
+            "random_seed": 42
+        },
+        "FPDAF-v2_vs_FedAvg Baseline": {
+            "model_A": "FPDAF-v2 (Proposed)",
+            "model_B": "FedAvg Baseline",
+            "point_delta": 0.0039,
+            "delta_mean_boot": 0.0042,
+            "delta_se": 0.009,
+            "delta_95ci": [
+                -0.0126,
+                0.0218
+            ],
+            "delta_ci_string": "+0.0039 (95% CI: -0.0126 to +0.0218)",
+            "empirical_p_value": 0.634,
+            "statistically_significant_at_05": false,
+            "replicates": 2000,
+            "random_seed": 42
+        },
+        "FPDAF-v2_vs_FedProx Baseline": {
+            "model_A": "FPDAF-v2 (Proposed)",
+            "model_B": "FedProx Baseline",
+            "point_delta": 0.0013,
+            "delta_mean_boot": 0.0016,
+            "delta_se": 0.0088,
+            "delta_95ci": [
+                -0.0151,
+                0.0197
+            ],
+            "delta_ci_string": "+0.0013 (95% CI: -0.0151 to +0.0197)",
+            "empirical_p_value": 0.864,
+            "statistically_significant_at_05": false,
+            "replicates": 2000,
+            "random_seed": 42
+        },
+        "FPDAF-v2_vs_Ditto Personalized": {
+            "model_A": "FPDAF-v2 (Proposed)",
+            "model_B": "Ditto Personalized",
+            "point_delta": -0.0066,
+            "delta_mean_boot": -0.0066,
+            "delta_se": 0.0091,
+            "delta_95ci": [
+                -0.0247,
+                0.0105
+            ],
+            "delta_ci_string": "-0.0066 (95% CI: -0.0247 to +0.0105)",
+            "empirical_p_value": 0.459,
+            "statistically_significant_at_05": false,
+            "replicates": 2000,
+            "random_seed": 42
+        }
+    }
+}

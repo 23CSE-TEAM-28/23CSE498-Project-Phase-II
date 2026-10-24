@@ -254,5 +254,68 @@ class TestPatientClusterBootstrap(unittest.TestCase):
             self.assertTrue(np.all((yp >= 0.0) & (yp <= 1.0)), f"Model {m} probabilities out of bounds [0, 1]")
             self.assertIn(int(yt.sum()), [387, 408], f"Model {m} positive count unexpected: {yt.sum()}")
 
+    def test_full_cohort_predictions_artifact_integrity(self):
+        """Verifies full_cohort_predictions.pt exists, has 102,994 windows, 6,050 patients, and 2,655 positives."""
+        pred_path = os.path.join(self.base_dir, "federated", "results", "full_cohort_predictions.pt")
+        if not os.path.exists(pred_path):
+            self.skipTest("full_cohort_predictions.pt not found")
+
+        preds = torch.load(pred_path, map_location="cpu", weights_only=False)
+        self.assertIn("metadata", preds)
+        self.assertIn("patient_ids", preds)
+        self.assertIn("window_ids", preds)
+        self.assertIn("client_ids", preds)
+        self.assertIn("y_true", preds)
+        self.assertIn("predictions", preds)
+
+        pids = np.array(preds["patient_ids"])
+        yt = np.array(preds["y_true"])
+        self.assertEqual(len(pids), 102994)
+        self.assertEqual(len(yt), 102994)
+        self.assertEqual(len(np.unique(pids)), 6050)
+        self.assertEqual(int(yt.sum()), 2655)
+
+        expected_models = [
+            "Centralized BiLSTM", "FedAvg Baseline", "FedProx Baseline", 
+            "Ditto Personalized", "FPDAF-v2 (Proposed)"
+        ]
+        for m in expected_models:
+            self.assertIn(m, preds["predictions"])
+            yp = np.array(preds["predictions"][m])
+            self.assertEqual(len(yp), 102994)
+            self.assertTrue(np.all((yp >= 0.0) & (yp <= 1.0)))
+
+    def test_full_cohort_metrics_consistency(self):
+        """Verifies full_cohort_benchmark_results.json matches verified empirical benchmark."""
+        json_path = os.path.join(self.base_dir, "federated", "results", "full_cohort_benchmark_results.json")
+        if not os.path.exists(json_path):
+            self.skipTest("full_cohort_benchmark_results.json not found")
+
+        with open(json_path, "r") as f:
+            data = json.load(f)
+
+        self.assertIn("models", data)
+        models = data["models"]
+
+        fpdaf = models["FPDAF-v2 (Proposed)"]
+        self.assertEqual(fpdaf["sample_size_windows"], 102994)
+        self.assertEqual(fpdaf["unique_patients_M"], 6050)
+        self.assertEqual(fpdaf["n_pos_windows"], 2655)
+
+        self.assertAlmostEqual(fpdaf["point_auroc"], 0.7923, places=3)
+        self.assertAlmostEqual(fpdaf["ece"], 0.0902, places=3)
+        self.assertAlmostEqual(fpdaf["brier_score"], 0.0548, places=3)
+
+        self.assertAlmostEqual(models["Centralized BiLSTM"]["point_auroc"], 0.8058, places=3)
+        self.assertAlmostEqual(models["FedAvg Baseline"]["point_auroc"], 0.7883, places=3)
+        self.assertAlmostEqual(models["FedProx Baseline"]["point_auroc"], 0.7910, places=3)
+        self.assertAlmostEqual(models["Ditto Personalized"]["point_auroc"], 0.7989, places=3)
+
+        paired = data["paired_comparisons"]
+        self.assertIn("FPDAF-v2_vs_Centralized BiLSTM", paired)
+        self.assertIn("FPDAF-v2_vs_FedAvg Baseline", paired)
+        self.assertIn("FPDAF-v2_vs_FedProx Baseline", paired)
+        self.assertIn("FPDAF-v2_vs_Ditto Personalized", paired)
+
 if __name__ == "__main__":
     unittest.main()
