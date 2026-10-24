@@ -189,5 +189,70 @@ class TestPatientClusterBootstrap(unittest.TestCase):
         self.assertEqual(len(both_pids), 166)
         self.assertEqual(len(pos_pids) + len(neg_pids) - len(both_pids), 4127)
 
+    def test_data_alignment_mismatched_lengths(self):
+        """Verifies that mismatched array lengths raise ValueError in bootstrap functions."""
+        pids = np.array([1, 1, 2, 2])
+        y_true = np.array([0, 1, 0, 1])
+        y_probs_short = np.array([0.2, 0.8, 0.3]) # length 3 != 4
+        y_probs = np.array([0.2, 0.8, 0.3, 0.7])
+        
+        with self.assertRaises(ValueError):
+            patient_level_cluster_bootstrap(pids, y_true, y_probs_short, B=50)
+            
+        with self.assertRaises(ValueError):
+            paired_patient_cluster_bootstrap(pids, y_true, y_probs, y_probs_short, B=50)
+
+    def test_degenerate_single_class_ground_truth(self):
+        """Verifies that all-negative or all-positive ground truth raises ValueError."""
+        pids = np.array([1, 1, 2, 2])
+        y_all_zero = np.array([0, 0, 0, 0])
+        y_probs = np.array([0.1, 0.2, 0.3, 0.4])
+        
+        with self.assertRaises(ValueError):
+            patient_level_cluster_bootstrap(pids, y_all_zero, y_probs, B=50)
+            
+        with self.assertRaises(ValueError):
+            paired_patient_cluster_bootstrap(pids, y_all_zero, y_probs, y_probs, B=50)
+
+    def test_paired_bootstrap_identical_predictions(self):
+        """Verifies that comparing a model against itself yields point_delta = 0 and p_value = 1.0."""
+        rng = np.random.RandomState(42)
+        pids = np.repeat(np.arange(30), 4)
+        y_true = (rng.rand(120) < 0.25).astype(int)
+        y_probs = rng.rand(120)
+        
+        paired = paired_patient_cluster_bootstrap(
+            pids, y_true, y_probs, y_probs,
+            name_A="Model_Self", name_B="Model_Self",
+            B=100, seed=42
+        )
+        self.assertEqual(paired["point_delta"], 0.0)
+        self.assertEqual(paired["empirical_p_value"], 1.0)
+        self.assertFalse(paired["statistically_significant_at_05"])
+        self.assertEqual(paired["delta_95ci"], [0.0, 0.0])
+
+    def test_saved_predictions_artifact_integrity(self):
+        """Verifies that benchmark_predictions.pt exists, has all models, and valid probabilities."""
+        pred_path = os.path.join(self.base_dir, "federated", "results", "benchmark_predictions.pt")
+        if not os.path.exists(pred_path):
+            self.skipTest("benchmark_predictions.pt not found")
+            
+        preds = torch.load(pred_path, map_location="cpu", weights_only=False)
+        expected_models = [
+            "Centralized", "Local-Only", "FedAvg", "FedProx", "Ditto", "FPDAF-v1", "FPDAF-v2 (Proposed)"
+        ]
+        for m in expected_models:
+            self.assertIn(m, preds, f"Missing model {m} in benchmark_predictions.pt")
+            d = preds[m]
+            yt = np.array(d["y_true"])
+            yp = np.array(d["y_probs"])
+            pids = np.array(d["patient_ids"])
+            
+            self.assertEqual(len(yt), 15000, f"Model {m} does not have 15,000 predictions")
+            self.assertEqual(len(yp), 15000)
+            self.assertEqual(len(pids), 15000)
+            self.assertTrue(np.all((yp >= 0.0) & (yp <= 1.0)), f"Model {m} probabilities out of bounds [0, 1]")
+            self.assertIn(int(yt.sum()), [387, 408], f"Model {m} positive count unexpected: {yt.sum()}")
+
 if __name__ == "__main__":
     unittest.main()

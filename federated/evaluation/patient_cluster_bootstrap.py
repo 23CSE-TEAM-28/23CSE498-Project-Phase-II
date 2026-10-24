@@ -50,7 +50,13 @@ def patient_level_cluster_bootstrap(
     y_true = np.asarray(y_true).astype(int)
     y_probs = np.asarray(y_probs).astype(float)
     
-    assert len(patient_ids) == len(y_true) == len(y_probs), "Arrays must have identical length"
+    if not (len(patient_ids) == len(y_true) == len(y_probs)):
+        raise ValueError(
+            f"Arrays must have identical length: patient_ids={len(patient_ids)}, "
+            f"y_true={len(y_true)}, y_probs={len(y_probs)}"
+        )
+    if len(np.unique(y_true)) < 2:
+        raise ValueError("Ground truth labels (y_true) must contain both positive and negative classes.")
     
     unique_patients = np.unique(patient_ids)
     M = len(unique_patients)
@@ -138,6 +144,14 @@ def paired_patient_cluster_bootstrap(
     y_true = np.asarray(y_true).astype(int)
     y_probs_A = np.asarray(y_probs_A).astype(float)
     y_probs_B = np.asarray(y_probs_B).astype(float)
+    
+    if not (len(patient_ids) == len(y_true) == len(y_probs_A) == len(y_probs_B)):
+        raise ValueError(
+            f"All arrays must have identical length: patient_ids={len(patient_ids)}, "
+            f"y_true={len(y_true)}, y_probs_A={len(y_probs_A)}, y_probs_B={len(y_probs_B)}"
+        )
+    if len(np.unique(y_true)) < 2:
+        raise ValueError("Ground truth labels (y_true) must contain both positive and negative classes.")
     
     unique_patients = np.unique(patient_ids)
     M = len(unique_patients)

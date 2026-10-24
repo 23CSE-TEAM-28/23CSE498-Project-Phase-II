@@ -214,3 +214,34 @@ Two distinct, valid evaluation samples exist for the 15,000-window benchmark, re
      - Patients with both positive and negative windows: $166$
      - Total Unique Patients: $231 + 4,062 - 166 = 4,127$.
 
+
+### 8.3 Fair Model Comparisons & Panel Structure
+To avoid presenting results from different sampling distributions as direct head-to-head comparisons:
+- **Panel A (Client-Stratified Benchmark, N=15,000, 408 pos, M=4,127 patients):** Strictly benchmarks personalized and localized edge models (`Local-Only`, `Ditto PFL`, `FPDAF-v1`, `FPDAF-v2`) on identical patient clusters. Paired cluster bootstrap tests resample identical patient clusters simultaneously across models.
+- **Panel B (Global Pooled Benchmark, N=15,000, 387 pos, M=4,207 patients):** Strictly benchmarks global consensus models (`Centralized BiLSTM`, `FedAvg`, `FedProx`) on identical patient clusters.
+- **Cross-Panel Boundary:** Comparing metrics directly between Panel A and Panel B is scientifically invalid because the institutional weighting and baseline sepsis prevalence differ (2.72% vs 2.58%).
+
+### 8.4 Calibration Audit (ECE & Brier Score)
+Evaluated on continuous prediction arrays (`federated/results/benchmark_predictions.pt`):
+- **Local-Only:** ECE = 0.0771, Brier = 0.0702 (non-federated baseline)
+- **Centralized BiLSTM:** ECE = 0.0788, Brier = 0.0647 (non-federated baseline)
+- **FPDAF-v2 (Proposed):** ECE = 0.0961, Brier = 0.0585
+- **Ditto PFL:** ECE = 0.0982, Brier = 0.0613
+- **FedAvg Baseline:** ECE = 0.1018, Brier = 0.0650
+- **FedProx Baseline:** ECE = 0.1110, Brier = 0.0676
+- **FPDAF-v1 (Ablation):** ECE = 0.1111, Brier = 0.0595
+
+*Audit Disclosure:* While FPDAF-v2 yields the lowest Brier probability error (0.0585) and an ECE of 0.0961 among personalized federated architectures, the difference in ECE relative to Ditto (0.0961 vs 0.0982) is a modest numerical gain ($\Delta = -0.0021$) that is not statistically significant. Non-federated baselines (Centralized BiLSTM and Local-Only) exhibit lower ECE (0.0788 and 0.0771) under their non-distributed empirical distributions. Manuscripts must not claim FPDAF-v2 achieves "lower calibration error than Centralized BiLSTM".
+
+### 8.5 FPDAF-v1 vs. FPDAF-v2 Calibration-Discrimination Trade-off
+- **FPDAF-v1 (Single-Phase Attention):** AUROC = 0.7921 (cluster bootstrap 95% CI: 0.7563–0.8242), but poor calibration (ECE = 0.1111).
+- **FPDAF-v2 (Dual-Phase Attention + Anchoring + Entropy Regularization):** AUROC = 0.7821 (cluster bootstrap 95% CI: 0.7447–0.8163), with substantially improved probability calibration (ECE = 0.0961, Brier = 0.0585) and improved sensitivity at $\tau=0.50$ (47.79% vs 44.36%).
+This represents an intentional clinical design choice prioritizing trustworthy, calibrated risk probabilities over uncalibrated rank-ordering.
+
+### 8.6 Full 102,994-Window Cohort Disclosure
+On the unstratified full cohort ($N=102,994$, 2,655 positive windows, $M=6,050$ disjoint patients):
+- **FedProx Baseline:** AUROC = 0.8033 (unadjusted window 95% CI: 0.7932–0.8134)
+- **Ditto Personalized:** AUROC = 0.7878 (unadjusted window 95% CI: 0.7774–0.7982)
+- **FedAvg Baseline:** AUROC = 0.7844 (unadjusted window 95% CI: 0.7740–0.7948)
+- **FPDAF-v2 (Proposed):** AUROC = 0.7603 (unadjusted window 95% CI: 0.7496–0.7710)
+*Limitation:* Clustered bootstrap intervals are not reported for this full partition because continuous prediction arrays were not serialized at the full-cohort scale during the original run (only confusion matrices and AUROC point estimates were preserved). Patient counts are not substituted into Hanley-McNeil to fabricate clustered intervals. On this unselected cohort, global regularized baselines (FedProx and Ditto) achieve higher discrimination, highlighting real-world trade-offs in local personalization heads under severe unstratified class imbalance.
