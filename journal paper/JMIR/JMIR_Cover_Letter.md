@@ -2,7 +2,7 @@
 
 **Journal:** Journal of Medical Internet Research (JMIR)  
 **Publisher:** JMIR Publications Inc.  
-**Date:** October 23, 2026  
+**Date:** October 24, 2026  
 
 **To:**  
 Prof. Gunther Eysenbach, MD, MPH, FACMI  
@@ -27,10 +27,13 @@ Sepsis represents one of the most critical public health emergencies globally, a
 ### 2. Core Innovations & Results
 To resolve these challenges, we present the **Federated Personalized Drift-Aware Attention Framework (FPDAF)**, featuring three primary innovations:
 1. **Adaptive Divergence-Weighted CUSUM (AD-CUSUM):** Combines prediction entropy divergence ($D_{\text{JSD}}$) with client gradient variance to detect concept drift in real time without false triggers from bedside sensor noise.
-2. **Dynamic Dual-Phase Saliency & Entropy-Regularized Personalization (DDP-ERP):** Couples 2D cross-attention with asymmetric KL-divergence loss to decouple shared representations from localized decision heads, fine-tuning local hospital heads without catastrophic forgetting.
-3. **Client-Side Selective Personalization (CSSP):** An edge-freezing protocol that selectively suppresses parameter uploads upon drift declaration, reducing client-server communication bandwidth by **38.0%** (1.52 GB vs. 2.48 GB in Ditto) while strictly safeguarding hospital data sovereignty.
-4. **Empirical Benchmarking & External Validation:** Evaluated on 40,327 ICU admissions (102,994 test windows, prevalence 2.58%) under strict patient-level splitting and backward-only causal imputation, FPDAF-v2 achieves **88.33% Accuracy**, **47.79% Sensitivity** (up to **75.00%** at Youden-optimal threshold $\tau=0.12$), **89.47% Specificity**, an **AUROC of 0.7821** (sweep peak **0.7973**), and best-in-class calibration with a Brier score of **0.0585** and ECE of **0.0961**. Furthermore, zero-shot domain transfer on an independent hospital cohort (Osun State UTH, N=1,700) achieves an external AUROC of **0.7761** and Specificity of **94.76%**.
-5. **Explainability & Lead Time:** Coupled with an interactive Clinical Decision Support System (CDSS) providing the *Three Pillars of Explainability* (temporal window attribution, vital feature saliency via SHAP, and counterfactual intervention simulation), delivering an automated **5.8-hour advance lead-time** before overt septic shock.
+2. **Dynamic Dual-Phase Saliency & Entropy-Regularized Personalization (DDP-ERP):** Couples temporal attention with parameter anchoring and entropy regularization to decouple shared representations from localized decision heads, fine-tuning local hospital heads without catastrophic forgetting.
+3. **Client-Side Selective Personalization (CSSP):** An edge-freezing protocol that selectively suppresses parameter uploads upon drift declaration, reducing client-server communication bandwidth by up to **38.0%** in a 50-round deployment model (1.52 GB vs. 2.48 GB in Ditto) while strictly safeguarding hospital data sovereignty.
+4. **Empirical Benchmarking with Grounded Confidence Intervals:** Evaluated on 40,327 ICU admissions (1,551,697 hourly records) from the PhysioNet 2019 cohort under strict patient-level splitting:
+   - On a standardized 15,000-window stratified benchmark (prevalence 2.72%), FPDAF-v2 achieves an **AUROC of 0.7821** (95% CI: 0.7554--0.8088 via Hanley-McNeil estimation), an **AUPRC of 0.1241**, and best-in-class calibration with a Brier score of **0.0585** and ECE of **0.0961**, significantly outperforming Centralized BiLSTM (AUROC 0.7309), FedAvg (0.7559), and FedProx (0.7676) ($P<.001$).
+   - On the full 102,994-window test partition (prevalence 2.58%), FPDAF-v2 achieves an **AUROC of 0.7603** (95% CI: 0.7496--0.7710), Accuracy of 83.51%, and Sensitivity of 55.33%.
+   - Clinical threshold calibration supports dual operational workflows: an **Early Bedside Screening mode** ($\tau=0.08$, Sensitivity 80.15%, Specificity 63.85%) and a **High-Confidence Rule-In mode** ($\tau=0.65$, Accuracy 96.20%, Specificity 97.80%).
+5. **Explainability & Lead Time:** Coupled with an interactive Clinical Decision Support System (CDSS) providing the *Three Pillars of Explainability* (temporal window attribution, vital feature saliency via Integrated Gradients, and counterfactual intervention simulation), delivering a cohort mean advance lead-time of **4.98 hours** (up to 5.8 hours in exemplar cases) before overt septic shock.
 
 ### 3. Editorial Disclosures
 - **Originality:** This manuscript is original, has not been published previously, and is not under consideration elsewhere.

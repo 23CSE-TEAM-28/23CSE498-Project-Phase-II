@@ -1,0 +1,107 @@
+{
+  "description": "Statistically rigorous 95% Confidence Intervals for AUROC using Hanley-McNeil variance estimation.",
+  "eval_15k_benchmark": {
+    "sample_size": 15000,
+    "positive_cases": 408,
+    "prevalence": 0.0272,
+    "models": {
+      "FPDAF-v2 (Proposed Full)": {
+        "method": "Hanley-McNeil (1982)",
+        "auroc": 0.7821,
+        "se": 0.013616604534141236,
+        "ci_95": [
+          0.7554,
+          0.8088
+        ],
+        "ci_string": "0.7821 (95% CI: 0.7554\u20130.8088)"
+      },
+      "Ditto (Personalized)": {
+        "method": "Hanley-McNeil (1982)",
+        "auroc": 0.7796,
+        "se": 0.013661167873924743,
+        "ci_95": [
+          0.7528,
+          0.8064
+        ],
+        "ci_string": "0.7796 (95% CI: 0.7528\u20130.8064)"
+      },
+      "FedProx": {
+        "method": "Hanley-McNeil (1982)",
+        "auroc": 0.7676,
+        "se": 0.01386322825984003,
+        "ci_95": [
+          0.7404,
+          0.7948
+        ],
+        "ci_string": "0.7676 (95% CI: 0.7404\u20130.7948)"
+      },
+      "FedAvg": {
+        "method": "Hanley-McNeil (1982)",
+        "auroc": 0.7559,
+        "se": 0.014042058127724681,
+        "ci_95": [
+          0.7284,
+          0.7834
+        ],
+        "ci_string": "0.7559 (95% CI: 0.7284\u20130.7834)"
+      },
+      "Centralized BiLSTM": {
+        "method": "Hanley-McNeil (1982)",
+        "auroc": 0.7309,
+        "se": 0.014367759913071744,
+        "ci_95": [
+          0.7027,
+          0.7591
+        ],
+        "ci_string": "0.7309 (95% CI: 0.7027\u20130.7591)"
+      }
+    }
+  },
+  "eval_full_test_partition": {
+    "sample_size": 102994,
+    "positive_cases": 2655,
+    "prevalence": 0.0258,
+    "models": {
+      "FPDAF-v2 (Full Partition)": {
+        "method": "Hanley-McNeil (1982)",
+        "auroc": 0.7603,
+        "se": 0.005477120880887586,
+        "ci_95": [
+          0.7496,
+          0.771
+        ],
+        "ci_string": "0.7603 (95% CI: 0.7496\u20130.7710)"
+      },
+      "Ditto Personalized": {
+        "method": "Hanley-McNeil (1982)",
+        "auroc": 0.7878,
+        "se": 0.005295042574197157,
+        "ci_95": [
+          0.7774,
+          0.7982
+        ],
+        "ci_string": "0.7878 (95% CI: 0.7774\u20130.7982)"
+      },
+      "FedProx": {
+        "method": "Hanley-McNeil (1982)",
+        "auroc": 0.8033,
+        "se": 0.0051739877595370284,
+        "ci_95": [
+          0.7932,
+          0.8134
+        ],
+        "ci_string": "0.8033 (95% CI: 0.7932\u20130.8134)"
+      },
+      "FedAvg": {
+        "method": "Hanley-McNeil (1982)",
+        "auroc": 0.7844,
+        "se": 0.005319752528743244,
+        "ci_95": [
+          0.774,
+          0.7948
+        ],
+        "ci_string": "0.7844 (95% CI: 0.7740\u20130.7948)"
+      }
+    }
+  }
+}
