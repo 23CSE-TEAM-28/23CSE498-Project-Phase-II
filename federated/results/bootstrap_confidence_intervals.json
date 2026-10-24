@@ -1,0 +1,244 @@
+{
+  "title": "Patient-Level Cluster Bootstrap AUROC Confidence Intervals and Paired Hypothesis Tests",
+  "description": "Genuine non-parametric cluster bootstrap resampling patient encounters with replacement (retaining all temporal observation windows per encounter). Correctly accounts for multi-window patient autocorrelation without relying on Hanley-McNeil heuristics.",
+  "eval_15k_benchmark_cluster_bootstrap": {
+    "Centralized": {
+      "method": "Patient-Level Cluster Bootstrap (B=2000, Percentile CI)",
+      "resampling_unit": "patient_encounter",
+      "point_auroc": 0.7309,
+      "bootstrap_mean_auroc": 0.7311,
+      "standard_error": 0.0185,
+      "ci_95": [
+        0.6938,
+        0.7676
+      ],
+      "ci_string": "0.7309 (95% CI: 0.6938\u20130.7676)",
+      "sample_size_windows": 15000,
+      "n_pos_windows": 387,
+      "n_neg_windows": 14613,
+      "unique_patients_M": 4207,
+      "replicates_requested": 2000,
+      "replicates_computed": 2000,
+      "single_class_replicates_discarded": 0,
+      "random_seed": 42
+    },
+    "Local-Only": {
+      "method": "Patient-Level Cluster Bootstrap (B=2000, Percentile CI)",
+      "resampling_unit": "patient_encounter",
+      "point_auroc": 0.7575,
+      "bootstrap_mean_auroc": 0.7579,
+      "standard_error": 0.0175,
+      "ci_95": [
+        0.7231,
+        0.7921
+      ],
+      "ci_string": "0.7575 (95% CI: 0.7231\u20130.7921)",
+      "sample_size_windows": 15000,
+      "n_pos_windows": 408,
+      "n_neg_windows": 14592,
+      "unique_patients_M": 4127,
+      "replicates_requested": 2000,
+      "replicates_computed": 2000,
+      "single_class_replicates_discarded": 0,
+      "random_seed": 42
+    },
+    "FedAvg": {
+      "method": "Patient-Level Cluster Bootstrap (B=2000, Percentile CI)",
+      "resampling_unit": "patient_encounter",
+      "point_auroc": 0.7559,
+      "bootstrap_mean_auroc": 0.756,
+      "standard_error": 0.0166,
+      "ci_95": [
+        0.722,
+        0.789
+      ],
+      "ci_string": "0.7559 (95% CI: 0.7220\u20130.7890)",
+      "sample_size_windows": 15000,
+      "n_pos_windows": 387,
+      "n_neg_windows": 14613,
+      "unique_patients_M": 4207,
+      "replicates_requested": 2000,
+      "replicates_computed": 2000,
+      "single_class_replicates_discarded": 0,
+      "random_seed": 42
+    },
+    "FedProx": {
+      "method": "Patient-Level Cluster Bootstrap (B=2000, Percentile CI)",
+      "resampling_unit": "patient_encounter",
+      "point_auroc": 0.7676,
+      "bootstrap_mean_auroc": 0.7678,
+      "standard_error": 0.0166,
+      "ci_95": [
+        0.7344,
+        0.7997
+      ],
+      "ci_string": "0.7676 (95% CI: 0.7344\u20130.7997)",
+      "sample_size_windows": 15000,
+      "n_pos_windows": 387,
+      "n_neg_windows": 14613,
+      "unique_patients_M": 4207,
+      "replicates_requested": 2000,
+      "replicates_computed": 2000,
+      "single_class_replicates_discarded": 0,
+      "random_seed": 42
+    },
+    "Ditto": {
+      "method": "Patient-Level Cluster Bootstrap (B=2000, Percentile CI)",
+      "resampling_unit": "patient_encounter",
+      "point_auroc": 0.7796,
+      "bootstrap_mean_auroc": 0.7799,
+      "standard_error": 0.0172,
+      "ci_95": [
+        0.7444,
+        0.811
+      ],
+      "ci_string": "0.7796 (95% CI: 0.7444\u20130.8110)",
+      "sample_size_windows": 15000,
+      "n_pos_windows": 408,
+      "n_neg_windows": 14592,
+      "unique_patients_M": 4127,
+      "replicates_requested": 2000,
+      "replicates_computed": 2000,
+      "single_class_replicates_discarded": 0,
+      "random_seed": 42
+    },
+    "FPDAF-v1": {
+      "method": "Patient-Level Cluster Bootstrap (B=2000, Percentile CI)",
+      "resampling_unit": "patient_encounter",
+      "point_auroc": 0.7921,
+      "bootstrap_mean_auroc": 0.7925,
+      "standard_error": 0.0174,
+      "ci_95": [
+        0.7563,
+        0.8242
+      ],
+      "ci_string": "0.7921 (95% CI: 0.7563\u20130.8242)",
+      "sample_size_windows": 15000,
+      "n_pos_windows": 408,
+      "n_neg_windows": 14592,
+      "unique_patients_M": 4127,
+      "replicates_requested": 2000,
+      "replicates_computed": 2000,
+      "single_class_replicates_discarded": 0,
+      "random_seed": 42
+    },
+    "FPDAF-v2 (Proposed)": {
+      "method": "Patient-Level Cluster Bootstrap (B=2000, Percentile CI)",
+      "resampling_unit": "patient_encounter",
+      "point_auroc": 0.7821,
+      "bootstrap_mean_auroc": 0.7827,
+      "standard_error": 0.0184,
+      "ci_95": [
+        0.7447,
+        0.8163
+      ],
+      "ci_string": "0.7821 (95% CI: 0.7447\u20130.8163)",
+      "sample_size_windows": 15000,
+      "n_pos_windows": 408,
+      "n_neg_windows": 14592,
+      "unique_patients_M": 4127,
+      "replicates_requested": 2000,
+      "replicates_computed": 2000,
+      "single_class_replicates_discarded": 0,
+      "random_seed": 42
+    }
+  },
+  "paired_comparisons": {
+    "FPDAF_v2_vs_Ditto": {
+      "model_A": "FPDAF-v2 (Proposed)",
+      "model_B": "Ditto (Personalized)",
+      "point_delta": 0.0025,
+      "delta_mean_boot": 0.0029,
+      "delta_se": 0.0109,
+      "delta_95ci": [
+        -0.0193,
+        0.0229
+      ],
+      "delta_ci_string": "+0.0025 (95% CI: -0.0193 to +0.0229)",
+      "empirical_p_value": 0.767,
+      "statistically_significant_at_05": false,
+      "replicates": 2000,
+      "random_seed": 42
+    },
+    "FedProx_vs_FedAvg": {
+      "model_A": "FedProx",
+      "model_B": "FedAvg",
+      "point_delta": 0.0117,
+      "delta_mean_boot": 0.0118,
+      "delta_se": 0.0094,
+      "delta_95ci": [
+        -0.0068,
+        0.03
+      ],
+      "delta_ci_string": "+0.0117 (95% CI: -0.0068 to +0.0300)",
+      "empirical_p_value": 0.207,
+      "statistically_significant_at_05": false,
+      "replicates": 2000,
+      "random_seed": 42
+    }
+  },
+  "sample_count_reconciliation": {
+    "summary": "Full reconciliation of the 15,000-window benchmark sampling structure.",
+    "global_pooled_partition": {
+      "applicable_models": [
+        "Centralized BiLSTM",
+        "FedAvg",
+        "FedProx"
+      ],
+      "sampling_method": "Stratified sampling directly from full test set (N=102,994, prevalence 2.5778%) using seed=42",
+      "sample_size_windows": 15000,
+      "positive_windows": 387,
+      "negative_windows": 14613,
+      "prevalence": 0.0258,
+      "unique_patients_total": 4207,
+      "patients_with_positive_windows": 236,
+      "patients_with_negative_windows": 4144,
+      "patients_with_both_positive_and_negative_windows": 173,
+      "reconciliation_formula": "236 + 4144 - 173 = 4207 total unique patients"
+    },
+    "federated_client_partition": {
+      "applicable_models": [
+        "Local-Only",
+        "Ditto (Personalized)",
+        "FPDAF-v1",
+        "FPDAF-v2 (Proposed)"
+      ],
+      "sampling_method": "Non-IID hospital client partition (5,000 stratified samples per hospital node across 3 sites) using seed=42",
+      "sample_size_windows": 15000,
+      "hospital_breakdown": {
+        "client_0_community_age_lt_60": {
+          "windows": 5000,
+          "pos": 144,
+          "neg": 4856,
+          "patients": 925
+        },
+        "client_1_trauma_age_gte_60": {
+          "windows": 5000,
+          "pos": 163,
+          "neg": 4837,
+          "patients": 1343
+        },
+        "client_2_academic_site_b": {
+          "windows": 5000,
+          "pos": 101,
+          "neg": 4899,
+          "patients": 1859
+        }
+      },
+      "positive_windows": 408,
+      "negative_windows": 14592,
+      "prevalence": 0.0272,
+      "unique_patients_total": 4127,
+      "patients_with_positive_windows": 231,
+      "patients_with_negative_windows": 4062,
+      "patients_with_both_positive_and_negative_windows": 166,
+      "reconciliation_formula": "231 + 4062 - 166 = 4127 total unique patients"
+    }
+  },
+  "full_partition_limitation_statement": {
+    "sample_size_windows": 102994,
+    "unique_patients": 6050,
+    "positive_windows": 2655,
+    "unadjusted_window_level_ci_note": "For the full 102,994-window cohort, continuous prediction probabilities from the initial multi-center benchmark were preserved as summary confusion matrices and AUROC point estimates (FPDAF-v2 AUROC 0.7603, Ditto 0.7878, FedProx 0.8033, FedAvg 0.7844). Because continuous window-level prediction arrays were not serialized at the full-cohort scale, a genuine cluster bootstrap cannot be reconstructed post-hoc without complete inference rerun. Window-level Hanley-McNeil intervals are clearly labelled as unadjusted, and patient counts are not substituted into Hanley-McNeil."
+  }
+}

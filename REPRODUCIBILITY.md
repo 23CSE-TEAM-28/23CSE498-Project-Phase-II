@@ -158,3 +158,59 @@ Execution outputs are automatically written to `federated/results/` and `federat
 6. **24-Hour Temporal Attention Profile:** `federated/results/figures/temporal_attention_24h.png`
 7. **AD-CUSUM Drift Control Chart:** `federated/results/figures/ad_cusum_drift_control_chart.png`
 8. **Communication Wire Payload (MB):** `federated/results/figures/communication_wire_payload.png`
+9. **Benchmark Predictions & Patient IDs:** `federated/results/benchmark_predictions.pt`
+10. **Bootstrap Confidence Intervals:** `federated/results/bootstrap_confidence_intervals.json`
+
+---
+
+## 7. Statistical Confidence Intervals & Genuine Patient-Level Cluster Bootstrap
+
+### 7.1 Methodological Rationale
+In longitudinal ICU telemetry, individual patients have multiple 24-hour observation windows (an average of $\sim 3.5$ windows per patient in the 15k benchmark sample and $\sim 17.0$ in the full partition). Windows originating from the same patient encounter exhibit intra-patient temporal autocorrelation and are not statistically independent.
+
+To avoid artificial deflation of standard errors, we implement a **genuine patient-level cluster bootstrap**:
+- **Resampling Unit:** Patient encounter cluster $p \in \{1, \dots, M\}$.
+- **Cluster Replacement:** Samples $M$ patient IDs uniformly at random with replacement across $B = 2,000$ replicates using a fixed seed (`seed = 42`).
+- **Preservation of Windows:** For each sampled patient, all eligible temporal windows are retained. If a patient is selected $k$ times ($k \ge 1$), all their observation windows appear exactly $k$ times in the bootstrap replicate.
+- **Degenerate Sample Handling:** Replicates containing only one outcome class are explicitly audited and resampled.
+- **Paired Comparisons:** To test for statistically significant differences between models without relying on marginal CI overlap, paired differences $\Delta^{(b)} = \text{AUROC}_A^{(b)} - \text{AUROC}_B^{(b)}$ are computed on identical patient resamples for each replicate $b$.
+
+### 7.2 Running Confidence Interval Generation
+```bash
+# 1. Regenerate patient-level cluster bootstrap (B=2,000) from saved predictions
+python3 federated/evaluation/patient_cluster_bootstrap.py --replicates 2000 --seed 42
+
+# 2. Compute combined confidence intervals (Bootstrap + Hanley-McNeil + Wilson score)
+python3 federated/evaluation/calculate_confidence_intervals.py
+```
+
+---
+
+## 8. Resolution of 15,000-Window Benchmark Sample Counts
+
+### 8.1 Empirical Root Cause of Count Differences
+Two distinct, valid evaluation samples exist for the 15,000-window benchmark, reflecting centralized vs. decentralized testing architectures:
+
+1. **Global Pooled Test Sample ($N = 15,000$ windows, prevalence $2.58\%$):**
+   - **Applicable Models:** Centralized BiLSTM, FedAvg, FedProx.
+   - **Procedure:** Stratified sub-sampling directly from the full test partition (`test.pt`, $N=102,994$, 2,655 positive windows) using `seed = 42`.
+   - **Formula:** $n_{\text{pos}} = \text{round}(15000 \times \frac{2655}{102994}) = 387$ positive windows; $n_{\text{neg}} = 15000 - 387 = 14,613$ negative windows.
+   - **Patient Count Reconciliation:** Total unique patients $M = 4,207$.
+     - Patients with $\ge 1$ positive window: $236$
+     - Patients with $\ge 1$ negative window: $4,144$
+     - Patients with both positive and negative windows: $173$
+     - Total Unique Patients: $236 + 4,144 - 173 = 4,207$.
+
+2. **Federated Client-Partitioned Test Sample ($N = 15,000$ windows, prevalence $2.72\%$):**
+   - **Applicable Models:** Local-Only, Ditto (Personalized), FPDAF-v1, FPDAF-v2 (Proposed).
+   - **Procedure:** Evaluated independently across 3 non-IID hospital client test partitions, with $15,000 // 3 = 5,000$ stratified samples per hospital node using `seed = 42`:
+     - **Client 0 (Community Hospital, Age < 60):** 5,000 windows (144 positive, 4,856 negative), 925 unique patients.
+     - **Client 1 (Trauma Center, Age $\ge$ 60):** 5,000 windows (163 positive, 4,837 negative), 1,343 unique patients.
+     - **Client 2 (Academic Medical Center, Site B):** 5,000 windows (101 positive, 4,899 negative), 1,859 unique patients.
+   - **Summed Totals:** $144 + 163 + 101 = 408$ positive windows; $4,856 + 4,837 + 4,899 = 14,592$ negative windows ($N = 15,000$).
+   - **Patient Count Reconciliation:** Total unique patients $M = 4,127$.
+     - Patients with $\ge 1$ positive window: $231$
+     - Patients with $\ge 1$ negative window: $4,062$
+     - Patients with both positive and negative windows: $166$
+     - Total Unique Patients: $231 + 4,062 - 166 = 4,127$.
+

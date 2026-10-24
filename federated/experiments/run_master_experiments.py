@@ -149,6 +149,7 @@ def main():
     global_test_ds = StratifiedSepsisDataset(global_test, max_samples=args.test_budget, seed=args.seed)
     test_loader = DataLoader(global_test_ds, batch_size=config['local_training']['batch_size'], shuffle=False)
     y_true_test = global_test_ds.labels.numpy().flatten()
+    pids_global = global_test_ds.patient_ids.numpy().flatten() if hasattr(global_test_ds.patient_ids, 'numpy') else np.array(global_test_ds.patient_ids)
     
     results = {}
     saved_predictions = {}
@@ -187,7 +188,7 @@ def main():
     m_cent['lead_time'] = estimate_early_warning_lead_time(y_true_cent, y_probs_cent)
     m_cent['total_bytes'] = 0
     results['Centralized (Upper Benchmark)'] = m_cent
-    saved_predictions['Centralized'] = {'y_true': y_true_cent, 'y_probs': y_probs_cent, 'dca': m_cent['dca']}
+    saved_predictions['Centralized'] = {'y_true': y_true_cent, 'y_probs': y_probs_cent, 'patient_ids': pids_global, 'dca': m_cent['dca']}
     logger.info(f"Centralized -> AUROC: {m_cent['auroc']:.4f}, AUPRC: {m_cent['auprc']:.4f}, Sens: {m_cent['sensitivity']:.4f}, Spec: {m_cent['specificity']:.4f}")
     
     # =========================================================================
@@ -196,6 +197,7 @@ def main():
     logger.info("\n--- [2/8] Running Local-Only Models (No Federation) ---")
     local_probs = []
     local_targets = []
+    local_pids = []
     for cid in range(3):
         c_train = StratifiedSepsisDataset(train_splits[cid], max_samples=args.budget, seed=args.seed)
         c_loader = DataLoader(c_train, batch_size=config['local_training']['batch_size'], shuffle=True)
@@ -214,13 +216,14 @@ def main():
         yt, yp = evaluate_predictions(c_model, c_tloader, device)
         local_targets.extend(yt)
         local_probs.extend(yp)
+        local_pids.extend(c_test.patient_ids.numpy().flatten() if hasattr(c_test.patient_ids, 'numpy') else np.array(c_test.patient_ids))
         
     m_local = compute_clinical_metrics(np.array(local_targets), np.array(local_probs))
     m_local['dca'] = compute_decision_curve(np.array(local_targets), np.array(local_probs))
     m_local['lead_time'] = estimate_early_warning_lead_time(np.array(local_targets), np.array(local_probs))
     m_local['total_bytes'] = 0
     results['Local-Only (No Fed)'] = m_local
-    saved_predictions['Local-Only'] = {'y_true': np.array(local_targets), 'y_probs': np.array(local_probs), 'dca': m_local['dca']}
+    saved_predictions['Local-Only'] = {'y_true': np.array(local_targets), 'y_probs': np.array(local_probs), 'patient_ids': np.array(local_pids), 'dca': m_local['dca']}
     logger.info(f"Local-Only -> AUROC: {m_local['auroc']:.4f}, AUPRC: {m_local['auprc']:.4f}")
     
     # Helper to build clients
@@ -263,7 +266,7 @@ def main():
     m_fedavg['lead_time'] = estimate_early_warning_lead_time(yt_fedavg, yp_fedavg)
     m_fedavg['total_bytes'] = server_fedavg.communication_stats['total_bytes']
     results['FedAvg'] = m_fedavg
-    saved_predictions['FedAvg'] = {'y_true': yt_fedavg, 'y_probs': yp_fedavg, 'dca': m_fedavg['dca']}
+    saved_predictions['FedAvg'] = {'y_true': yt_fedavg, 'y_probs': yp_fedavg, 'patient_ids': pids_global, 'dca': m_fedavg['dca']}
     logger.info(f"FedAvg -> AUROC: {m_fedavg['auroc']:.4f}, AUPRC: {m_fedavg['auprc']:.4f}, Wire: {m_fedavg['total_bytes']/(1024*1024):.2f} MB")
     
     # =========================================================================
@@ -283,7 +286,7 @@ def main():
     m_fedprox['lead_time'] = estimate_early_warning_lead_time(yt_fedprox, yp_fedprox)
     m_fedprox['total_bytes'] = server_fedprox.communication_stats['total_bytes']
     results['FedProx'] = m_fedprox
-    saved_predictions['FedProx'] = {'y_true': yt_fedprox, 'y_probs': yp_fedprox, 'dca': m_fedprox['dca']}
+    saved_predictions['FedProx'] = {'y_true': yt_fedprox, 'y_probs': yp_fedprox, 'patient_ids': pids_global, 'dca': m_fedprox['dca']}
     logger.info(f"FedProx -> AUROC: {m_fedprox['auroc']:.4f}, AUPRC: {m_fedprox['auprc']:.4f}, Wire: {m_fedprox['total_bytes']/(1024*1024):.2f} MB")
     
     # =========================================================================
@@ -300,6 +303,7 @@ def main():
     # Personalized client testing
     ditto_probs = []
     ditto_targets = []
+    ditto_pids = []
     for c in clients_ditto:
         p_model = CentralizedLSTM(config['model']['input_dim'], config['model']['hidden_dim'], config['model']['num_layers'], config['model']['dropout'], 1).to(device)
         p_model.load_state_dict(c.personalized_weights)
@@ -308,13 +312,14 @@ def main():
         yt, yp = evaluate_predictions(p_model, loader, device)
         ditto_targets.extend(yt)
         ditto_probs.extend(yp)
+        ditto_pids.extend(c_test.patient_ids.numpy().flatten() if hasattr(c_test.patient_ids, 'numpy') else np.array(c_test.patient_ids))
         
     m_ditto = compute_clinical_metrics(np.array(ditto_targets), np.array(ditto_probs))
     m_ditto['dca'] = compute_decision_curve(np.array(ditto_targets), np.array(ditto_probs))
     m_ditto['lead_time'] = estimate_early_warning_lead_time(np.array(ditto_targets), np.array(ditto_probs))
     m_ditto['total_bytes'] = server_ditto.communication_stats['total_bytes']
     results['Ditto (Personalized)'] = m_ditto
-    saved_predictions['Ditto'] = {'y_true': np.array(ditto_targets), 'y_probs': np.array(ditto_probs), 'dca': m_ditto['dca']}
+    saved_predictions['Ditto'] = {'y_true': np.array(ditto_targets), 'y_probs': np.array(ditto_probs), 'patient_ids': np.array(ditto_pids), 'dca': m_ditto['dca']}
     logger.info(f"Ditto -> AUROC: {m_ditto['auroc']:.4f}, AUPRC: {m_ditto['auprc']:.4f}, Wire: {m_ditto['total_bytes']/(1024*1024):.2f} MB")
     
     # =========================================================================
@@ -334,6 +339,7 @@ def main():
             
     fpdaf1_probs = []
     fpdaf1_targets = []
+    fpdaf1_pids = []
     for c in clients_fpdaf1:
         p_model = PersonalizedAttentionLSTM(config['model']['input_dim'], config['model']['hidden_dim'], config['model']['num_layers'], config['model']['dropout'], 1).to(device)
         p_model.load_state_dict(c.personalized_weights)
@@ -342,13 +348,14 @@ def main():
         yt, yp = evaluate_predictions(p_model, loader, device)
         fpdaf1_targets.extend(yt)
         fpdaf1_probs.extend(yp)
+        fpdaf1_pids.extend(c_test.patient_ids.numpy().flatten() if hasattr(c_test.patient_ids, 'numpy') else np.array(c_test.patient_ids))
         
     m_fpdaf1 = compute_clinical_metrics(np.array(fpdaf1_targets), np.array(fpdaf1_probs))
     m_fpdaf1['dca'] = compute_decision_curve(np.array(fpdaf1_targets), np.array(fpdaf1_probs))
     m_fpdaf1['lead_time'] = estimate_early_warning_lead_time(np.array(fpdaf1_targets), np.array(fpdaf1_probs))
     m_fpdaf1['total_bytes'] = server_fpdaf1.communication_stats['total_bytes']
     results['FPDAF-v1'] = m_fpdaf1
-    saved_predictions['FPDAF-v1'] = {'y_true': np.array(fpdaf1_targets), 'y_probs': np.array(fpdaf1_probs), 'dca': m_fpdaf1['dca']}
+    saved_predictions['FPDAF-v1'] = {'y_true': np.array(fpdaf1_targets), 'y_probs': np.array(fpdaf1_probs), 'patient_ids': np.array(fpdaf1_pids), 'dca': m_fpdaf1['dca']}
     logger.info(f"FPDAF-v1 -> AUROC: {m_fpdaf1['auroc']:.4f}, AUPRC: {m_fpdaf1['auprc']:.4f}, Wire: {m_fpdaf1['total_bytes']/(1024*1024):.2f} MB")
     
     # =========================================================================
@@ -392,6 +399,7 @@ def main():
                 
     fpdaf2_probs = []
     fpdaf2_targets = []
+    fpdaf2_pids = []
     for c in clients_fpdaf2:
         p_model = DualPhaseAttentionLSTM(config['model']['input_dim'], config['model']['hidden_dim'], config['model']['num_layers'], config['model']['dropout'], 1).to(device)
         p_model.load_state_dict(c.personalized_weights)
@@ -400,14 +408,22 @@ def main():
         yt, yp = evaluate_predictions(p_model, loader, device)
         fpdaf2_targets.extend(yt)
         fpdaf2_probs.extend(yp)
+        fpdaf2_pids.extend(c_test.patient_ids.numpy().flatten() if hasattr(c_test.patient_ids, 'numpy') else np.array(c_test.patient_ids))
         
     m_fpdaf2 = compute_clinical_metrics(np.array(fpdaf2_targets), np.array(fpdaf2_probs))
     m_fpdaf2['dca'] = compute_decision_curve(np.array(fpdaf2_targets), np.array(fpdaf2_probs))
     m_fpdaf2['lead_time'] = estimate_early_warning_lead_time(np.array(fpdaf2_targets), np.array(fpdaf2_probs))
     m_fpdaf2['total_bytes'] = server_fpdaf2.communication_stats['total_bytes']
     results['FPDAF-v2 (Proposed)'] = m_fpdaf2
-    saved_predictions['FPDAF-v2 (Proposed)'] = {'y_true': np.array(fpdaf2_targets), 'y_probs': np.array(fpdaf2_probs), 'dca': m_fpdaf2['dca']}
+    saved_predictions['FPDAF-v2 (Proposed)'] = {'y_true': np.array(fpdaf2_targets), 'y_probs': np.array(fpdaf2_probs), 'patient_ids': np.array(fpdaf2_pids), 'dca': m_fpdaf2['dca']}
     logger.info(f"FPDAF-v2 -> AUROC: {m_fpdaf2['auroc']:.4f}, AUPRC: {m_fpdaf2['auprc']:.4f}, Wire: {m_fpdaf2['total_bytes']/(1024*1024):.2f} MB")
+    
+    # Save client personalized checkpoints
+    for c in clients_fpdaf2:
+        torch.save({
+            'client_id': c.client_id,
+            'personalized_weights': c.personalized_weights
+        }, os.path.join(checkpoint_dir, f"client_{c.client_id}_fpdaf_personalized_model.pt"))
     
     # =========================================================================
     # EXPERIMENT 8: Systematic Ablation Suite
@@ -621,6 +637,18 @@ def main():
                 v.pop('dca', None)
         json.dump(clean_res, f, indent=4)
     logger.info(f"\nSaved Master Experiment Results to: {results_json_path}")
+    
+    # Save Benchmark Predictions with Patient IDs for exact reproducibility and cluster bootstrap
+    pred_pt_path = os.path.join(base_dir, "results", "benchmark_predictions.pt")
+    clean_predictions = {}
+    for k, v in saved_predictions.items():
+        clean_predictions[k] = {
+            'y_true': np.array(v['y_true']),
+            'y_probs': np.array(v['y_probs']),
+            'patient_ids': np.array(v['patient_ids'])
+        }
+    torch.save(clean_predictions, pred_pt_path)
+    logger.info(f"Saved benchmark predictions with patient IDs to: {pred_pt_path}")
     
     # Sync figures to revised manuscript directories
     for paper_dir in ["journal paper/JMIR/images", "journal paper/IEEE/images"]:
