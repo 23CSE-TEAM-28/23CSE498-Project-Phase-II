@@ -165,16 +165,17 @@ def init_database():
     model_ditto.load_state_dict(ditto_ckpt['personalized_weights'])
     model_ditto.eval()
     
+    # 5. FPDAF v1 (Single-Phase Attention)
     model_fpdaf = PersonalizedAttentionLSTM(input_dim=40, hidden_dim=64, num_layers=2, dropout=0.2, output_dim=1)
-    fpdaf_ckpt = torch.load(os.path.join(checkpoints_dir, "client_0_fpdaf_personalized_model.pt"), map_location=torch.device("cpu"))
-    model_fpdaf.load_state_dict(fpdaf_ckpt['personalized_weights'])
+    fpdaf_v1_ckpt = torch.load(os.path.join(checkpoints_dir, "best_fpdaf_global_model.pt"), map_location=torch.device("cpu"))
+    model_fpdaf.load_state_dict(fpdaf_v1_ckpt['model_state_dict'])
     model_fpdaf.eval()
     
+    # 6. FPDAF-v2 (Dual-Phase Attention)
     from federated.models.attention_lstm import DualPhaseAttentionLSTM
     model_fpdaf_v2 = DualPhaseAttentionLSTM(input_dim=40, hidden_dim=64, num_layers=2, dropout=0.2, output_dim=1)
-    # We load the same weights but for demonstration of v2 we use the model architecture
-    # Due to layer mismatch, we'll try strict=False
-    model_fpdaf_v2.load_state_dict(fpdaf_ckpt['personalized_weights'], strict=False)
+    fpdaf_v2_ckpt = torch.load(os.path.join(checkpoints_dir, "client_0_fpdaf_personalized_model.pt"), map_location=torch.device("cpu"))
+    model_fpdaf_v2.load_state_dict(fpdaf_v2_ckpt['personalized_weights'])
     model_fpdaf_v2.eval()
     
     import random

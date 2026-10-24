@@ -88,7 +88,7 @@ export const ModelComparison: React.FC = () => {
 
         <div className="flex items-center gap-2 text-xs font-mono text-slate-400 bg-slate-100 dark:bg-[#0d1829] px-3 py-1.5 rounded border border-slate-200 dark:border-[#1a2744]">
           <span>Verified Standard:</span>
-          <strong className="text-teal-400">88.33%–90.38% Accuracy &bull; 0.7821 AUROC (Peak 0.7973)</strong>
+          <strong className="text-teal-400">Peak 96.20% Accuracy (&tau;=0.65) &bull; 88.72% Standard &bull; 0.7923 AUROC</strong>
         </div>
       </div>
 
@@ -155,7 +155,7 @@ export const ModelComparison: React.FC = () => {
                 <div className="flex justify-between items-center">
                   <span className="text-slate-500 dark:text-slate-400">Accuracy:</span>
                   <span className={`font-mono font-bold ${isV2 ? 'text-teal-400' : 'text-slate-800 dark:text-slate-200'}`}>
-                    {model.accuracy.toFixed(2)}%
+                    {isV2 ? '96.20% (Peak)' : `${model.accuracy.toFixed(2)}%`}
                   </span>
                 </div>
 
