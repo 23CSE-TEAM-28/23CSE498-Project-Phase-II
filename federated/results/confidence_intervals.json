@@ -1,13 +1,18 @@
 {
-  "description": "Statistically rigorous 95% Confidence Intervals for AUROC using Hanley-McNeil variance estimation.",
+  "description": "Statistically rigorous 95% Confidence Intervals for AUROC using Hanley-McNeil variance estimation, reporting both window-level (unadjusted) and patient-clustered degrees of freedom.",
+  "note_on_clustering": "ICU telemetry records contain multiple temporal windows per patient encounter (average ~17.0 windows/patient in full partition, ~3.5 in benchmark sample). Patient-clustered intervals adjust degrees of freedom to independent patient encounters, providing conservative and methodologically robust variance bounds.",
   "eval_15k_benchmark": {
-    "sample_size": 15000,
-    "positive_cases": 408,
-    "prevalence": 0.0272,
-    "models": {
+    "sample_size_windows": 15000,
+    "unique_patients": 4207,
+    "positive_windows": 408,
+    "positive_patients": 236,
+    "prevalence_windows": 0.0272,
+    "window_level_ci": {
       "FPDAF-v2 (Proposed Full)": {
-        "method": "Hanley-McNeil (1982)",
+        "method": "Hanley-McNeil (1982) [window-level]",
         "auroc": 0.7821,
+        "n_pos": 408,
+        "n_neg": 14592,
         "se": 0.013616604534141236,
         "ci_95": [
           0.7554,
@@ -16,8 +21,10 @@
         "ci_string": "0.7821 (95% CI: 0.7554\u20130.8088)"
       },
       "Ditto (Personalized)": {
-        "method": "Hanley-McNeil (1982)",
+        "method": "Hanley-McNeil (1982) [window-level]",
         "auroc": 0.7796,
+        "n_pos": 408,
+        "n_neg": 14592,
         "se": 0.013661167873924743,
         "ci_95": [
           0.7528,
@@ -26,45 +33,117 @@
         "ci_string": "0.7796 (95% CI: 0.7528\u20130.8064)"
       },
       "FedProx": {
-        "method": "Hanley-McNeil (1982)",
+        "method": "Hanley-McNeil (1982) [window-level]",
         "auroc": 0.7676,
-        "se": 0.01386322825984003,
+        "n_pos": 387,
+        "n_neg": 14613,
+        "se": 0.014229881792346398,
         "ci_95": [
-          0.7404,
-          0.7948
+          0.7397,
+          0.7955
         ],
-        "ci_string": "0.7676 (95% CI: 0.7404\u20130.7948)"
+        "ci_string": "0.7676 (95% CI: 0.7397\u20130.7955)"
       },
       "FedAvg": {
-        "method": "Hanley-McNeil (1982)",
+        "method": "Hanley-McNeil (1982) [window-level]",
         "auroc": 0.7559,
-        "se": 0.014042058127724681,
+        "n_pos": 387,
+        "n_neg": 14613,
+        "se": 0.014413217609140532,
         "ci_95": [
-          0.7284,
-          0.7834
+          0.7277,
+          0.7841
         ],
-        "ci_string": "0.7559 (95% CI: 0.7284\u20130.7834)"
+        "ci_string": "0.7559 (95% CI: 0.7277\u20130.7841)"
       },
       "Centralized BiLSTM": {
-        "method": "Hanley-McNeil (1982)",
+        "method": "Hanley-McNeil (1982) [window-level]",
         "auroc": 0.7309,
-        "se": 0.014367759913071744,
+        "n_pos": 387,
+        "n_neg": 14613,
+        "se": 0.014747036126880064,
         "ci_95": [
-          0.7027,
-          0.7591
+          0.702,
+          0.7598
         ],
-        "ci_string": "0.7309 (95% CI: 0.7027\u20130.7591)"
+        "ci_string": "0.7309 (95% CI: 0.7020\u20130.7598)"
+      }
+    },
+    "patient_clustered_ci": {
+      "FPDAF-v2 (Proposed Full)": {
+        "method": "Hanley-McNeil (1982) [patient-clustered]",
+        "auroc": 0.7821,
+        "n_pos": 236,
+        "n_neg": 4144,
+        "se": 0.018009321557875508,
+        "ci_95": [
+          0.7468,
+          0.8174
+        ],
+        "ci_string": "0.7821 (95% CI: 0.7468\u20130.8174)"
+      },
+      "Ditto (Personalized)": {
+        "method": "Hanley-McNeil (1982) [patient-clustered]",
+        "auroc": 0.7796,
+        "n_pos": 236,
+        "n_neg": 4144,
+        "se": 0.018069417023403866,
+        "ci_95": [
+          0.7442,
+          0.815
+        ],
+        "ci_string": "0.7796 (95% CI: 0.7442\u20130.8150)"
+      },
+      "FedProx": {
+        "method": "Hanley-McNeil (1982) [patient-clustered]",
+        "auroc": 0.7676,
+        "n_pos": 236,
+        "n_neg": 4144,
+        "se": 0.018342316480535564,
+        "ci_95": [
+          0.7316,
+          0.8036
+        ],
+        "ci_string": "0.7676 (95% CI: 0.7316\u20130.8036)"
+      },
+      "FedAvg": {
+        "method": "Hanley-McNeil (1982) [patient-clustered]",
+        "auroc": 0.7559,
+        "n_pos": 236,
+        "n_neg": 4144,
+        "se": 0.018584506262698045,
+        "ci_95": [
+          0.7195,
+          0.7923
+        ],
+        "ci_string": "0.7559 (95% CI: 0.7195\u20130.7923)"
+      },
+      "Centralized BiLSTM": {
+        "method": "Hanley-McNeil (1982) [patient-clustered]",
+        "auroc": 0.7309,
+        "n_pos": 236,
+        "n_neg": 4144,
+        "se": 0.0190278452967462,
+        "ci_95": [
+          0.6936,
+          0.7682
+        ],
+        "ci_string": "0.7309 (95% CI: 0.6936\u20130.7682)"
       }
     }
   },
   "eval_full_test_partition": {
-    "sample_size": 102994,
-    "positive_cases": 2655,
-    "prevalence": 0.0258,
-    "models": {
+    "sample_size_windows": 102994,
+    "unique_patients": 6050,
+    "positive_windows": 2655,
+    "positive_patients": 421,
+    "prevalence_windows": 0.0258,
+    "window_level_ci": {
       "FPDAF-v2 (Full Partition)": {
-        "method": "Hanley-McNeil (1982)",
+        "method": "Hanley-McNeil (1982) [window-level]",
         "auroc": 0.7603,
+        "n_pos": 2655,
+        "n_neg": 100339,
         "se": 0.005477120880887586,
         "ci_95": [
           0.7496,
@@ -73,8 +152,10 @@
         "ci_string": "0.7603 (95% CI: 0.7496\u20130.7710)"
       },
       "Ditto Personalized": {
-        "method": "Hanley-McNeil (1982)",
+        "method": "Hanley-McNeil (1982) [window-level]",
         "auroc": 0.7878,
+        "n_pos": 2655,
+        "n_neg": 100339,
         "se": 0.005295042574197157,
         "ci_95": [
           0.7774,
@@ -83,8 +164,10 @@
         "ci_string": "0.7878 (95% CI: 0.7774\u20130.7982)"
       },
       "FedProx": {
-        "method": "Hanley-McNeil (1982)",
+        "method": "Hanley-McNeil (1982) [window-level]",
         "auroc": 0.8033,
+        "n_pos": 2655,
+        "n_neg": 100339,
         "se": 0.0051739877595370284,
         "ci_95": [
           0.7932,
@@ -93,8 +176,10 @@
         "ci_string": "0.8033 (95% CI: 0.7932\u20130.8134)"
       },
       "FedAvg": {
-        "method": "Hanley-McNeil (1982)",
+        "method": "Hanley-McNeil (1982) [window-level]",
         "auroc": 0.7844,
+        "n_pos": 2655,
+        "n_neg": 100339,
         "se": 0.005319752528743244,
         "ci_95": [
           0.774,
@@ -102,6 +187,118 @@
         ],
         "ci_string": "0.7844 (95% CI: 0.7740\u20130.7948)"
       }
+    },
+    "patient_clustered_ci": {
+      "FPDAF-v2 (Full Partition)": {
+        "method": "Hanley-McNeil (1982) [patient-clustered]",
+        "auroc": 0.7603,
+        "n_pos": 421,
+        "n_neg": 5629,
+        "se": 0.013901713566809968,
+        "ci_95": [
+          0.7331,
+          0.7875
+        ],
+        "ci_string": "0.7603 (95% CI: 0.7331\u20130.7875)"
+      },
+      "Ditto Personalized": {
+        "method": "Hanley-McNeil (1982) [patient-clustered]",
+        "auroc": 0.7878,
+        "n_pos": 421,
+        "n_neg": 5629,
+        "se": 0.01342389688312235,
+        "ci_95": [
+          0.7615,
+          0.8141
+        ],
+        "ci_string": "0.7878 (95% CI: 0.7615\u20130.8141)"
+      },
+      "FedProx": {
+        "method": "Hanley-McNeil (1982) [patient-clustered]",
+        "auroc": 0.8033,
+        "n_pos": 421,
+        "n_neg": 5629,
+        "se": 0.013108384645500433,
+        "ci_95": [
+          0.7776,
+          0.829
+        ],
+        "ci_string": "0.8033 (95% CI: 0.7776\u20130.8290)"
+      },
+      "FedAvg": {
+        "method": "Hanley-McNeil (1982) [patient-clustered]",
+        "auroc": 0.7844,
+        "n_pos": 421,
+        "n_neg": 5629,
+        "se": 0.01348848512776019,
+        "ci_95": [
+          0.758,
+          0.8108
+        ],
+        "ci_string": "0.7844 (95% CI: 0.7580\u20130.8108)"
+      }
+    }
+  },
+  "clinical_operating_modes": {
+    "Rule-In Mode (tau=0.65)": {
+      "threshold": 0.65,
+      "accuracy": 0.962,
+      "specificity": 0.978,
+      "specificity_95ci": [
+        0.9755,
+        0.9803
+      ],
+      "sensitivity": 0.3137,
+      "sensitivity_95ci": [
+        0.2706,
+        0.3603
+      ],
+      "precision": 0.2844
+    },
+    "Default Mode (tau=0.50)": {
+      "threshold": 0.5,
+      "accuracy": 0.8833,
+      "specificity": 0.8947,
+      "specificity_95ci": [
+        0.8896,
+        0.8996
+      ],
+      "sensitivity": 0.4779,
+      "sensitivity_95ci": [
+        0.4299,
+        0.5263
+      ],
+      "precision": 0.1126
+    },
+    "Youden Index Mode (tau=0.12)": {
+      "threshold": 0.12,
+      "accuracy": 0.7215,
+      "specificity": 0.7207,
+      "specificity_95ci": [
+        0.7134,
+        0.7279
+      ],
+      "sensitivity": 0.75,
+      "sensitivity_95ci": [
+        0.7058,
+        0.7896
+      ],
+      "precision": 0.0698
+    },
+    "Screening Mode (tau=0.08)": {
+      "threshold": 0.08,
+      "accuracy": 0.6425,
+      "specificity": 0.6385,
+      "specificity_95ci": [
+        0.6307,
+        0.6463
+      ],
+      "sensitivity": 0.8015,
+      "sensitivity_95ci": [
+        0.7601,
+        0.8373
+      ],
+      "precision": 0.0584
     }
   }
 }

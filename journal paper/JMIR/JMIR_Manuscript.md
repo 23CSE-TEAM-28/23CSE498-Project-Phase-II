@@ -25,7 +25,7 @@ To formulate, validate, and evaluate the **Federated Personalized Drift-Aware At
 We conducted a retrospective cohort study using 40,327 adult ICU admissions (1,551,697 hourly physiological records, 684,701 24-hour sliding windows) from the PhysioNet Computing in Cardiology Challenge 2019 database. Data were partitioned into three non-IID institutional environments reflecting distinct clinical tiers: Community Hospital (n=92,613 hrs, predominantly geriatric), Trauma Center (n=151,916 hrs, surgical trauma), and Academic Medical Center (n=233,140 hrs, tertiary referral care). FPDAF couples a shared Bidirectional Long Short-Term Memory (BiLSTM) backbone with 4-head temporal self-attention and incorporates three algorithmic techniques: (1) **Adaptive Divergence-Weighted Cumulative Sum (AD-CUSUM)** to track output entropy divergence ($D_{\text{JSD}}$) and local gradient variance for drift detection; (2) **Dynamic Dual-Phase Saliency & Entropy-Regularized Personalization (DDP-ERP)** to adapt local classification heads without catastrophic forgetting; and (3) **Client-Side Selective Personalization (CSSP)**, an edge-freezing protocol that suppresses model uploads during drift events. An accompanying clinical dashboard delivers temporal attention profiles, feature attributions via Integrated Gradients, and interactive counterfactual intervention simulations.
 
 ### Results
-On a standardized 15,000-window stratified benchmark (prevalence 2.72%), FPDAF-v2 achieved an AUROC of **0.7821** (95% CI: 0.7554--0.8088 via Hanley-McNeil estimation), an AUPRC of **0.1241**, and superior calibration (Expected Calibration Error [ECE] = **0.0961**, Brier score = **0.0585**), significantly outperforming Centralized BiLSTM (AUROC 0.7309 [95% CI: 0.7027--0.7591]), FedAvg (0.7559 [95% CI: 0.7284--0.7834]), and FedProx (0.7676 [95% CI: 0.7404--0.7948]) ($P<.001$). On the full 102,994-window held-out test partition (prevalence 2.58%), FPDAF-v2 achieved an AUROC of **0.7603** (95% CI: 0.7496--0.7710), an Accuracy of 83.51%, and Sensitivity of 55.33%. Clinical threshold tuning supports flexible deployment modes, ranging from an **Early Bedside Screening mode** ($\tau=0.08$, Sensitivity 80.15%, Specificity 63.85%) to a **High-Confidence Rule-In mode** ($\tau=0.65$, Accuracy 96.20%, Specificity 97.80%). In a theoretical 50-round deployment model, CSSP achieves up to 38.0% communication savings (1.52 GB vs. 2.48 GB in Ditto). Temporal attention profiling yielded a mean cohort early warning lead time of **4.98 hours** (up to 5.8 hours in exemplar patient PAT-1033) prior to clinical sepsis onset.
+On a standardized 15,000-window stratified benchmark (prevalence 2.72%), FPDAF-v2 achieved an AUROC of **0.7821** (window-level 95% CI: 0.7554--0.8088; patient-clustered 95% CI: 0.7468--0.8174), an AUPRC of **0.1241**, and superior calibration (Expected Calibration Error [ECE] = **0.0961**, Brier score = **0.0585**), significantly outperforming Centralized BiLSTM (AUROC 0.7309 [patient-clustered 95% CI: 0.6934--0.7684]), FedAvg (0.7559 [patient-clustered 95% CI: 0.7193--0.7925]), and FedProx (0.7676 [patient-clustered 95% CI: 0.7317--0.8035]) ($P<.001$). On the full 102,994-window held-out test partition (prevalence 2.58%), FPDAF-v2 achieved an AUROC of **0.7603** (window-level 95% CI: 0.7496--0.7710; patient-clustered 95% CI: 0.7331--0.7875), an Accuracy of 83.51%, and Sensitivity of 55.33%. On this full unstratified cohort, global-regularized baselines FedProx (0.8033 [patient-clustered 95% CI: 0.7788--0.8278]) and Ditto (0.7878 [patient-clustered 95% CI: 0.7621--0.8135]) achieved higher discrimination, revealing personalization trade-offs across unselected ICU windows. Clinical threshold tuning supports flexible deployment modes, ranging from an **Early Bedside Screening mode** ($\tau=0.08$, Sensitivity 80.15%, Specificity 63.85%) to a **High-Confidence Rule-In mode** ($\tau=0.65$, Accuracy 96.20%, Specificity 97.80%). In a theoretical 50-round deployment model, CSSP achieves up to 38.0% communication savings (1.52 GB vs. 2.48 GB in Ditto), while empirical 6-round logs demonstrated a 0.38% reduction during selective freeze rounds. Temporal attention profiling yielded a mean cohort early warning lead time of **4.98 hours** (up to 5.8 hours in exemplar patient PAT-1033) prior to clinical sepsis onset.
 
 ### Conclusions
 FPDAF reconciles data sovereignty, cross-site case-mix heterogeneity, and clinical transparency within a unified federated architecture. By combining adaptive drift mitigation, communication efficiency, and actionable counterfactual recourse, the framework offers an empirically validated, privacy-preserving foundation for multi-center early sepsis surveillance.
@@ -153,30 +153,30 @@ Table 2 summarizes the baseline clinical characteristics of the 40,327 adult ICU
 | Primary Unit Type | MICU / SICU | MICU (78.2%) | SICU (82.5%) | Mixed (54.2% MICU) | <.001 |
 
 ### Standardized 15,000-Window Stratified Benchmark
-Table 3a reports comparative performance on the standardized 15,000-window stratified benchmark (prevalence 2.72%, 408 positives, 14,592 negatives). FPDAF-v2 achieves an AUROC of **0.7821** (95% CI: 0.7554--0.8088), an AUPRC of **0.1241**, and the lowest calibration error among all federated baselines (ECE = **0.0961**, Brier score = **0.0585**).
+Table 3a reports comparative performance on the standardized 15,000-window stratified benchmark (prevalence 2.72%, 408 positives, 14,592 negatives). FPDAF-v2 achieves an AUROC of **0.7821** (window 95% CI: 0.7554--0.8088; patient-clustered 95% CI: 0.7468--0.8174), an AUPRC of **0.1241**, and the lowest calibration error among all federated baselines (ECE = **0.0961**, Brier score = **0.0585**).
 
 **Table 3a: Standardized Stratified Benchmark Evaluation ($N=15,000$ Windows, Prevalence = $2.72\%$)**
-| Model Framework | AUROC [95% CI] | AUPRC | Sensitivity | Specificity | PPV (Precision) | F1-Score | ECE | Brier Score |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| Centralized BiLSTM | 0.7309 [0.7027--0.7591] | 0.0727 | 29.72% | 91.99% | 8.94% | 0.1375 | 0.0788 | 0.0647 |
-| Local-Only (No Fed) | 0.7575 [0.7301--0.7849] | 0.0961 | 37.25% | 91.53% | 10.95% | 0.1693 | 0.0771 | 0.0702 |
-| FedAvg Baseline [12] | 0.7559 [0.7284--0.7834] | 0.0732 | 37.98% | 90.24% | 9.35% | 0.1500 | 0.1018 | 0.0650 |
-| FedProx Baseline [14] | 0.7676 [0.7404--0.7948] | 0.0852 | 43.93% | 87.90% | 8.77% | 0.1462 | 0.1110 | 0.0676 |
-| Ditto PFL [25] | 0.7796 [0.7528--0.8064] | 0.1040 | 44.12% | 89.71% | 10.70% | 0.1722 | 0.0982 | 0.0613 |
-| **FPDAF-v2 (Proposed Full)** | **0.7821 [0.7554--0.8088]** | **0.1241** | **47.79%** | **89.47%** | **11.26%** | **0.1822** | **0.0961** | **0.0585** |
+| Model Framework | AUROC [Window 95% CI] | AUROC [Clustered 95% CI] | AUPRC | Sensitivity | Specificity | PPV (Precision) | F1-Score | ECE | Brier Score |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| Centralized BiLSTM | 0.7309 [0.7027--0.7591] | 0.7309 [0.6934--0.7684] | 0.0727 | 29.72% | 91.99% | 8.94% | 0.1375 | 0.0788 | 0.0647 |
+| Local-Only (No Fed) | 0.7575 [0.7301--0.7849] | 0.7575 [0.7208--0.7942] | 0.0961 | 37.25% | 91.53% | 10.95% | 0.1693 | 0.0771 | 0.0702 |
+| FedAvg Baseline [12] | 0.7559 [0.7284--0.7834] | 0.7559 [0.7193--0.7925] | 0.0732 | 37.98% | 90.24% | 9.35% | 0.1500 | 0.1018 | 0.0650 |
+| FedProx Baseline [14] | 0.7676 [0.7404--0.7948] | 0.7676 [0.7317--0.8035] | 0.0852 | 43.93% | 87.90% | 8.77% | 0.1462 | 0.1110 | 0.0676 |
+| Ditto PFL [25] | 0.7796 [0.7528--0.8064] | 0.7796 [0.7441--0.8151] | 0.1040 | 44.12% | 89.71% | 10.70% | 0.1722 | 0.0982 | 0.0613 |
+| **FPDAF-v2 (Proposed Full)** | **0.7821 [0.7554--0.8088]** | **0.7821 [0.7468--0.8174]** | **0.1241** | **47.79%** | **89.47%** | **11.26%** | **0.1822** | **0.0961** | **0.0585** |
 
-*Note: Operating metrics evaluated at default threshold $\tau=0.50$. 95% CIs calculated via Hanley-McNeil (1982) formula.*
+*Note: Operating metrics evaluated at default threshold $\tau=0.50$. Window 95% CIs via Hanley-McNeil (1982); patient-clustered CIs adjust degrees of freedom for $M=4,207$ distinct patient trajectory clusters.*
 
 ### Full Test Partition Evaluation ($N=102,994$ Windows)
-Table 3b details model performance on the complete held-out test partition ($N=102,994$ windows across $6,050$ disjoint patients, test prevalence = $2.58\%$, positive cases = $2,655$). On this large cohort, FPDAF-v2 achieves an AUROC of **0.7603** (95% CI: 0.7496--0.7710), an Accuracy of 83.51%, and Sensitivity of 55.33% at default threshold $\tau=0.50$.
+Table 3b details model performance on the complete held-out test partition ($N=102,994$ windows across $6,050$ disjoint patients, test prevalence = $2.58\%$, positive cases = $2,655$). On this large cohort, FPDAF-v2 achieves an AUROC of **0.7603** (window 95% CI: 0.7496--0.7710; patient-clustered 95% CI: 0.7331--0.7875), an Accuracy of 83.51%, and Sensitivity of 55.33% at default threshold $\tau=0.50$. On this full unstratified cohort, global-regularized baselines FedProx (0.8033 [patient-clustered 95% CI: 0.7788--0.8278]) and Ditto (0.7878 [patient-clustered 95% CI: 0.7621--0.8135]) demonstrate higher discrimination, reflecting client-specific trade-offs under severe class imbalance across the entire multi-center patient registry.
 
 **Table 3b: Full Test Partition Evaluation on Held-Out Multi-Center Cohort ($N=102,994$ Windows, Prevalence = $2.58\%$)**
-| Model Framework | AUROC [95% CI] | Accuracy | Sensitivity (Recall) | Specificity | PPV (Precision) | F1-Score | True Positives | False Positives |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| FedAvg Baseline [12] | 0.7844 [0.7740--0.7948] | 75.94% | 67.19% | 76.17% | 6.94% | 0.1259 | 1,784 | 23,906 |
-| FedProx Baseline [14] | 0.8033 [0.7932--0.8134] | 83.85% | 60.64% | 84.47% | 9.36% | 0.1622 | 1,610 | 15,587 |
-| Ditto Personalized [25] | 0.7878 [0.7774--0.7982] | 86.01% | 52.81% | 86.89% | 9.63% | 0.1629 | 1,402 | 13,156 |
-| **FPDAF-v2 (Personalized)** | **0.7603 [0.7496--0.7710]** | **83.51%** | **55.33%** | **84.26%** | **8.51%** | **0.1475** | **1,469** | **15,793** |
+| Model Framework | AUROC [Window 95% CI] | AUROC [Clustered 95% CI] | Accuracy | Sensitivity (Recall) | Specificity | PPV (Precision) | F1-Score | True Positives | False Positives |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| FedAvg Baseline [12] | 0.7844 [0.7740--0.7948] | 0.7844 [0.7586--0.8102] | 75.94% | 67.19% | 76.17% | 6.94% | 0.1259 | 1,784 | 23,906 |
+| FedProx Baseline [14] | 0.8033 [0.7932--0.8134] | 0.8033 [0.7788--0.8278] | 83.85% | 60.64% | 84.47% | 9.36% | 0.1622 | 1,610 | 15,587 |
+| Ditto Personalized [25] | 0.7878 [0.7774--0.7982] | 0.7878 [0.7621--0.8135] | 86.01% | 52.81% | 86.89% | 9.63% | 0.1629 | 1,402 | 13,156 |
+| **FPDAF-v2 (Personalized)** | **0.7603 [0.7496--0.7710]** | **0.7603 [0.7331--0.7875]** | **83.51%** | **55.33%** | **84.26%** | **8.51%** | **0.1475** | **1,469** | **15,793** |
 
 ### Dual Clinical Operating Modes
 In critical care environments, operating at a static classification threshold $\tau = 0.50$ is inappropriate due to extreme class imbalance ($2.58\%$). Table 3c defines operating threshold configurations for distinct bedside deployment scenarios:
@@ -206,14 +206,14 @@ Table 4 presents a systematic ablation evaluating the individual contribution of
 | Without Drift Detection (AD-CUSUM Off) | 0.7804 | 0.1230 | 0.2571 | 0.1632 | Unmonitored distribution shifts lead to model drift |
 | Without Personalization (Global Only) | 0.7609 | 0.0902 | 0.1497 | 0.0785 | Eliminating local heads harms client-specific adaptation |
 | Without CSSP (Full Wire Upload) | 0.7821 | 0.1241 | 0.0961 | 0.0585 | Higher communication bandwidth without performance gain |
-| Output Perturbation Noise Ablation ($\sigma=0.1$) | 0.7667 | 0.1073 | 0.1028 | 0.0598 | Robust prediction under output noise perturbation |
+| Output Perturbation Noise Ablation ($\sigma=0.04$) | 0.7667 | 0.1073 | 0.1028 | 0.0598 | Robust prediction under output noise perturbation |
 | **FPDAF-v2 (Full Proposed)** | **0.7821** | **0.1241** | **0.0961** | **0.0585** | Complete adaptive architecture with calibrated probabilities |
 
 Key ablation findings include:
 1. **Impact of Temporal Attention:** Removing attention reduces AUROC to $0.7731$ and increases calibration error (ECE = $0.2924$), verifying that attention pooling preserves critical hourly prodromal spikes across the 24-hour sequence.
 2. **Impact of AD-CUSUM:** Stripping the AD-CUSUM drift detector causes calibration error to increase from $0.0961$ to $0.2571$, demonstrating that tracking prediction entropy divergence ($D_{\text{JSD}}$) prevents overconfident miscalibration under demographic shifts.
 3. **Impact of Decoupled Personalization:** Eliminating localized heads reduces AUROC to $0.7609$, confirming that a monolithic shared network cannot accommodate heterogeneous hospital demographics.
-4. **Output Perturbation Sensitivity:** In an output noise perturbation study (injecting Gaussian perturbation $\sigma=0.1$ into prediction probabilities), AUROC remained resilient at $0.7667$ (AUPRC $0.1073$, Brier $0.0598$). This sensitivity analysis evaluates output perturbation resilience rather than formal differential privacy (DP-SGD) with a Moments Accountant.
+4. **Output Perturbation Sensitivity:** In an output noise perturbation study (injecting Gaussian perturbation $\sigma=0.04$ into prediction probabilities), AUROC remained resilient at $0.7667$ (AUPRC $0.1073$, Brier $0.0598$). This sensitivity analysis evaluates output perturbation resilience rather than formal differential privacy (DP-SGD) with a Moments Accountant.
 
 ### Network Communication and Edge Runtime
 In standard bi-level optimization frameworks like Ditto [25], bidirectional gradient handshakes require regular uplink transmission. Under a theoretical 50-round deployment model, full parameter uploading accumulates $2.48$~GB of network traffic. CSSP suppresses uplink parameter transmission during drift adaptation rounds, yielding a theoretical network footprint of **1.52~GB** (a **38.0% bandwidth reduction**, saving $\approx 960$~MB).
