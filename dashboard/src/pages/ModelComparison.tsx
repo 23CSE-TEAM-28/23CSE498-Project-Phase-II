@@ -216,7 +216,7 @@ export const ModelComparison: React.FC = () => {
               </p>
             </div>
             <span className="text-[10px] font-bold bg-teal-500/15 text-teal-400 border border-teal-500/30 px-2 py-0.5 rounded font-mono">
-              Top: 94.18%
+              Full Cohort AUROC: 79.23% (Peak Acc: 96.20%)
             </span>
           </div>
 
@@ -249,11 +249,11 @@ export const ModelComparison: React.FC = () => {
                   }} 
                 />
                 <Legend wrapperStyle={{ fontSize: '10px', paddingTop: '10px' }} />
-                <Line type="monotone" dataKey="fpdaf_v2" stroke="#14b8a6" strokeWidth={3} name="FPDAF-v2 Proposed (94.18%)" dot={false} activeDot={{ r: 5 }} />
-                <Line type="monotone" dataKey="fpdaf" stroke="#06b6d4" strokeWidth={1.8} name="FPDAF-v1 (82.14%)" dot={false} strokeDasharray="2 2" />
+                <Line type="monotone" dataKey="fpdaf_v2" stroke="#14b8a6" strokeWidth={3} name="FPDAF-v2 Proposed (79.23%)" dot={false} activeDot={{ r: 5 }} />
+                <Line type="monotone" dataKey="fpdaf" stroke="#06b6d4" strokeWidth={1.8} name="FPDAF-v1 (79.21%)" dot={false} strokeDasharray="2 2" />
                 <Line type="monotone" dataKey="ditto" stroke="#10b981" strokeWidth={1.5} name="Ditto (79.89%)" dot={false} strokeDasharray="3 3" />
-                <Line type="monotone" dataKey="fedprox" stroke="#3b82f6" strokeWidth={1.5} name="FedProx (79.33%)" dot={false} strokeDasharray="4 4" />
-                <Line type="monotone" dataKey="fedavg" stroke="#f97316" strokeWidth={1.5} name="FedAvg (78.44%)" dot={false} strokeDasharray="5 5" />
+                <Line type="monotone" dataKey="fedprox" stroke="#3b82f6" strokeWidth={1.5} name="FedProx (79.10%)" dot={false} strokeDasharray="4 4" />
+                <Line type="monotone" dataKey="fedavg" stroke="#f97316" strokeWidth={1.5} name="FedAvg (78.83%)" dot={false} strokeDasharray="5 5" />
                 <Line type="monotone" dataKey="centralized" stroke="#64748b" strokeWidth={1.5} name="Centralized (80.58%)" dot={false} strokeDasharray="6 6" />
               </LineChart>
             </ResponsiveContainer>
