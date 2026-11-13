@@ -11,7 +11,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from federated.utils.helpers import set_seed, load_config, setup_logging, get_device, split_non_iid_dataset
 from federated.evaluation.evaluator import FederatedEvaluator
 from baseline.models.lstm import CentralizedLSTM
-from federated.models.attention_lstm import PersonalizedAttentionLSTM
+from federated.models.attention_lstm import PersonalizedAttentionLSTM, DualPhaseAttentionLSTM
 
 class InMemorySepsisDataset(Dataset):
     """Simple in-memory PyTorch Dataset wrapper."""
@@ -131,7 +131,7 @@ def main():
         output_dim=config['model']['output_dim']
     ).to(device)
     
-    model_fpdaf_pers = PersonalizedAttentionLSTM(
+    model_fpdaf_pers = DualPhaseAttentionLSTM(
         input_dim=config['model']['input_dim'],
         hidden_dim=config['model']['hidden_dim'],
         num_layers=config['model']['num_layers'],

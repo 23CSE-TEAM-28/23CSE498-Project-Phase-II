@@ -21,6 +21,8 @@ datasets/processed/*
 !datasets/processed/.gitkeep
 *.tar.gz
 *.zip
+!Review External/Overleaf_Packages/*.zip
+!Review External/Reference_and_Guidelines/*.zip
 *.pkl
 
 # ===== Jupyter Notebooks =====

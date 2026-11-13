@@ -9,7 +9,7 @@
 |---|---|---|:---:|
 | 1 | **Manuscript File Format** | Mandatory Microsoft Word .docx format (single column, 1.5 line spacing, 1-inch margins). LaTeX source provided as companion archive. | **VERIFIED - 100% COMPLIANT** |
 | 2 | **Article Title Format** | Concise, descriptive title containing the exact study design subtitle: '...: Retrospective Model Development and Validation Study' per JMIR policy. | **VERIFIED - 100% COMPLIANT** |
-| 3 | **Structured Abstract** | Structured IMRD format strictly under 450 words with mandatory subheadings: Background, Objective, Methods, Results, Conclusions. | **VERIFIED (447 Words) - COMPLIANT** |
+| 3 | **Structured Abstract** | Structured IMRD format strictly under 450 words with mandatory subheadings: Background, Objective, Methods, Results, Conclusions. | **VERIFIED (417 Words) - COMPLIANT** |
 | 4 | **Keywords Selection** | 7-10 MeSH-compliant keywords reflecting digital health, federated learning, and intensive care medicine. | **VERIFIED (9 Keywords) - COMPLIANT** |
 | 5 | **IMRD Section Structure** | Strict adherence to Introduction, Methods, Results, Discussion structure with matching subheadings between Methods and Results. | **VERIFIED - 100% COMPLIANT** |
 | 6 | **Ethical Considerations** | Comprehensive statements on patient de-identification (HIPAA Safe Harbor 18 identifiers expunged), PhysioNet challenge approval, and India DPDPA 2023 compliance. | **VERIFIED - 100% COMPLIANT** |
