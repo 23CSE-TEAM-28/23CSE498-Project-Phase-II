@@ -194,3 +194,59 @@ body {
   animation: ecg-scan 2.5s infinite linear;
 }
 
+/* ==============================================================================
+   CLINICAL PRINT STYLESHEET (Official Hospital CDSS Chart Printing)
+   ============================================================================== */
+@media print {
+  html, body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 11pt !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide everything on the page except the printable report */
+  body * {
+    visibility: hidden;
+  }
+
+  #printable-cdss-report, #printable-cdss-report * {
+    visibility: visible;
+  }
+
+  #printable-cdss-report {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 18mm 16mm 18mm 16mm !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    box-shadow: none !important;
+    border: none !important;
+    display: block !important;
+  }
+
+  /* Force background colors to print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide modal buttons and close icons */
+  .no-print {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Page setup */
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+}
+
+

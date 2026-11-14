@@ -12,7 +12,8 @@ import {
   CheckCircle2, 
   X, 
   ShieldCheck, 
-  ChevronRight
+  ChevronRight,
+  Eye
 } from 'lucide-react';
 import { 
   AreaChart, 
@@ -440,6 +441,18 @@ export const DashboardCDSS: React.FC<DashboardCDSSProps> = ({ onSelectPatient, s
                     title="Open Sepsis Prediction Model"
                   >
                     Diagnose
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      if (onSelectPatient) onSelectPatient(p);
+                      if (setActiveTab) setActiveTab('xai');
+                    }}
+                    className="py-1 px-2 rounded text-[11px] font-bold text-purple-600 dark:text-purple-400 hover:bg-purple-500/10 transition-colors flex items-center gap-1"
+                    title="Open Three-Pillar Explainable AI Suite"
+                  >
+                    <Eye className="h-3 w-3 text-purple-500" />
+                    <span>XAI</span>
                   </button>
 
                   {isHigh && (

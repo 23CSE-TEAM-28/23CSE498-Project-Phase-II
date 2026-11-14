@@ -2,11 +2,11 @@
 
 # ==============================================================================
 # FPDAF: Federated Personalized Drift-Aware Attention Framework (v2.0)
-# Interactive Demonstration & Review Defense Runner Script
+# Unified Workstation, PyTorch Inference & Live System Launcher
 # ==============================================================================
-# Authors: Sheela Akshar Sakhi (Lead AI Engineer & System Architect)
-#          Dr. Pallavi (Lead Intensivist & ICU Specialist)
-# Project Guide: Dr. G. R. Ramya | Co-Guide: Dr. S. Vandhana
+# Author: Sheela Akshar Sakhi (Lead AI Engineer & System Architect)
+# Lead Clinician: Dr. Pallavi (Lead Intensivist & Critical Care Specialist)
+# Project Guides: Dr. G. R. Ramya, Dr. S. Vandhana
 # Amrita School of Computing, Coimbatore, India
 # ==============================================================================
 
@@ -27,7 +27,7 @@ cd "$BASE_DIR"
 
 # Clean Termination Handler
 cleanup() {
-    echo -e "\n${YELLOW}🛑 Shutting down FPDAF runtime processes...${NC}"
+    echo -e "\n${YELLOW}🛑 Terminating FPDAF runtime processes...${NC}"
     if [ ! -z "$BACKEND_PID" ]; then
         kill $BACKEND_PID 2>/dev/null || true
     fi
@@ -37,7 +37,7 @@ cleanup() {
     # Free occupied ports
     lsof -t -i :8000 | xargs kill -9 2>/dev/null || true
     lsof -t -i :5173 | xargs kill -9 2>/dev/null || true
-    echo -e "${GREEN}✓ All services safely stopped.${NC}"
+    echo -e "${GREEN}✓ All services cleanly stopped.${NC}"
     exit 0
 }
 
@@ -104,8 +104,9 @@ model.eval()
 
 # Dummy 24-hour multivariate sequence of 40 clinical signals
 dummy_patient = torch.randn(1, 24, 40)
-logits, attn = model(dummy_patient, return_attention=True)
-prob = float(torch.sigmoid(logits).item())
+with torch.no_grad():
+    logits, attn = model(dummy_patient, return_attention=True)
+    prob = float(torch.sigmoid(logits).item())
 elapsed_ms = (time.perf_counter() - t0) * 1000.0
 
 print(f'   ${GREEN}✓ Model Architecture: DualPhaseAttentionLSTM (BiLSTM + Dual-Phase Cross-Attention)${NC}')
@@ -166,7 +167,7 @@ echo "║  Authorized Review Accounts:                                          
 echo "║    1. Clinician:  Dr. Pallavi (Lead Intensivist & ICU Consultant)                     ║"
 echo "║    2. Developer:  Akshar (Lead AI Engineer & System Architect)                        ║"
 echo "╠═══════════════════════════════════════════════════════════════════════════════════════╣"
-echo "║  Live Terminal Log Stream: [Press Ctrl+C to safely exit]                              ║"
+echo "║  Live Terminal Log Stream: [Press Ctrl+C to cleanly exit]                             ║"
 echo "╚═══════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "${NC}\n"
 

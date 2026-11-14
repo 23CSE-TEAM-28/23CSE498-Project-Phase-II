@@ -29,8 +29,7 @@ When an external reviewer asks you to show the code, use this instant lookup tab
 ```
 23CSE498-Project-Phase-II/
 │
-├── run_demo.sh                     <-- ⭐ ONE-COMMAND LIVE DEMO SCRIPT (Prints terminal tensor ops + boots UI)
-├── run_app.sh                      <-- Automated workstation launcher script
+├── run.sh                          <-- ⭐ THE ONE RUN SCRIPT (Sanity check + PyTorch inference + boots system)
 ├── CODEBASE_REVIEW_GUIDE.md        <-- This architectural walkthrough guide
 ├── requirements.txt                <-- Python dependencies (torch, fastapi, uvicorn, scikit-learn, etc.)
 │
@@ -231,13 +230,13 @@ with torch.no_grad():
 
 ---
 
-## 5. Live Demonstration in Terminal: Running `./run_demo.sh`
+## 5. Live Demonstration in Terminal: Running `./run.sh`
 
 To demonstrate the full project to reviewers in a single command, open the terminal in the project root:
 
 ```bash
 cd 23CSE498-Project-Phase-II
-./run_demo.sh
+./run.sh
 ```
 
 ### What Happens When You Run This Script:
@@ -277,7 +276,7 @@ cd 23CSE498-Project-Phase-II
 ---
 
 ### Summary Checklist for Review Day
-- [x] Run `./run_demo.sh` to initialize servers and demonstrate live terminal operations.
+- [x] Run `./run.sh` to initialize servers and demonstrate live terminal operations.
 - [x] Show the login screen with **Dr. Pallavi** (Clinician) and **Akshar** (Developer).
 - [x] Open **Bedside Sepsis Diagnostic Predictor** (`PredictionScreen.tsx`) to show live PyTorch tensor inference with 1-click **Back to Dashboard** and **Go to Records Page** navigation.
 - [x] Open **Three-Pillar XAI Engine** (`ExplainableAI.tsx`) to showcase self-attention timelines and algorithmic recourse.
