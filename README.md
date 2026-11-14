@@ -99,6 +99,17 @@ Evaluated across **40,327 ICU patient encounters** from the PhysioNet 2019 Compu
 ```text
 23CSE498-Project-Phase-II/
 │
+├── docs/                       # Project Specifications, Audits & Clinical Ontologies
+│   ├── README.md               # Documentation Catalog & Index
+│   ├── DATA_DICTIONARY.md      # 40-feature ICU clinical ontology & ranges
+│   ├── EXPERIMENT_RESULTS.md   # Machine-verified benchmark logs & confusion matrices
+│   ├── PROJECT_AUDIT.md        # Technical validation & audit trail
+│   ├── DASHBOARD_PROTOTYPE_GUIDE.md # Clinician/Admin UI architecture guide
+│   ├── DATASET_SETUP.md        # PhysioNet 2019 dataset ingestion manual
+│   ├── REPRODUCIBILITY.md      # Exact reproduction runbook & environment setup
+│   ├── EXPERIMENT_PLAN.md      # Hypotheses H1-H4 & ablation matrices
+│   └── Literature_Survey.xlsx  # 45+ peer-reviewed multi-cohort comparative matrix
+│
 ├── baseline/                   # Centralized baseline models & evaluators
 │   ├── configs/config.yaml     # Baseline hyperparameters
 │   ├── datasets/dataset.py     # PyTorch DataLoader for time-series sequences
@@ -153,6 +164,12 @@ Evaluated across **40,327 ICU patient encounters** from the PhysioNet 2019 Compu
 │   ├── presentation.pdf / .tex # LaTeX Madrid Beamer presentation slides
 │   ├── report.pdf / .tex       # Phase II academic review reports
 │   └── hospital_pitch.pdf      # MedTech venture executive brief
+│
+├── Review External/            # External Capstone Defense Deliverables
+│   ├── G028_Presentation.pdf   # 25-slide defense deck with booktabs & real metrics
+│   ├── G028_Report.pdf         # 8-page IEEE standard capstone technical report
+│   ├── Overleaf_Packages/      # Production Overleaf compile-ready ZIP bundles
+│   └── VIVA_VOCE_DEFENSE_AND_DEMO_GUIDE.md # 36-question oral defense dossier
 │
 ├── MSME/                       # MSME Hackathon 6.0 Funding Proposal
 │   ├── msmeproposal.pdf        # Full clinical proposal document
