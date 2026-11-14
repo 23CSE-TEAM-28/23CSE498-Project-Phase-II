@@ -218,19 +218,55 @@ def run_live_inference(request: LiveInferenceRequest):
     X_test = dataset["X_test"]
     y_test = dataset["y_test"]
     
-    # Resolve patient index (PAT-1000 to PAT-1049 map to indices 0 to 49)
+    # Resolve patient sequence
     pat_id = request.patient_id or "PAT-1000"
     pat_idx = 0
-    if pat_id.startswith("PAT-"):
+    if pat_id.startswith("HOSP-"):
+        # Retrieve actual hospital transcribed patient trajectory from warehouse
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT hour, heart_rate, blood_pressure, temperature, respiration, spo2 FROM vitals WHERE patient_id = ? ORDER BY hour ASC", (pat_id,))
+        v_rows = cursor.fetchall()
+        cursor.execute("SELECT * FROM laboratories WHERE patient_id = ?", (pat_id,))
+        lab_row = cursor.fetchone()
+        cursor.execute("SELECT age, gender FROM patients WHERE id = ?", (pat_id,))
+        p_row = cursor.fetchone()
+        conn.close()
+
+        raw_mat = np.tile(scaler.mean_, (24, 1))
+        for r in v_rows:
+            h = r["hour"] - 1
+            if 0 <= h < 24:
+                raw_mat[h, 0] = r["heart_rate"]
+                raw_mat[h, 1] = r["spo2"]
+                raw_mat[h, 2] = r["temperature"]
+                raw_mat[h, 3] = r["blood_pressure"]
+                raw_mat[h, 4] = r["blood_pressure"] * 0.72 # MAP
+                raw_mat[h, 6] = r["respiration"]
+        if lab_row:
+            raw_mat[:, 11] = lab_row["ph"] or 7.35
+            raw_mat[:, 19] = lab_row["creatinine"] or 1.0
+            raw_mat[:, 22] = lab_row["lactate"] or 2.0
+            raw_mat[:, 26] = lab_row["bilirubin"] or 1.0
+            raw_mat[:, 31] = (lab_row["wbc"] or 10.0) * 1000.0
+            raw_mat[:, 33] = (lab_row["platelets"] or 200.0) * 1000.0
+        if p_row:
+            raw_mat[:, 34] = p_row["age"]
+            raw_mat[:, 35] = 1.0 if p_row["gender"] == "Male" else 0.0
+        scaled_mat = (raw_mat - scaler.mean_) / scaler.scale_
+        seq = torch.from_numpy(scaled_mat).float()
+        ground_truth = 1
+    elif pat_id.startswith("PAT-"):
         try:
             pat_idx = int(pat_id.replace("PAT-", "")) - 1000
             pat_idx = max(0, min(pat_idx, len(X_test) - 1))
         except ValueError:
             pat_idx = 0
-            
-    # Base sequence: (24 hours, 40 features)
-    seq = X_test[pat_idx].clone() # shape: (24, 40)
-    ground_truth = int(y_test[pat_idx].item())
+        seq = X_test[pat_idx].clone() # shape: (24, 40)
+        ground_truth = int(y_test[pat_idx].item())
+    else:
+        seq = X_test[0].clone()
+        ground_truth = int(y_test[0].item())
     
     # Apply vitals override if provided by clinician/simulator
     v_overrides = request.vitals_override
@@ -593,6 +629,10 @@ def get_patient_full_profile(pat_id: str):
         FROM clinical_notes WHERE patient_id = ? ORDER BY timestamp DESC
     """, (pat_id,))
     n_rows = cursor.fetchall()
+
+    # Laboratory panel & SOFA from database if available (e.g. for hospital cohort)
+    cursor.execute("SELECT * FROM laboratories WHERE patient_id = ?", (pat_id,))
+    lab_row = cursor.fetchone()
     conn.close()
     
     vitals_list = []
@@ -629,26 +669,49 @@ def get_patient_full_profile(pat_id: str):
     if last_vital["bloodPressure"] <= 100: qsofa += 1
     if is_critical: qsofa += 1
     
-    # Laboratory panel
-    labs = {
-        "lactate": 4.2 if is_critical else 1.1,
-        "lactateUnit": "mmol/L",
-        "lactateRef": "< 2.0",
-        "wbc": 18.6 if is_critical else 7.8,
-        "wbcUnit": "x10^9/L",
-        "wbcRef": "4.5 - 11.0",
-        "creatinine": 2.4 if is_critical else 0.9,
-        "creatinineUnit": "mg/dL",
-        "creatinineRef": "0.7 - 1.3",
-        "platelets": 110 if is_critical else 240,
-        "plateletsUnit": "x10^9/L",
-        "plateletsRef": "150 - 450",
-        "bilirubin": 2.1 if is_critical else 0.6,
-        "bilirubinUnit": "mg/dL",
-        "bilirubinRef": "0.2 - 1.2",
-        "ph": 7.28 if is_critical else 7.41,
-        "phRef": "7.35 - 7.45"
-    }
+    # Laboratory panel & SOFA from database if available (e.g. for hospital cohort)
+    if lab_row:
+        labs = {
+            "lactate": lab_row["lactate"],
+            "lactateUnit": lab_row["lactate_unit"] or "mmol/L",
+            "lactateRef": lab_row["lactate_ref"] or "< 2.0",
+            "wbc": lab_row["wbc"],
+            "wbcUnit": lab_row["wbc_unit"] or "x10^9/L",
+            "wbcRef": lab_row["wbc_ref"] or "4.5 - 11.0",
+            "creatinine": lab_row["creatinine"],
+            "creatinineUnit": lab_row["creatinine_unit"] or "mg/dL",
+            "creatinineRef": lab_row["creatinine_ref"] or "0.7 - 1.3",
+            "platelets": lab_row["platelets"],
+            "plateletsUnit": lab_row["platelets_unit"] or "x10^9/L",
+            "plateletsRef": lab_row["platelets_ref"] or "150 - 450",
+            "bilirubin": lab_row["bilirubin"],
+            "bilirubinUnit": lab_row["bilirubin_unit"] or "mg/dL",
+            "bilirubinRef": lab_row["bilirubin_ref"] or "0.2 - 1.2",
+            "ph": lab_row["ph"],
+            "phRef": lab_row["ph_ref"] or "7.35 - 7.45"
+        }
+        if lab_row["sofa_score"] is not None:
+            total_sofa = lab_row["sofa_score"]
+    else:
+        labs = {
+            "lactate": 4.2 if is_critical else 1.1,
+            "lactateUnit": "mmol/L",
+            "lactateRef": "< 2.0",
+            "wbc": 18.6 if is_critical else 7.8,
+            "wbcUnit": "x10^9/L",
+            "wbcRef": "4.5 - 11.0",
+            "creatinine": 2.4 if is_critical else 0.9,
+            "creatinineUnit": "mg/dL",
+            "creatinineRef": "0.7 - 1.3",
+            "platelets": 110 if is_critical else 240,
+            "plateletsUnit": "x10^9/L",
+            "plateletsRef": "150 - 450",
+            "bilirubin": 2.1 if is_critical else 0.6,
+            "bilirubinUnit": "mg/dL",
+            "bilirubinRef": "0.2 - 1.2",
+            "ph": 7.28 if is_critical else 7.41,
+            "phRef": "7.35 - 7.45"
+        }
 
     return {
         "id": pat_row["id"],

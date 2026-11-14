@@ -1,0 +1,62 @@
+﻿patient_id,source_pdf_page,age_years,sex,icu_day,heart_rate_bpm,map_mmhg,spo2_pct,respiratory_rate_min,systolic_bp_mmhg,diastolic_bp_mmhg,temperature_c,gcs,urine_output_ml,fluid_balance_ml,vasopressor,sofa_score,arterial_ph,paco2_mmhg,pao2_mmhg,hco3_mmol_l,fio2_pct,serum_lactate_mmol_l,creatinine_mg_dl,bun_mg_dl,rbs_mg_dl,wbc_per_ul,platelets_per_ul,hemoglobin_g_dl,ast_u_l,alt_u_l,bilirubin_mg_dl,albumin_g_dl,pt_inr,sodium_mmol_l,potassium_mmol_l,chloride_mmol_l,calcium_mg_dl,magnesium_mg_dl,sepsis_diagnosed,icu_outcome,transcription_status,notes
+P01,1,72,M,1,100.0,73.0,99.5,19.25,,,,,,,,,7.46,,52,,40,3,0.6,,156,12000,160000,11.2,76,,1.2,,,131,4.6,,,,yes,discharged,partial_manual_transcription,
+P01,1,72,M,2,96.75,70.0,98.75,21.25,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,
+P01,1,72,M,3,88.5,76.75,97.75,22.75,,,,,,,,,7.5,,54,,40,3,0.6,,196,11000,260000,10.6,78,,1.2,,,135,4.4,,,,yes,discharged,partial_manual_transcription,
+P01,1,72,M,4,84.0,70.0,98.75,15.5,,,,,,,,,7.35,,40,,40,1.5,0.52,,120,9000,260000,10.7,78,,1.2,,,140,4.4,,,,yes,discharged,partial_manual_transcription,
+P02,1,63,F,1,112.0,67.0,96.75,17.5,,,,,,,,,7.31,55,,,40,2.2,0.9,,102,21000,120000,11.2,44,,1.4,,,140,3.8,,,,yes,discharged,partial_manual_transcription,
+P02,1,63,F,2,106.5,70.75,97.25,17.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,
+P02,1,63,F,3,96.5,75.0,98.0,15.75,,,,,,,,,7.34,31,,,40,2,0.9,,96,16000,150000,11.2,43,,1.4,,,141,3.7,,,,yes,discharged,partial_manual_transcription,
+P03,2,52,M,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P03,2,52,M,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P03,2,52,M,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P04,3,43,F,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P04,3,43,F,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P04,3,43,F,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P05,3,65,F,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P05,3,65,F,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P05,3,65,F,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P05,3,65,F,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P06,4,77,M,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P06,4,77,M,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P07,4,82,F,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P07,4,82,F,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P07,4,82,F,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P07,4,82,F,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P08,5,44,F,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P08,5,44,F,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P08,5,44,F,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P09,6,58,F,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P09,6,58,F,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P10,7,50,F,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P10,7,50,F,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P10,7,50,F,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P10,7,50,F,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P11,8,69,F,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P11,8,69,F,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P11,8,69,F,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P12,9,74,M,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P12,9,74,M,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P13,9,56,F,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P13,9,56,F,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P13,9,56,F,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P14,10,53,M,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P14,10,53,M,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P15,10,63,F,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P15,10,63,F,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P16,11,61,M,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P16,11,61,M,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P17,11,85,F,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P17,11,85,F,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P17,11,85,F,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,yes,discharged,partial_manual_transcription,Vitals/labs pending verification from handwritten source
+P18,12,70,F,1,128,59,89,28,82,48,38.9,12,15,2500,,12,7.21,32,68,14,80,5.8,2.4,42,210,18500,85000,8.2,156,132,2.8,2.4,1.6,132,4.8,108,7.8,1.6,,,manual_transcription_review_required,Day-level single readings; verify before clinical or ML use
+P18,12,70,F,2,116,68,92,24,92,56,38.2,13,25,1200,,9,7.28,36,78,18,60,4.2,2.1,36,168,16200,98000,8.6,124,98,2.3,2.6,1.4,136,4.2,104,8.2,1.8,,,manual_transcription_review_required,Day-level single readings; verify before clinical or ML use
+P18,12,70,F,3,98,80,95,20,92,56,37.6,14,45,200,,6,7.34,38,86,22,45,2.9,1.7,28,141,12800,136000,9.4,78,62,1.7,3.0,1.2,138,4.0,102,8.6,1.9,,,manual_transcription_review_required,Day-level single readings; verify before clinical or ML use
+P18,12,70,F,4,86,86,97,18,116,72,37.1,15,60,300,,3,7.37,39,92,24,35,2.9,1.3,20,126,10500,165000,9.8,52,44,1.3,3.2,1.1,139,3.9,101,9.0,2.0,,,manual_transcription_review_required,Day-level single readings; verify before clinical or ML use
+P18,12,70,F,5,82,92,98,16,122,78,36.8,15,75,-500,,1,7.39,40,96,24.5,35,1.4,1.1,16,118,9200,195000,10.1,48,38,1.1,3.5,1.0,140,3.8,102,9.2,2.1,,,manual_transcription_review_required,Day-level single readings; verify before clinical or ML use
+P19,14,65,M,1,130,60,90,26,90,60,39.0,11,15,3000,,12,7.24,32,68,13,85,5.6,2.5,43,200,19700,89000,8.7,160,130,2.5,2.4,1.5,134,4.8,104,7.6,1.5,,,manual_transcription_review_required,Day-level single readings; verify before clinical or ML use
+P19,14,65,M,2,112,68,95,24,92,60,38.2,13,45,1200,,9,7.34,38,86,21,60,4.2,2.1,36,168,16200,126000,8.8,78,62,3.0,3.0,1.2,138,4.0,102,8.6,1.9,,,manual_transcription_review_required,Day-level single readings; verify before clinical or ML use
+P19,14,65,M,3,98,86,97,18,92,80,37.1,15,60,300,,3,7.37,39,92,24,45,2.9,1.3,20,126,10500,160000,9.8,52,44,1.4,3.2,1.1,139,3.8,101,9.0,2.0,,,manual_transcription_review_required,Day-level single readings; verify before clinical or ML use
+P19,14,65,M,4,86,92,98,16,122,80,36.8,15,75,-500,,1,7.39,40,96,24.5,35,1.4,1.1,16,118,9200,195000,10.1,48,38,1.3,3.5,1.0,139,,102,9.2,2.1,,,manual_transcription_review_required,Day-level single readings; verify before clinical or ML use
+P20,15,76,M,1,126,60,89,24,90,70,38.9,12,25,1200,,9,7.28,36,,18,60,4.2,2.1,36,168,16200,98000,8.6,124,92,2.3,2.6,1.4,136,4.2,104,8.6,1.9,,,manual_transcription_review_required,Day-level single readings; verify before clinical or ML use
+P20,15,76,M,2,86,80,95,20,95,80,37.6,14,60,300,,6,7.37,39,,24,35,2.9,1.3,20,126,10500,165000,9.4,52,44,1.3,3.2,1.6,138,3.9,101,9.0,2.0,,,manual_transcription_review_required,Day-level single readings; verify before clinical or ML use
+P20,15,76,M,3,82,92,98,16,120,80,36.8,15,75,-500,,1,7.39,40,,24.5,35,1.4,1.1,16,118,9200,195000,10.1,48,38,1.1,3.5,1.0,140,3.8,102,9.2,2.1,,,manual_transcription_review_required,Day-level single readings; verify before clinical or ML use
