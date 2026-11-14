@@ -13,6 +13,7 @@ import { DriftMonitor } from './pages/DriftMonitor';
 import { FLMonitor } from './pages/FLMonitor';
 import { ModelComparison } from './pages/ModelComparison';
 import { ResearchInsights } from './pages/ResearchInsights';
+import { DeveloperArchitecture } from './pages/DeveloperArchitecture';
 import { fetchPatients } from './services/api';
 import type { Patient } from './services/api';
 
@@ -188,6 +189,9 @@ function App() {
           
           {/* 11. Research Insights & Methodology */}
           {activeTab === 'research' && <ResearchInsights />}
+
+          {/* 12. Developer Architecture & End-to-End Data Flow */}
+          {activeTab === 'architecture' && <DeveloperArchitecture setActiveTab={setActiveTab} />}
         </main>
       </div>
     </div>

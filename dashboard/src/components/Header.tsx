@@ -11,7 +11,8 @@ import {
   Stethoscope,
   Code2,
   Sparkles,
-  ShieldAlert
+  ShieldAlert,
+  Network
 } from 'lucide-react';
 import { FPDAFLogo } from './FPDAFLogo';
 
@@ -163,6 +164,18 @@ export const Header: React.FC<HeaderProps> = ({
             <span>All Modules</span>
           </button>
         </div>
+
+        {/* Architecture Flow Quick Link (Developer Console) */}
+        {(userRole === 'Admin' || userRole === 'Full Access') && (
+          <button
+            onClick={() => setActiveTab('architecture')}
+            className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-500/25 text-xs font-bold transition-all cursor-pointer shadow-xs"
+            title="Inspect System Architecture & PyTorch Call Graph"
+          >
+            <Network className="h-3.5 w-3.5 text-indigo-500" />
+            <span>Architecture Flow</span>
+          </button>
+        )}
 
         {/* ICU Alarm Audio Button (Apple Squircle) */}
         <button

@@ -117,43 +117,49 @@ When an external reviewer asks you to show the code, use this instant lookup tab
 
 ---
 
-## 3. End-to-End System Workflow: How the Modules Are Connected
+## 3. End-to-End System Architecture: How the Modules Connect Together
 
 ```mermaid
 flowchart TD
-    subgraph Data["1. Clinical Telemetry Layer"]
-        A1["PhysioNet 2019 Test Cohort<br>(6,050 Disjoint Patients)"] --> S["StandardScaler<br>(scaler.pkl)"]
-        A2["Hospital Transcribed Records<br>(sepsis_transcription_draft.csv)"] --> DB[("SQLite Database<br>clinical_warehouse.db")]
-        DB --> S
+    subgraph Frontend["React 19 Bedside Workstation (Port 5173)"]
+        UI["PredictionScreen.tsx / ExplainableAI.tsx"]
+        API_CLIENT["services/api.ts (Axios HTTP Client)"]
+        UI -->|User selects Patient PAT-1033 / HOSP-P04| API_CLIENT
     end
 
-    subgraph Backend["2. FastAPI Application & Neural Engine (backend/main.py)"]
-        S --> Tensor["Input Tensor Generation<br>X ∈ ℝ^(1 × 24 × 40)"]
-        Tensor --> Fwd["PyTorch In-Process Forward Passes<br>(torch.no_grad())"]
+    subgraph Backend["FastAPI Clinical Service (Port 8000)"]
+        ROUTER["backend/main.py: POST /api/inference/live"]
+        DB[("backend/clinical_warehouse.db<br>70 ICU Beds")]
+        SCALER["StandardScaler Normalizer"]
         
-        subgraph Models["Parallel 6-Model Execution"]
-            Fwd --> M1["Centralized LSTM<br>(baseline/checkpoints/best_model.pt)"]
-            Fwd --> M2["FedAvg Global<br>(federated/checkpoints/best_global_model.pt)"]
-            Fwd --> M3["FedProx Global<br>(federated/checkpoints/best_fedprox_model.pt)"]
-            Fwd --> M4["Ditto Personalized<br>(client_0_personalized_model.pt)"]
-            Fwd --> M5["FPDAF-v1 Attention<br>(best_fpdaf_global_model.pt)"]
-            Fwd --> M6["FPDAF-v2 SOTA DDP-ERP<br>(client_0_fpdaf_personalized_model.pt)"]
-        end
-
-        M6 --> Attn["Pillar 1: Temporal Attention<br>(explainability/temporal_attention.py)"]
-        M6 --> IG["Pillar 2: Integrated Gradients<br>(explainability/integrated_gradients.py)"]
-        M6 --> Rec["Pillar 3: Counterfactual Recourse<br>(explainability/counterfactual_recourse.py)"]
-        M6 --> Drift["AD-CUSUM Drift Telemetry<br>(federated/clients/client.py)"]
+        API_CLIENT -->|HTTP JSON Request| ROUTER
+        ROUTER -->|Fetch 24h vitals & labs| DB
+        DB -->|Raw 24x40 Matrix| SCALER
+        SCALER -->|Normalized PyTorch Tensor<br>Shape: torch.Size([1, 24, 40])| PYTORCH_ENGINE
     end
 
-    subgraph Frontend["3. React 19 Apple HIG Dashboard (dashboard/src/)"]
-        Attn --> UI1["PredictionScreen.tsx<br>(Live Inferences & SSC Bundle)"]
-        IG --> UI2["ExplainableAI.tsx<br>(Attention Heatmaps & Saliency)"]
-        Rec --> UI2
-        Drift --> UI3["DriftMonitor.tsx & HospitalNetwork.tsx<br>(CUSUM Telemetry & 3 Hospital Nodes)"]
-        Models --> UI4["DashboardCDSS.tsx<br>(70-Bed ICU Overview)"]
+    subgraph NeuralEngine["PyTorch In-Memory Inference Engine"]
+        PYTORCH_ENGINE["get_pytorch_models() in backend/main.py"]
+        MODEL_DEF["models/bilstm_attention.py<br>(DualPhaseAttentionLSTM)"]
+        CKPT[/"federated/checkpoints/<br>client_0_fpdaf_personalized_model.pt"/]
+
+        MODEL_DEF -.->|Instantiates Architecture| PYTORCH_ENGINE
+        CKPT -.->|Loads Weights into| PYTORCH_ENGINE
+        PYTORCH_ENGINE -->|Forward Pass: logits, attn| PREDICTION["Sepsis Risk: 97% - 99%<br>Latency: 14.35 ms<br>Attention Weights: [1, 24, 1]"]
     end
+
+    PREDICTION -->|JSON Response| UI
 ```
+
+### End-to-End Execution Walkthrough (For Review Panel Defense)
+1. **Bedside Interaction (Frontend):**  
+   The clinician (`Dr. Pallavi`) or developer (`Akshar`) selects an ICU patient (e.g., `PAT-1033` or `HOSP-P04`) in `PredictionScreen.tsx` or `ExplainableAI.tsx`. The typed client in `services/api.ts` dispatches an asynchronous HTTP POST request to `/api/inference/live`.
+2. **Clinical Warehouse & Normalization (Backend):**  
+   FastAPI receives the request in `backend/main.py`. It pulls the recorded 24-hour multivariate sequence (40 physiological signals and lab biomarkers) from the SQLite clinical database `backend/clinical_warehouse.db`. The raw values are mapped through the fitted `StandardScaler` to yield a standard tensor of shape $\mathbf{X} \in \mathbb{R}^{1 \times 24 \times 40}$.
+3. **In-Memory PyTorch Inference (Neural Engine):**  
+   `get_pytorch_models()` loads the SOTA `DualPhaseAttentionLSTM` defined in `models/bilstm_attention.py` with trained personalized weights from `federated/checkpoints/client_0_fpdaf_personalized_model.pt`. Under `torch.no_grad()`, it executes forward passes across all 6 models simultaneously, computes temporal self-attention weights, and calculates exact inference latency ($\approx 14.35\text{ ms}$).
+4. **Clinical Decision Support Response:**  
+   The calibrated risk probability ($97\% - 99\%$), lead time prediction ($5.8\text{ hours}$ in advance), top physiological feature attributions, and attention matrix are returned as JSON to the React interface, updating bedside alert states and enabling one-click Surviving Sepsis Campaign (SSC) bundle resuscitation.
 
 ---
 

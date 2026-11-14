@@ -13,7 +13,8 @@ import {
   Building,
   User,
   Sliders,
-  Cpu
+  Cpu,
+  Code2
 } from 'lucide-react';
 import { FPDAFLogo } from './FPDAFLogo';
 
@@ -65,8 +66,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
       ]
     },
     {
-      title: "Benchmarks & Science",
+      title: "Engineering & Architecture",
       items: [
+        { id: 'architecture', label: 'System Architecture & Data Flow', icon: Code2, badge: 'Flow', roles: ['Admin', 'Full Access'] },
         { id: 'comparison', label: '6-Way Model Benchmark', icon: BarChart3, roles: ['Admin', 'Full Access'] },
         { id: 'research', label: 'Research & Methodology', icon: FileText, roles: ['Doctor', 'Admin', 'Full Access'] },
       ]
