@@ -424,10 +424,11 @@
 % --- SLIDE 14: SECTION 6B - DRIFT & ABLATION RESULTS ---
 \begin{frame}{6. Preliminary Verification \& Quantitative Results}
     \framesubtitle{30-Round Dynamic Drift Benchmark \& Ablation Study Verification}
+    \vspace{-0.15cm}
     \begin{table}
         \centering
         \scriptsize
-        \renewcommand{\arraystretch}{1.10}
+        \renewcommand{\arraystretch}{1.02}
         \begin{tabular}{l c c c c}
             \toprule
             \textbf{Federated Adaptation Policy} & \textbf{Drift Detection} & \textbf{Post-Drift AUROC} & \textbf{Post-Drift Brier} & \textbf{Brier Reduction} \\
@@ -440,22 +441,25 @@
             \bottomrule
         \end{tabular}
     \end{table}
+    \vspace{-0.25cm}
 
     \begin{table}
         \centering
         \scriptsize
-        \renewcommand{\arraystretch}{1.06}
+        \renewcommand{\arraystretch}{1.00}
         \begin{tabular}{l c c c l}
             \toprule
             \textbf{Ablation Configuration} & \textbf{AUROC} & \textbf{ECE} & \textbf{Brier} & \textbf{Algorithmic Impact} \\
             \midrule
-            Without Temporal Attention (BiLSTM Only) & $0.7731$ & $0.2924$ & $0.1795$ & Fails to capture acute hourly vitals spikes \\
-            Without AD-CUSUM Drift Detection & $0.7804$ & $0.2571$ & $0.1632$ & Unmonitored shift degrades calibration \\
-            Without Decoupled Personalization (Global Only) & $0.7609$ & $0.1497$ & $0.0785$ & Monolithic head harms client specialization \\
-            \textbf{\textcolor{amritaMaroon}{Full Proposed System (FPDAF-v2)}} & $\mathbf{0.7821}$ & $\mathbf{0.0961}$ & $\mathbf{0.0585}$ & Fully calibrated, drift-resilient prediction \\
+            Without Attention (BiLSTM Only) & $0.7731$ & $0.2924$ & $0.1795$ & Omits acute hourly vitals dynamics \\
+            Without AD-CUSUM Drift Guard & $0.7804$ & $0.2571$ & $0.1632$ & Unmonitored shift degrades calibration \\
+            Without Decoupled Heads (Global) & $0.7609$ & $0.1497$ & $0.0785$ & Monolithic head harms specialization \\
+            \midrule
+            \textbf{\textcolor{amritaMaroon}{Full Proposed System (FPDAF-v2)}} & $\mathbf{0.7821}$ & $\mathbf{0.0961}$ & $\mathbf{0.0585}$ & Calibrated, drift-resilient prediction \\
             \bottomrule
         \end{tabular}
     \end{table}
+    \vspace{-0.15cm}
 
     \begin{block}{Drift \& Ablation Verification Summary}
         \footnotesize
