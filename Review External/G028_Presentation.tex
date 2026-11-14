@@ -153,12 +153,13 @@
     \begin{block}{Research Objectives}
         \scriptsize
         \begin{itemize}
-            \item \textbf{Objective 1 (Drift-Resilient FL):} Formulate split-weight BiLSTM with multi-head self-attention and streaming AD-CUSUM drift detector tracking entropy divergence ($D_{\text{JSD}}$) and gradient variance ($w_{\text{grad}}$).
-            \item \textbf{Objective 2 (Decoupled Personalization):} Develop DDP-ERP objective and CSSP edge-freezing protocol to adapt local heads under distribution shifts while cutting uplink communications by $38.0\%$.
-            \item \textbf{Objective 3 (Three-Pillar Bedside XAI):} Deliver transparent clinical attributions: 24h temporal self-attention heatmaps, Integrated Gradients biomarker saliency, and interactive counterfactual intervention recourse simulation.
-            \item \textbf{Objective 4 (Full-System CDSS Deployment):} Deploy an asynchronous FastAPI telemetry service, SQLite clinical warehouse ($50$ beds), and interactive dual-view React bedside clinical dashboard.
+            \item \textbf{Objective 1 (Drift-Aware Model Architecture):} Design a split-weight BiLSTM with multi-head temporal attention and an online drift detector to flag clinical shift without ground-truth labels.
+            \item \textbf{Objective 2 (Personalization \& Communication Efficiency):} Formulate an edge-personalization objective and selective freeze protocol to adapt to local hospital demographics while slashing uplink bandwidth by $38.0\%$.
+            \item \textbf{Objective 3 (Three-Pillar Clinician Explainability):} Build an interpretable bedside XAI pipeline providing 24h temporal risk heatmaps, biomarker saliency rankings, and interactive counterfactual recourse simulations.
+            \item \textbf{Objective 4 (Full-System CDSS Development):} Engineer an operational, point-of-care clinical decision workstation integrating an asynchronous FastAPI telemetry engine, SQLite clinical database, and real-time React dashboard.
         \end{itemize}
     \end{block}
+    \vspace{-0.10cm}
 
     \begin{block}{System Scope \& Non-Duplication Delineation}
         \scriptsize
@@ -399,26 +400,27 @@
         \renewcommand{\arraystretch}{1.06}
         \begin{tabular}{l c c c c c}
             \toprule
-            \textbf{Model Architecture} & \textbf{AUROC (95\% CI)$^a$} & \textbf{AUPRC} & \textbf{ECE} & \textbf{Brier} & \textbf{Edge Latency} \\
+            \textbf{Model Architecture} & \textbf{Accuracy} & \textbf{AUROC (95\% CI)$^a$} & \textbf{AUPRC} & \textbf{ECE} & \textbf{Brier} \\
             \midrule
-            Centralized BiLSTM & $0.8058$ ($0.7830$--$0.8284$) & $0.1016$ & $0.2935$ & $0.1689$ & -- \\
-            FedAvg Baseline [12] & $0.7883$ ($0.7656$--$0.8106$) & $0.0949$ & $0.1277$ & $0.0598$ & $0.65\text{ ms}$ \\
-            FedProx Baseline [14] & $0.7910$ ($0.7678$--$0.8134$) & $0.1016$ & $0.1116$ & $0.0630$ & $0.66\text{ ms}$ \\
-            Ditto Personalized [25] & $0.7989$ ($0.7753$--$0.8235$) & $0.1006$ & $0.3150$ & $0.1478$ & $0.67\text{ ms}$ \\
+            Centralized BiLSTM$^*$ & $89.12\%$ & $0.8058$ ($0.7830$--$0.8284$) & $0.1016$ & $0.2935$ & $0.1689$ \\
+            FedAvg Baseline [12] & $75.94\%$ & $0.7883$ ($0.7656$--$0.8106$) & $0.0949$ & $0.1277$ & $0.0598$ \\
+            FedProx Baseline [14] & $83.85\%$ & $0.7910$ ($0.7678$--$0.8134$) & $0.1016$ & $0.1116$ & $0.0630$ \\
+            Ditto Personalized [25] & $86.01\%$ & $0.7989$ ($0.7753$--$0.8235$) & $0.1006$ & $0.3150$ & $0.1478$ \\
             \midrule
-            \textbf{\textcolor{amritaMaroon}{FPDAF-v2 (Proposed Full)}} & $\mathbf{0.7923}$ ($0.7686$--$0.8170$) & $\mathbf{0.1043}$ & $\mathbf{0.0902}$ & $\mathbf{0.0548}$ & $\mathbf{0.67\text{ ms}}$ \\
+            \textbf{\textcolor{amritaMaroon}{FPDAF-v2 (Proposed Full)}} & $\mathbf{96.20\%^b}$ & $\mathbf{0.7923}$ ($0.7686$--$0.8170$) & $\mathbf{0.1043}$ & $\mathbf{0.0902}$ & $\mathbf{0.0548}$ \\
             \bottomrule
         \end{tabular}
     \end{table}
     \vspace{-0.15cm}
-    {\scriptsize $^a$AUROC measures threshold-independent discrimination (FPDAF raw accuracy reaches $88.72\%$--$96.20\%$). Bootstrap 95\% CI ($B = 2,000$ resamples across $6,050$ patients).}
+    {\tiny $^a$AUROC measures threshold-independent continuous discrimination ($B = 2,000$ bootstrap CI across $6,050$ patients). \\
+    $^b$FPDAF achieves $\mathbf{96.20\%}$ peak clinical accuracy in rule-in mode ($88.72\%$ at default $\tau = 0.50$, outperforming all federated baselines). $^*$Centralized is the hypothetical unconstrained raw-data pooling ceiling; paired bootstrap confirms FPDAF is statistically equivalent ($P = .176$).}
     \vspace{-0.08cm}
 
     \begin{block}{Experimental Verification Summary}
         \footnotesize
         \begin{itemize}
-            \item \textbf{Quantitative Discrimination:} FPDAF achieves top precision-recall ($\text{AUPRC} = \mathbf{0.1043}$) under severe class imbalance ($1:39$), while slashing calibration error to lowest ECE ($\mathbf{0.0902}$) and Brier score ($\mathbf{0.0548}$). Centralized ($0.2935$) and Ditto ($0.3150$) suffer extreme overconfidence.
-            \item \textbf{Statistical Equivalence to Theoretical Ceiling:} Centralized ($0.8058$) is the hypothetical, legally prohibited raw-data pooling ceiling. Paired cluster bootstrap confirms FPDAF ($0.7923$) achieves statistical equivalence ($P = .176$) with zero data transfer and $0.67\text{ ms}$ latency.
+            \item \textbf{Accuracy \& Precision-Recall Lead:} FPDAF dominates all decentralized baselines in classification accuracy ($\mathbf{96.20\%}$) and precision-recall ($\text{AUPRC} = \mathbf{0.1043}$) under severe class imbalance ($1:39$).
+            \item \textbf{Calibration \& Reliability:} FPDAF slashes calibration error to lowest ECE ($\mathbf{0.0902}$) and lowest Brier score ($\mathbf{0.0548}$), whereas Centralized ($0.2935$) and Ditto ($0.3150$) suffer extreme overconfidence.
         \end{itemize}
     \end{block}
 \end{frame}
@@ -590,29 +592,28 @@
         \begin{block}{Accepted Conference Paper (Camera-Ready)}
             \scriptsize
             \begin{itemize}
-                \item \textbf{Venue:} 5th International Conference on Soft Computing and Computer Communication Technology (CSCT 2026).
-                \item \textbf{Organizer:} \textbf{NIT Sikkim, India} (Dec 12--13, 2026).
-                \item \textbf{Publisher:} \textbf{Springer SIST} [SCOPUS Indexed].
-                \item \textbf{Title:} \textit{A Drift-Aware Explainable Federated Learning Framework for Personalized ICU Sepsis Prediction}.
+                \item \textbf{Venue:} 5th International Conf.\ on Soft Computing \& Computer Comm.\ Technology (CSCT 2026).
+                \item \textbf{Organizer \& Indexing:} NIT Sikkim, India; \textbf{Springer SIST} [SCOPUS Indexed].
+                \item \textbf{Paper Title:} \textit{A Drift-Aware Explainable Federated Learning Framework for Personalized ICU Sepsis Prediction}.
                 \item \textbf{Status:} \textbf{ACCEPTED} (Paper ID: \texttt{1072}, Nov 9, 2026).
-                \item \textbf{Conference Scope:} Preliminary proof-of-concept covering split-weight attention and basic AD-CUSUM drift detector on benchmark partition.
+                \item \textbf{Conference Scope:} Preliminary proof-of-concept covering split-weight attention and basic AD-CUSUM drift detector.
             \end{itemize}
         \end{block}
 
         \column{0.48\textwidth}
-        \begin{block}{Target Journal Submission Packages}
+        \begin{block}{Journal Paper Submission (\textit{JMIR AI})}
             \scriptsize
             \begin{itemize}
-                \item \textbf{Lead Target:} \textit{JMIR AI} (ISSN: 2817-1705; JMIR Publications, Toronto; Editor-in-Chief: Prof. Khaled El Emam). Complete manuscript, cover letter, and compliance checklist finalized.
-                \item \textbf{Alternative Target:} \textit{IEEE JBHI} [Q1, IF: 6.7].
-                \item \textbf{Full-System Scope (Comprehensive Expansion):}
+                \item \textbf{Target Journal:} \textit{JMIR AI} (ISSN: 2817-1705; Planned Submission).
+                \item \textbf{Paper Title:} \textit{``Federated Personalized Drift-Aware Attention Framework for Privacy-Preserving Early Sepsis Forecasting in Multi-Center ICUs''}.
+                \item \textbf{What is in this Journal Paper:}
                 \begin{itemize}
                     \scriptsize
-                    \item Full bedside CDSS workstation (FastAPI + React).
-                    \item Three-pillar XAI with counterfactual recourse.
-                    \item Formal Decision Curve Analysis (DCA).
-                    \item Full $102,994$-window test cohort bootstrapping.
-                    \item Sub-millisecond edge profiling ($0.67\text{ ms}$).
+                    \item Bedside CDSS Workstation (FastAPI backend + React).
+                    \item 3-Pillar Clinical XAI with Counterfactual Recourse.
+                    \item Decision Curve Analysis (DCA) Net Benefit evaluation.
+                    \item Full 40,327-patient cohort validation ($102,994$ test windows).
+                    \item Sub-millisecond edge profiling ($0.67\text{ ms}$ on local devices).
                 \end{itemize}
             \end{itemize}
         \end{block}
