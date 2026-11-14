@@ -115,26 +115,26 @@ Sepsis remains the leading cause of in-hospital mortality worldwide, claiming ov
 \noindent
 Existing approaches in federated learning and clinical time-series prediction have focused predominantly on idealized IID image benchmarks or static tabular predictions, leaving critical deficiencies in real-world critical care environments. Table \ref{tab:literature} synthesizes the core literature surveyed and identifies specific gaps addressed by FPDAF.
 
-\begin{table}[H]
+\begin{table}[!htbp]
     \centering
     \footnotesize
-    \renewcommand{\arraystretch}{1.2}
-    \begin{tabular}{|p{3.2cm}|p{4.0cm}|p{4.2cm}|p{3.4cm}|}
-        \hline
+    \renewcommand{\arraystretch}{1.12}
+    \begin{tabular}{p{3.2cm} p{4.0cm} p{4.3cm} p{3.5cm}}
+        \toprule
         \textbf{Author / Year / Citation} & \textbf{Core Methodology Used} & \textbf{Key Findings / Strengths} & \textbf{Identified Limitations} \\
-        \hline
+        \midrule
         Reyna et al., 2020 \cite{reyna2019physionet} & PhysioNet CinC 2019 multi-center sepsis challenge benchmark & Standardized 40-feature ICU protocol and clinical utility score evaluation & Centralized evaluation only; ignored cross-site data privacy and federation constraints. \\
-        \hline
+        \addlinespace[3pt]
         McMahan et al., 2017 \cite{mcmahan2017fedavg} & Federated Averaging (FedAvg) with local stochastic gradient descent & Established baseline privacy-preserving distributed model aggregation & Fails under non-IID patient heterogeneity; consensus model diverges on extreme class imbalance. \\
-        \hline
+        \addlinespace[3pt]
         Li et al., 2020 \cite{li2020fedprox} & FedProx with proximal regularization term $\frac{\mu}{2}\|\theta - \theta^t\|^2$ & Stabilizes optimization convergence under system and statistical heterogeneity & Single global model; cannot personalize to unique institutional ICU patient case-mixes. \\
-        \hline
+        \addlinespace[3pt]
         Li et al., 2021 \cite{li2021ditto} & Ditto personalized federated learning with bi-level optimization & Improves fairness and personalization via local client model heads & Lacks temporal drift awareness; prone to severe probability miscalibration under ICU distribution shifts. \\
-        \hline
+        \addlinespace[3pt]
         Jothimurugesan et al., 2022 \cite{jothimurugesan2022drift} & CUSUM-based concept drift detection in federated learning & Server-driven clustering of clients undergoing covariate shift & Relies on raw validation loss; high false-positive trigger rate due to stochastic ICU measurement noise. \\
-        \hline
+        \addlinespace[3pt]
         Pan et al., 2025 \cite{pan2025multiprog} & MultiProg federated clinical risk prediction & Multi-center longitudinal EHR modeling with privacy protection & High communication uplink overhead; lacks client-side selective uplink freezing during acute drift. \\
-        \hline
+        \bottomrule
     \end{tabular}
     \caption{Summary of Key Literature Surveyed and Identified Limitations.}
     \label{tab:literature}
@@ -206,24 +206,24 @@ FPDAF fundamentally differentiates from FedAvg, FedProx, and Ditto through: (1)~
 \noindent
 The implementation is 100\% complete across all four architectural subsystems, validated with comprehensive unit tests and reproducible audit scripts, as summarized in Table \ref{tab:modules}.
 
-\begin{table}[H]
+\begin{table}[!htbp]
     \centering
     \footnotesize
-    \renewcommand{\arraystretch}{1.2}
-    \begin{tabular}{|c|p{4.2cm}|p{6.0cm}|c|c|}
-        \hline
+    \renewcommand{\arraystretch}{1.12}
+    \begin{tabular}{c l p{7.2cm} c c}
+        \toprule
         \textbf{Mod.} & \textbf{Subsystem Name} & \textbf{Key Components \& Deliverables Implemented} & \textbf{LOC} & \textbf{Status} \\
-        \hline
-        \textbf{M1} & Clinical Data Pipeline \& Causal Imputation & Patient-disjoint 70/15/15 partitioning ($N=40,327$ patients), causal backward-only forward fill, 40-feature normalizers & 2,840 & \textbf{100\% Complete} \\
-        \hline
+        \midrule
+        \textbf{M1} & Clinical Data Pipeline & Patient-disjoint 70/15/15 partitioning ($N=40,327$ patients), causal backward-only forward fill, 40-feature normalizers & 2,840 & \textbf{100\% Complete} \\
+        \addlinespace[2pt]
         \textbf{M2} & Split-Weight Federated Engine & Custom PyTorch FL engine, FedAvg, FedProx, Ditto baselines, bi-level parameter anchoring, MPS/CUDA support & 3,450 & \textbf{100\% Complete} \\
-        \hline
-        \textbf{M3} & AD-CUSUM Drift \& CSSP Adaptation & Online JSD calculator, gradient variance monitor, adaptive slack $\kappa_r$, CSSP selective freeze toggle, entropy regularizer & 1,980 & \textbf{100\% Complete} \\
-        \hline
-        \textbf{M4} & Clinical CDSS Workstation \& 3 Pillars XAI & FastAPI REST API, SQLite warehouse, React-Vite bedside CDSS, Integrated Gradients attributions, counterfactual engine & 4,720 & \textbf{100\% Complete} \\
-        \hline
-        \multicolumn{3}{|r|}{\textbf{Total Verified Production Codebase:}} & \textbf{12,990} & \textbf{100\% Complete} \\
-        \hline
+        \addlinespace[2pt]
+        \textbf{M3} & AD-CUSUM Drift \& CSSP & Online JSD calculator, gradient variance monitor, adaptive slack $\kappa_r$, CSSP selective freeze toggle, entropy regularizer & 1,980 & \textbf{100\% Complete} \\
+        \addlinespace[2pt]
+        \textbf{M4} & Clinical CDSS Workstation & FastAPI REST API, SQLite warehouse, React-Vite bedside CDSS, Integrated Gradients attributions, counterfactual engine & 4,720 & \textbf{100\% Complete} \\
+        \midrule
+        \multicolumn{3}{r}{\textbf{Total Verified Production Codebase:}} & \textbf{12,990} & \textbf{100\% Complete} \\
+        \bottomrule
     \end{tabular}
     \caption{Module-Wise Implementation Completion Status (Audited 100\% Functional).}
     \label{tab:modules}
@@ -250,24 +250,21 @@ Evaluated on $N = 102,994$ strictly held-out test windows spanning $M = 6,050$ p
 \noindent
 Table \ref{tab:benchmarks} presents the comprehensive comparative evaluation of FPDAF against centralized and federated baselines.
 
-\begin{table}[H]
+\begin{table}[!htbp]
     \centering
     \footnotesize
-    \renewcommand{\arraystretch}{1.2}
-    \begin{tabular}{|p{4.2cm}|c|c|c|c|c|}
-        \hline
+    \renewcommand{\arraystretch}{1.15}
+    \begin{tabular}{l c c c c c}
+        \toprule
         \textbf{Model / Configuration} & \textbf{AUPRC $\uparrow$} & \textbf{AUROC $\uparrow$} & \textbf{ECE $\downarrow$} & \textbf{Brier Score $\downarrow$} & \textbf{Latency (M4)} \\
-        \hline
+        \midrule
         Centralized BiLSTM (Upper Bound) & $0.1016$ & $\mathbf{0.8058}$ & $0.2935$ & $0.1689$ & $0.68\text{ ms}$ \\
-        \hline
         FedAvg (McMahan et al., 2017) & $0.0949$ & $0.7883$ & $0.1277$ & $0.0598$ & $0.67\text{ ms}$ \\
-        \hline
         FedProx (Li et al., 2020) & $0.1016$ & $0.7910$ & $0.1116$ & $0.0630$ & $0.67\text{ ms}$ \\
-        \hline
         Ditto Personalized (Li et al., 2021) & $0.1006$ & $0.7989$ & $0.3150$ & $0.1478$ & $0.68\text{ ms}$ \\
-        \hline
+        \midrule
         \textbf{FPDAF (Proposed Framework)} & $\mathbf{0.1043}$ & $0.7923$ & $\mathbf{0.0902}$ & $\mathbf{0.0548}$ & $\mathbf{0.67\text{ ms}}$ \\
-        \hline
+        \bottomrule
     \end{tabular}
     \caption{Multi-Center Benchmark on Held-Out Test Windows ($N = 102,994$ windows, $6,050$ patients).}
     \label{tab:benchmarks}
@@ -285,22 +282,20 @@ Table \ref{tab:benchmarks} presents the comprehensive comparative evaluation of 
 \noindent
 To benchmark robustness under real-world clinical shifts, an acute demographic concept drift was injected into Client 1 at communication round 3. Table \ref{tab:drift} demonstrates that AD-CUSUM detected the shift immediately at round 3 ($S_r = 5.24 > 5.0$), triggering CSSP selective freeze. Local entropy-regularized adaptation reduced Brier error by $63.1\%$ relative to unadapted FedAvg.
 
-\begin{table}[H]
+\begin{table}[!htbp]
     \centering
     \footnotesize
-    \renewcommand{\arraystretch}{1.2}
-    \begin{tabular}{|p{4.2cm}|c|c|c|c|}
-        \hline
+    \renewcommand{\arraystretch}{1.15}
+    \begin{tabular}{l c c c c}
+        \toprule
         \textbf{Federated Adaptation Policy} & \textbf{Drift Detection Round} & \textbf{Post-Drift AUROC} & \textbf{Post-Drift Brier} & \textbf{Brier Reduction} \\
-        \hline
+        \midrule
         FedAvg (No Adaptation) & Not Detected & $0.7241$ & $0.1582$ & Baseline ($0.0\%$) \\
-        \hline
         FedProx (Proximal Anchoring) & Not Detected & $0.7380$ & $0.1419$ & $-10.3\%$ \\
-        \hline
         Ditto (Local Tuning without Freeze) & Not Detected & $0.7512$ & $0.1290$ & $-18.5\%$ \\
-        \hline
+        \midrule
         \textbf{FPDAF (AD-CUSUM + CSSP)} & \textbf{Round 3 (Immediate)} & $\mathbf{0.7894}$ & $\mathbf{0.0584}$ & $\mathbf{-63.1\%}$ \\
-        \hline
+        \bottomrule
     \end{tabular}
     \caption{30-Round Late-ICU Concept Drift Benchmark Performance on Client 1.}
     \label{tab:drift}
@@ -365,28 +360,28 @@ Figure \ref{fig:visual_results} presents experimental ROC and Precision-Recall c
 % 8. DELIVERABLES & TECHNICAL ENRICHMENT SUMMARY
 % ==========================================
 \section{Project Deliverables \& Technical Enrichment Summary}
-\begin{table}[H]
+\begin{table}[!htbp]
     \centering
     \scriptsize
-    \renewcommand{\arraystretch}{1.02}
-    \begin{tabular}{|p{3.4cm}|p{8.8cm}|c|}
-        \hline
+    \renewcommand{\arraystretch}{1.08}
+    \begin{tabular}{l p{9.0cm} c}
+        \toprule
         \textbf{Deliverable Category} & \textbf{Details / Title / Repository Reference} & \textbf{Status} \\
-        \hline
+        \midrule
         \textbf{Source Code Repository} & 100\% completed codebase with PyTorch FL engine, FastAPI backend, React CDSS, and unit tests (\texttt{23CSE498-Project-Phase-II}) & \textbf{Completed} \\
-        \hline
+        \addlinespace[2pt]
         \textbf{Conference Publication} & Accepted \& Camera-Ready for CSCT 2026 (Springer LNCS, Paper ID: 1072, PTP ID: Paper\_4324) & \textbf{Completed} \\
-        \hline
+        \addlinespace[2pt]
         \textbf{Individual Certifications} & 5 completed 12--20 hr MOOC certifications: S. A. Sakhi (Coursera DL), H. Reddy (FastAPI), K. S. Lakkaraju (XAI), Haswitha K. (FL), V. Chakravarthy (Time Series) & \textbf{Completed} \\
-        \hline
+        \addlinespace[2pt]
         \textbf{Group TEA Activity 1} & Full journal research paper targeting IEEE JBHI / Springer Nature / Elsevier & \textbf{Completed} \\
-        \hline
+        \addlinespace[2pt]
         \textbf{Group TEA Activity 2} & Indian Patent Application Draft: \textit{Federated Adaptive Drift-Aware Clinical Decision Support System} & \textbf{Completed} \\
-        \hline
+        \addlinespace[2pt]
         \textbf{Group TEA Activity 4} & Project Website \& Full Technical Documentation Web Portal & \textbf{Completed} \\
-        \hline
+        \addlinespace[2pt]
         \textbf{Group TEA Activity 5 \& 6} & Open-Source Technical Repository \& PhysioNet CinC 2019 Submission Package & \textbf{Completed} \\
-        \hline
+        \bottomrule
     \end{tabular}
     \caption{Summary of Completed Project Deliverables and Technical Enrichment Activities (Group G028).}
     \label{tab:deliverables}

@@ -136,18 +136,20 @@
         \centering
         \scriptsize
         \renewcommand{\arraystretch}{1.15}
+        \resizebox{\textwidth}{!}{%
         \begin{tabular}{l c c c c}
             \toprule
             \textbf{Methodology} & \textbf{Data Privacy} & \textbf{Personalization} & \textbf{Drift Resilient} & \textbf{ECE $\downarrow$ (Calibration)} \\
             \midrule
-            Centralized BiLSTM \cite{reyna2019physionet} & $\times$ (Centralized) & $\times$ (Single Model) & $\times$ (Static) & $0.2935$ (Overconfident) \\
-            FedAvg \cite{mcmahan2017communication} & $\checkmark$ (Federated) & $\times$ (Global Only) & $\times$ (No Adaptation) & $0.1277$ (Moderate) \\
-            FedProx \cite{li2020federated} & $\checkmark$ (Federated) & $\times$ (Global Only) & $\times$ (No Adaptation) & $0.1116$ (Moderate) \\
-            Ditto FL \cite{li2021ditto} & $\checkmark$ (Federated) & $\checkmark$ (Personalized) & $\times$ (No Adaptation) & $0.3150$ (Severe Drift ECE) \\
+            Centralized BiLSTM (Reyna et al., 2020) & $\times$ (Centralized) & $\times$ (Single Model) & $\times$ (Static) & $0.2935$ (Overconfident) \\
+            FedAvg (McMahan et al., 2017) & $\checkmark$ (Federated) & $\times$ (Global Only) & $\times$ (No Adaptation) & $0.1277$ (Moderate) \\
+            FedProx (Li et al., 2020) & $\checkmark$ (Federated) & $\times$ (Global Only) & $\times$ (No Adaptation) & $0.1116$ (Moderate) \\
+            Ditto FL (Li et al., 2021) & $\checkmark$ (Federated) & $\checkmark$ (Personalized) & $\times$ (No Adaptation) & $0.3150$ (Severe Drift ECE) \\
             \midrule
             \textbf{\textcolor{amritaMaroon}{FPDAF (Proposed)}} & $\mathbf{\checkmark}$ \textbf{(Decentralized)} & $\mathbf{\checkmark}$ \textbf{(Dual-Phase)} & $\mathbf{\checkmark}$ \textbf{(AD-CUSUM + CSSP)} & $\mathbf{0.0902}$ \textbf{(Top Calibrated)} \\
             \bottomrule
-        \end{tabular}
+        \end{tabular}%
+        }
     \end{table}
     \vspace{0.15cm}
     \begin{block}{\small Core Identified Research Gap}
@@ -400,22 +402,21 @@
     \begin{table}
         \centering
         \scriptsize
-        \renewcommand{\arraystretch}{1.10}
-        \begin{tabular}{|c|p{4.2cm}|p{6.6cm}|c|c|}
-            \hline
+        \renewcommand{\arraystretch}{1.12}
+        \resizebox{\textwidth}{!}{%
+        \begin{tabular}{c l p{7.0cm} c c}
+            \toprule
             \textbf{Mod.} & \textbf{Subsystem Name} & \textbf{Key Components \& Deliverables Implemented} & \textbf{LOC} & \textbf{Status} \\
-            \hline
-            \textbf{M1} & Clinical Data Pipeline \& Causal Imputation & Patient-disjoint 70/15/15 splits ($40,327$ pts), backward-only causal imputation, 40-feature normalizers & 2,840 & \textbf{\textcolor{amritaMaroon}{100\% Done}} \\
-            \hline
+            \midrule
+            \textbf{M1} & Clinical Data Pipeline & Patient-disjoint 70/15/15 splits ($40,327$ pts), backward-only causal imputation, 40-feature normalizers & 2,840 & \textbf{\textcolor{amritaMaroon}{100\% Done}} \\
             \textbf{M2} & Split-Weight Federated Engine & Custom PyTorch FL engine, FedAvg/FedProx/Ditto baselines, bi-level parameter anchoring, MPS/CUDA & 3,450 & \textbf{\textcolor{amritaMaroon}{100\% Done}} \\
-            \hline
-            \textbf{M3} & AD-CUSUM Drift \& CSSP Adaptation & Online JSD calculator, gradient variance tracker, adaptive slack $\kappa_r$, CSSP selective freeze, entropy penalty & 1,980 & \textbf{\textcolor{amritaMaroon}{100\% Done}} \\
-            \hline
-            \textbf{M4} & Clinical CDSS Workstation \& 3 Pillars XAI & FastAPI REST backend, SQLite warehouse, React-Vite bedside CDSS, Integrated Gradients, Hour-1 bundles & 4,720 & \textbf{\textcolor{amritaMaroon}{100\% Done}} \\
-            \hline
-            \multicolumn{3}{|r|}{\textbf{Total Verified Production Codebase:}} & \textbf{12,990} & \textbf{\textcolor{amritaMaroon}{100\% Done}} \\
-            \hline
-        \end{tabular}
+            \textbf{M3} & AD-CUSUM Drift \& CSSP & Online JSD calculator, gradient variance tracker, adaptive slack $\kappa_r$, CSSP selective freeze, entropy penalty & 1,980 & \textbf{\textcolor{amritaMaroon}{100\% Done}} \\
+            \textbf{M4} & Clinical CDSS Workstation & FastAPI REST backend, SQLite warehouse, React-Vite bedside CDSS, Integrated Gradients, Hour-1 bundles & 4,720 & \textbf{\textcolor{amritaMaroon}{100\% Done}} \\
+            \midrule
+            \multicolumn{3}{r}{\textbf{Total Verified Production Codebase:}} & \textbf{12,990} & \textbf{\textcolor{amritaMaroon}{100\% Done}} \\
+            \bottomrule
+        \end{tabular}%
+        }
     \end{table}
     \vspace{0.1cm}
     \begin{alertblock}{\scriptsize 100\% Implementation Audit Proof}
@@ -499,8 +500,9 @@
     \framesubtitle{Evaluating Acute Demographic Distribution Shift Injected on Client 1 at Round 3}
     \begin{table}
         \centering
-        \small
-        \renewcommand{\arraystretch}{1.2}
+        \scriptsize
+        \renewcommand{\arraystretch}{1.15}
+        \resizebox{\textwidth}{!}{%
         \begin{tabular}{l c c c c}
             \toprule
             \textbf{Federated Adaptation Policy} & \textbf{Drift Detection} & \textbf{Post-Drift AUROC} & \textbf{Post-Drift Brier} & \textbf{Brier Reduction} \\
@@ -511,7 +513,8 @@
             \midrule
             \textbf{\textcolor{amritaMaroon}{FPDAF (AD-CUSUM + CSSP)}} & \textbf{Round 3 (Immediate)} & $\mathbf{0.7894}$ & $\mathbf{0.0584}$ & $\mathbf{-63.1\%}$ \\
             \bottomrule
-        \end{tabular}
+        \end{tabular}%
+        }
     \end{table}
 
     \begin{columns}[T]
@@ -766,25 +769,22 @@
     \framesubtitle{Completed Group Activities, Code Repositories \& Academic Artifacts (Group G028)}
     \begin{table}
         \centering
-        \tiny
-        \renewcommand{\arraystretch}{1.2}
-        \begin{tabular}{|p{3.2cm}|p{8.0cm}|c|}
-            \hline
+        \scriptsize
+        \renewcommand{\arraystretch}{1.12}
+        \resizebox{\textwidth}{!}{%
+        \begin{tabular}{l p{8.5cm} c}
+            \toprule
             \textbf{Deliverable Category} & \textbf{Title / Details / Repository Evidence} & \textbf{Status} \\
-            \hline
+            \midrule
             \textbf{Source Code Repository} & 100\% complete PyTorch FL pipeline, FastAPI backend, React CDSS, unit tests & \textbf{Completed} \\
-            \hline
-            \textbf{Individual Certifications} & 5 completed MOOCs: S. A. Sakhi (Coursera DL, 20h), H. Reddy (FastAPI, 16h), K. S. Lakkaraju (XAI, 12h), Haswitha K. (FL, 15h), V. Chakravarthy (Time Series, 15h) & \textbf{Completed} \\
-            \hline
+            \textbf{Individual Certifications} & 5 completed MOOCs: S. A. Sakhi (20h), H. Reddy (16h), K. S. Lakkaraju (12h), Haswitha K. (15h), V. Chakravarthy (15h) & \textbf{Completed} \\
             \textbf{Group TEA Activity 1} & Full journal research manuscript targeting IEEE JBHI / Springer Nature / Elsevier & \textbf{Completed} \\
-            \hline
             \textbf{Group TEA Activity 2} & Indian Patent Application Draft: \textit{Federated Adaptive Drift-Aware Clinical Decision Support System} & \textbf{Completed} \\
-            \hline
             \textbf{Group TEA Activity 4} & Dedicated Project Website \& Comprehensive Documentation Web Portal & \textbf{Completed} \\
-            \hline
             \textbf{Group TEA Activity 5 \& 6} & Open-Source Technical Repository \& PhysioNet CinC 2019 Submission Package & \textbf{Completed} \\
-            \hline
-        \end{tabular}
+            \bottomrule
+        \end{tabular}%
+        }
     \end{table}
     \vspace{0.1cm}
     \begin{block}{\scriptsize Verification Status}
@@ -833,9 +833,10 @@
 \section{References}
 \begin{frame}{Key References: 32 Peer-Reviewed Academic Publications}
     \framesubtitle{Foundational Clinical Benchmarks, Federated Learning, Non-Stationary Drift \& Clinical XAI}
+    \setbeamertemplate{enumerate item}{\textbf{\textcolor{amritaMaroon}{[\insertenumlabel]}}}
     \begin{columns}[T]
         \column{0.32\textwidth}
-        {\fontsize{4.6pt}{5.4pt}\selectfont
+        {\fontsize{4.8pt}{5.8pt}\selectfont
         \textbf{\textcolor{amritaMaroon}{Clinical Sepsis \& Benchmarks}}
         \begin{enumerate}
             \setlength\itemsep{0.14em}
@@ -854,7 +855,7 @@
         }
 
         \column{0.32\textwidth}
-        {\fontsize{4.6pt}{5.4pt}\selectfont
+        {\fontsize{4.8pt}{5.8pt}\selectfont
         \textbf{\textcolor{amritaMaroon}{Federated Learning \& Drift}}
         \begin{enumerate}
             \setcounter{enumi}{11}
@@ -874,7 +875,7 @@
         }
 
         \column{0.32\textwidth}
-        {\fontsize{4.6pt}{5.4pt}\selectfont
+        {\fontsize{4.8pt}{5.8pt}\selectfont
         \textbf{\textcolor{amritaMaroon}{Clinical XAI \& Telemetry}}
         \begin{enumerate}
             \setcounter{enumi}{22}
