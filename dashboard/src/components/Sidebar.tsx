@@ -74,25 +74,25 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
   ];
 
   return (
-    <aside className={`bg-[#0a1628] text-slate-300 flex flex-col min-h-screen border-r border-[#152238] shrink-0 transition-all duration-300 ${
+    <aside className={`bg-white dark:bg-[#0a1628] text-slate-700 dark:text-slate-300 flex flex-col min-h-screen border-r border-slate-200 dark:border-[#152238] shrink-0 transition-all duration-300 ${
       isCollapsed ? 'w-16' : 'w-64'
     }`}>
       {/* Brand Header */}
-      <div className="px-4 py-3.5 border-b border-[#152238] flex items-center justify-between">
+      <div className="px-4 py-3.5 border-b border-slate-200 dark:border-[#152238] flex items-center justify-between">
         <div className="flex items-center gap-2.5 overflow-hidden">
-          <div className="h-8 w-8 rounded-lg bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 shrink-0">
+          <div className="h-8 w-8 rounded-lg bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-600 dark:text-teal-400 shrink-0">
             <HeartPulse className="h-4 w-4" />
           </div>
           {!isCollapsed && (
             <div className="overflow-hidden">
-              <h1 className="font-bold text-xs text-white tracking-tight leading-tight">FPDAF CDSS</h1>
-              <span className="text-[10px] text-teal-400 font-medium tracking-wide block">Clinical Decision Suite</span>
+              <h1 className="font-bold text-xs text-slate-900 dark:text-white tracking-tight leading-tight">FPDAF CDSS</h1>
+              <span className="text-[10px] text-teal-600 dark:text-teal-400 font-medium tracking-wide block">Clinical Decision Suite</span>
             </div>
           )}
         </div>
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/5 transition-colors hidden sm:block"
+          className="p-1 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors hidden sm:block"
           title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
         >
           {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
@@ -110,7 +110,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
           return (
             <div key={gIdx} className="space-y-1">
               {!isCollapsed && (
-                <div className="px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider text-slate-500">
+                <div className="px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                   {group.title}
                 </div>
               )}
@@ -124,18 +124,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
                     title={isCollapsed ? item.label : undefined}
                     className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-xs font-medium transition-all ${
                       isActive 
-                        ? 'bg-teal-500/15 text-teal-300 border border-teal-500/30 font-semibold shadow-xs' 
-                        : 'text-slate-400 hover:bg-white/5 hover:text-slate-200 border border-transparent'
+                        ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300 border border-teal-500/30 font-semibold shadow-xs' 
+                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-slate-200 border border-transparent'
                     } ${isCollapsed ? 'justify-center px-0' : ''}`}
                   >
                     <div className="flex items-center gap-2.5 truncate">
-                      <Icon className={`h-4 w-4 shrink-0 ${isActive ? 'text-teal-400' : 'text-slate-400'}`} />
+                      <Icon className={`h-4 w-4 shrink-0 ${isActive ? 'text-teal-600 dark:text-teal-400' : 'text-slate-400'}`} />
                       {!isCollapsed && <span className="truncate">{item.label}</span>}
                     </div>
 
                     {!isCollapsed && item.badge && (
                       <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded font-mono ${
-                        isActive ? 'bg-teal-500/30 text-teal-200' : 'bg-slate-800 text-slate-400'
+                        isActive ? 'bg-teal-500/20 text-teal-800 dark:text-teal-200' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                       }`}>
                         {item.badge}
                       </span>
@@ -149,17 +149,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
       </nav>
 
       {/* Footer: Station & Logout */}
-      <div className="p-3 border-t border-[#152238] space-y-2">
+      <div className="p-3 border-t border-slate-200 dark:border-[#152238] space-y-2">
         {!isCollapsed && (
-          <div className="bg-[#0c1626] p-2.5 rounded-xl border border-[#172640] text-[11px] space-y-1">
+          <div className="bg-slate-50 dark:bg-[#0c1626] p-2.5 rounded-xl border border-slate-200 dark:border-[#172640] text-[11px] space-y-1">
             <div className="flex items-center justify-between">
-              <span className="text-slate-400 text-[10px]">Station Node</span>
-              <span className="text-[10px] font-medium text-emerald-400 flex items-center gap-1">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-slate-500 dark:text-slate-400 text-[10px]">Station Node</span>
+              <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 PyTorch 2.14 Online
               </span>
             </div>
-            <div className="text-[10px] text-slate-300 font-medium truncate">
+            <div className="text-[10px] text-slate-700 dark:text-slate-300 font-medium truncate">
               Medical Center ICU &bull; Node 01
             </div>
           </div>
@@ -168,7 +168,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
         <button 
           onClick={onLogout}
           title={isCollapsed ? "Sign Out" : undefined}
-          className={`w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-colors ${
+          className={`w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-500 dark:text-slate-400 hover:bg-red-500/10 hover:text-red-500 transition-colors ${
             isCollapsed ? 'justify-center px-0' : ''
           }`}
         >

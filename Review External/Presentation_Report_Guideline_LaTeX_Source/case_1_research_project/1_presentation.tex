@@ -4,17 +4,23 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{helvet}
-\renewcommand{\familydefault}{\sfdefault} % Times New Roman font for text and math
+\renewcommand{\familydefault}{\sfdefault}
 \usepackage{xcolor}
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{tikz}
+\usepackage{amsmath,amssymb}
+\usepackage{multirow}
+\usepackage{url}
 \usetikzlibrary{calc}
 
-\graphicspath{{../}{./}}
+\graphicspath{{images/}{../images/}{./}}
 
-% --- Branding Colors ---
+% --- Branding Colors matching official university template ---
 \definecolor{amritaMaroon}{HTML}{A4123F}
+\definecolor{darkNavy}{HTML}{0F172A}
+\definecolor{deepTeal}{HTML}{0F766E}
+\definecolor{lightGrayBg}{HTML}{F8FAFC}
 
 % --- Theme Setup ---
 \usetheme{Madrid}
@@ -22,13 +28,21 @@
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{footline}[frame number]
 
+% Block Colors matching official template
+\setbeamercolor{block title}{bg=amritaMaroon, fg=white}
+\setbeamercolor{block body}{bg=amritaMaroon!6, fg=black}
+\setbeamercolor{block title alerted}{bg=amritaMaroon, fg=white}
+\setbeamercolor{block body alerted}{bg=amritaMaroon!6, fg=black}
+\setbeamercolor{block title example}{bg=amritaMaroon, fg=white}
+\setbeamercolor{block body example}{bg=amritaMaroon!6, fg=black}
+
 \begin{document}
 
 % =========================================================================
-% TITLE SLIDE (Research-Based Project)
+% SLIDE 1: TITLE SLIDE (Research-Based Project)
 % =========================================================================
 \begin{frame}
-    % Corner Box Indicator
+    % Corner Box Indicator (Official University Template Requirement)
     \begin{tikzpicture}[remember picture,overlay]
         \node[fill=amritaMaroon, text=white, font=\bfseries\footnotesize, anchor=north east, rounded corners=2pt, inner sep=5pt]
         at ($(current page.north east) + (-0.2cm,-0.2cm)$)
@@ -36,331 +50,647 @@
     \end{tikzpicture}
 
     \centering
-    \includegraphics[width=2.8cm]{logo.png}
-    \vspace{0.1cm}
-
-    {\large \textbf{\textcolor{amritaMaroon}{[RESEARCH PROJECT TITLE]}}} \\
     \vspace{0.05cm}
-    {\footnotesize \textbf{23CSE498 -- Project Phase II (External Review)} \quad | \quad \textbf{Team Number: [GXXX]}} \\
-    \vspace{0.15cm}
+    \includegraphics[width=2.6cm]{images/logo.png}
+    \vspace{0.08cm}
+
+    {\large \textbf{\textcolor{amritaMaroon}{Federated Personalized Drift-Aware Attention Framework (FPDAF) for Early Sepsis Forecasting}}} \\
+    \vspace{0.06cm}
+    {\footnotesize \textbf{23CSE498 -- Project Phase II (External Review)} \quad | \quad \textbf{Team Number: G028}} \\
+    \vspace{0.12cm}
 
     % Student Table
     \begin{table}
         \centering
         \footnotesize
-        \renewcommand{\arraystretch}{1.05}
+        \renewcommand{\arraystretch}{1.02}
         \begin{tabular}{|c|c|l|}
             \hline
             \textbf{S.No} & \textbf{Register Number} & \textbf{Student Name} \\
             \hline
-            1 & [CB.SC.U4CSE23XXX] & [Student Name 1] \\
+            1 & CB.SC.U4CSE23547 & Sheela Akshar Sakhi (Lead) \\
             \hline
-            2 & [CB.SC.U4CSE23XXX] & [Student Name 2] \\
+            2 & CB.SC.U4CSE23529 & Hasini Reddy M \\
             \hline
-            3 & [CB.SC.U4CSE23XXX] & [Student Name 3] \\
+            3 & CB.SC.U4CSE23761 & Kousik Sarma Lakkaraju \\
             \hline
-            4 & [CB.SC.U4CSE23XXX] & [Student Name 4] \\
+            4 & CB.SC.U4CSE23363 & Haswitha K \\
+            \hline
+            5 & CB.SC.U4CSE23753 & V. Chakravarthy \\
             \hline
         \end{tabular}
     \end{table}
-    \vspace{0.1cm}
+    \vspace{0.08cm}
 
-    {\footnotesize Guide: \textbf{[Guide Name]}, [Designation], Department of CSE} \\
-    \vspace{0.1cm}
-    {\scriptsize \today}
+    {\footnotesize Guide: \textbf{Dr. G. R. Ramya}, Assistant Professor (Sr. Gr.), Department of CSE} \\
+    {\scriptsize Co-Guide: \textbf{Dr. S. Vandhana}, Assistant Professor, Department of CSE \quad | \quad Clinical Advisor: \textbf{Dr. Pallavi, MD}, Intensivist} \\
+    \vspace{0.04cm}
+    {\scriptsize Evaluation Date: November 16, 2026}
 \end{frame}
 
-% =========================================================================
-% SECTION 1: PROBLEM DEFINITION, RESEARCH MOTIVATION & SOLUTION DESIGN
-% =========================================================================
 % =========================================================================
 % SLIDE 2: GUIDE APPROVAL EMAIL CONFIRMATION (Mandatory)
 % =========================================================================
 \begin{frame}{Guide Review \& Submission Approval}
     \framesubtitle{Confirmation of Project Review and Approval from Guide}
     \centering
-    \fbox{\begin{minipage}[c][5.4cm]{0.94\textwidth}
-        \centering
-        \textbf{[Insert Screenshot of Guide Approval Email Here]} \\[0.3cm]
-        {\footnotesize [Mandatory: Attach a clear, readable screenshot of the email received from your project guide approving this presentation and final review submission]}
-    \end{minipage}}
+    \includegraphics[width=0.82\textwidth, height=0.50\textheight, keepaspectratio]{images/guide_approval_ss.png}
+    \vspace{0.05cm}
+
+    \begin{block}{\footnotesize Project Defense Authorization}
+        \footnotesize
+        Officially reviewed, evaluated, and approved by Project Guide \textbf{Dr. G. R. Ramya} and Co-Guide \textbf{Dr. S. Vandhana} for Final External Defense.
+    \end{block}
 \end{frame}
 
+% =========================================================================
+% SECTION 1: PROBLEM DEFINITION & RESEARCH MOTIVATION
+% =========================================================================
 \section{Problem \& Solution Design}
 
-% --- SLIDE 1: PROBLEM DEFINITION & RESEARCH MOTIVATION ---
+% --- SLIDE 3: SECTION 1A - PROBLEM STATEMENT & CLINICAL CONTEXT ---
 \begin{frame}{1. Problem Definition \& Research Motivation}
-    \framesubtitle{Problem Statement, Identified Literature Gap \& Objectives}
-    \begin{block}{Problem Statement}
+    \framesubtitle{Problem Statement \& Clinical Urgency in Critical Care Telemetry}
+    \begin{block}{What is Sepsis? \& Global / Indian Healthcare Burden}
+        \footnotesize
         \begin{itemize}
-            \item \textbf{Core Research Problem:} {[State the specific research problem and scope clearly]}
-            \item \textbf{Domain Context:} {[Briefly state why this problem is important to solve]}
+            \item \textbf{Clinical Definition (Sepsis-3):} Life-threatening acute organ dysfunction caused by a dysregulated host immune response to systemic infection.
+            \item \textbf{Mortality Toll (World vs. India):} Sepsis claims $> \mathbf{11\text{ million}}$ lives annually worldwide ($1$ in every $5$ deaths). In \textbf{India alone}, sepsis causes $\approx \mathbf{3\text{ million}}$ deaths every year ($\approx 30\%$ of total ICU mortality).
         \end{itemize}
     \end{block}
+    \vspace{-0.10cm}
 
-    \begin{block}{Existing Limitations \& Research Gap}
+    \begin{block}{Core Research Problem \& Early Warning Urgency}
+        \footnotesize
         \begin{itemize}
-            \item \textbf{Summary of Existing Approaches:} {[Summarize how prior literature approaches this problem]}
-            \item \textbf{Identified Research Gap:} {[Clearly state the specific limitation or gap addressed by this work]}
-        \end{itemize}
-    \end{block}
-
-    \begin{block}{Research Objectives}
-        \begin{itemize}
-            \item \textbf{Objective 1:} {[State measurable research objective 1]}
-            \item \textbf{Objective 2:} {[State measurable research objective 2]}
-            \item \textbf{Objective 3:} {[State measurable research objective 3]}
+            \item \textbf{Forecasting Objective:} Prospective early detection of acute Sepsis-3 onset $\mathbf{6\text{ hours}}$ in advance from continuous 24h multivariate ICU telemetry ($40$ vitals and laboratory biomarkers).
+            \item \textbf{High-Stakes Decision Window:} In septic shock, each hour of therapeutic delay increases mortality risk by $\approx \mathbf{7.6\% - 8.0\%}$. Standard ICU scores (SOFA, MEWS) react only \textit{after} overt physiological collapse.
         \end{itemize}
     \end{block}
 \end{frame}
 
-% --- SLIDE 2: PROPOSED METHODOLOGY & OVERALL WORKFLOW (FULL-SLIDE DIAGRAM) ---
-% Note to students: Duplicate this frame if multiple workflow/architecture diagrams are required.
+% --- SLIDE 4: SECTION 1B - EXISTING LIMITATIONS & RESEARCH GAPS ---
+\begin{frame}{1. Problem Definition \& Research Motivation}
+    \framesubtitle{Existing Limitations \& The Three Critical Healthcare Translation Gaps}
+    \begin{block}{Summary of Existing Approaches}
+        \footnotesize
+        Centralized deep learning (DeepAISE, InSight) or static federated learning (FedAvg, FedProx) that assume uniform data distributions and unconstrained data pooling.
+    \end{block}
+
+    \begin{block}{Identified Research Gaps (The Three Healthcare Barriers)}
+        \footnotesize
+        \begin{enumerate}
+            \item \textbf{Statutory Privacy Barriers:} Strict regulations (HIPAA, GDPR, India's DPDPA 2023) legally forbid pooling sensitive multi-hospital Electronic Health Records (EHR) into centralized cloud repositories.
+            \item \textbf{Cross-Site Heterogeneity \& Concept Drift:} Non-IID demographic shifts across community, trauma, and academic ICUs degrade static federated consensus models; existing FL methods lack drift-aware adaptation.
+            \item \textbf{Model Opacity \& Clinician Alarm Fatigue:} Black-box models trigger $80\%-90\%$ false positive alerts, causing severe bedside alert fatigue and distrust among intensivists.
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+% --- SLIDE 5: SECTION 1C - OBJECTIVES & SYSTEM SCOPE ---
+\begin{frame}{1. Problem Definition \& Research Motivation}
+    \framesubtitle{Research Objectives \& Delineation of Full-System Scope}
+    \begin{block}{Research Objectives}
+        \scriptsize
+        \begin{itemize}
+            \item \textbf{Objective 1 (Drift-Aware Model Architecture):} Design a split-weight BiLSTM with multi-head temporal attention and an online drift detector to flag clinical shift without ground-truth labels.
+            \item \textbf{Objective 2 (Personalization \& Communication Efficiency):} Formulate an edge-personalization objective and selective freeze protocol to adapt to local hospital demographics while slashing uplink bandwidth by $38.0\%$.
+            \item \textbf{Objective 3 (Three-Pillar Clinician Explainability):} Build an interpretable bedside XAI pipeline providing 24h temporal risk heatmaps, biomarker saliency rankings, and interactive counterfactual recourse simulations.
+            \item \textbf{Objective 4 (Full-System CDSS Development):} Realize an operational, point-of-care clinical decision workstation integrating an asynchronous FastAPI telemetry engine, SQLite clinical database ($70$ beds across benchmark \& partner hospital cohorts), and dual-view React bedside interface.
+        \end{itemize}
+    \end{block}
+    \vspace{-0.10cm}
+
+    \begin{block}{System Scope \& Non-Duplication Delineation}
+        \scriptsize
+        \begin{itemize}
+            \item \textbf{Accepted Conference Paper (CSCT 2026, Springer SIST):} Preliminary proof-of-concept covering split-weight attention and basic AD-CUSUM drift detection.
+            \item \textbf{Full Phase-II System Scope (Comprehensive Expansion):} Extensive non-overlapping architectural expansion incorporating full bedside CDSS workstation, counterfactual recourse, DCA clinical utility, edge profiling ($0.67\text{ ms}$), and $102,994$-window cluster bootstrap validation.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% =========================================================================
+% SECTION 2: PROPOSED METHODOLOGY & OVERALL WORKFLOW
+% =========================================================================
+% --- SLIDE 6: SECTION 2A - SYSTEM ARCHITECTURE ---
 \begin{frame}{2. Proposed Methodology \& Overall Workflow}
-    \framesubtitle{End-to-End Research Methodology / System Workflow Architecture}
+    \framesubtitle{End-to-End System Architecture \& Multi-Center Federation Pipeline}
     \centering
-    \fbox{\begin{minipage}[c][5.2cm]{0.94\textwidth}
-        \centering
-        \textbf{[Insert Full-Width Proposed Methodology / Research Workflow Diagram]} \\[0.3cm]
-        {\footnotesize [Placeholder: Include end-to-end stages from Input Data $\rightarrow$ Processing / Core Methodology $\rightarrow$ Output \& Evaluation]}
-    \end{minipage}}
-    \vspace{0.2cm}
+    \includegraphics[width=0.82\textwidth, height=0.36\textheight, keepaspectratio]{images/ArcDigram.jpeg}
+    \vspace{0.03cm}
 
     \begin{block}{Workflow Summary}
-        \footnotesize {[Provide a concise 1--2 line walkthrough of the end-to-end methodology depicted above.]}
+        \scriptsize
+        Private ICU telemetry ($X \in \mathbb{R}^{24 \times 40}$) remains secured behind hospital firewalls. Local client nodes train shared BiLSTM feature extractors while continuously auditing prediction drift via AD-CUSUM. The federated aggregation server synchronizes shared backbone parameters $\theta_{\text{shared}}$ across non-IID hospital tiers, while CSSP freezes uplink parameter uploads during drift events to protect peer consensus and adapt local decision heads.
     \end{block}
 \end{frame}
 
-% --- SLIDE 3: METHODOLOGICAL COMPONENTS & FORMULATION ---
-% Note to students: Duplicate this frame if additional slides are needed to explain sub-modules or formulations.
+% --- SLIDE 7: SECTION 2B - DATAFLOW & STAGED EXECUTION PIPELINE ---
+\begin{frame}{2. Proposed Methodology \& Overall Workflow}
+    \framesubtitle{End-to-End Dataflow \& Staged Execution Pipeline}
+    \centering
+    \includegraphics[width=0.82\textwidth, height=0.34\textheight, keepaspectratio]{images/Dataflow2.png}
+    \vspace{0.03cm}
+
+    \begin{block}{Staged Execution Walkthrough}
+        \scriptsize
+        \textbf{Stage 1 (Data Preprocessing):} Causal backward-only forward fill (0 lookahead leakage) $\rightarrow$ Robust IQR scaling $\rightarrow$ 24h rolling windows ($X \in \mathbb{R}^{24 \times 40}$). \\
+        \textbf{Stage 2 (Split-Weight FL):} Backbone parameters $\theta_{\text{shared}}$ synchronized across nodes; localized heads $\phi_k$ adapted privately via DDP-ERP. \\
+        \textbf{Stage 3 (AD-CUSUM Drift Monitoring):} Streaming JSD tracking $\rightarrow$ Uplink freeze trigger ($S_r \ge 3.0$) $\rightarrow$ Edge adaptation. \\
+        \textbf{Stage 4 (Bedside CDSS Inference):} Sub-millisecond forward pass ($0.67\text{ ms}$) delivering temporal attention heatmaps and SSC Hour-1 bundle guidance.
+    \end{block}
+\end{frame}
+
+% =========================================================================
+% SECTION 3: METHODOLOGICAL COMPONENTS & FORMULATION
+% =========================================================================
+% --- SLIDE 8: SECTION 3A - CORE ARCHITECTURE & DATASET SPECS ---
 \begin{frame}{3. Methodological Components \& Formulation}
     \framesubtitle{Sub-Module Breakdown, Governing Mathematical Model \& Datasets}
     \begin{columns}[T]
         \column{0.50\textwidth}
         \begin{block}{Methodological Breakdown}
-            \footnotesize
+            \scriptsize
             \begin{itemize}
-                \item \textbf{[Stage / Component 1]:} {[Role and technical function]}
-                \item \textbf{[Stage / Component 2]:} {[Role and technical function]}
-                \item \textbf{[Stage / Component 3]:} {[Role and technical function]}
+                \item \textbf{BiLSTM Backbone:} 2-layer bidirectional sequential encoder across 24 hourly time-steps ($h=64$).
+                \item \textbf{Attention Pooling:} 4 heads capturing acute vitals spikes: $c = \sum_{t=1}^{24} \alpha_t h_t$.
+                \item \textbf{Split Decoupling:} Shared backbone $\theta_{\text{shared}}$ + private edge classification head $\phi_k$.
             \end{itemize}
         \end{block}
 
-        \begin{block}{Mathematical / Algorithmic Formulation}
-            \footnotesize
+        \begin{block}{Mathematical Formulation}
+            \scriptsize
             \begin{itemize}
-                \item \textbf{Governing Formulation:} {[Insert key equation, objective function, or formal definition]}
-                \item \textbf{Key Variables:} {[Define parameters and constraints]}
+                \item \textbf{Attention:} $\alpha_t = \frac{\exp(w_s^T u_t)}{\sum_{\tau=1}^T \exp(w_s^T u_\tau)}$ with $u_t = \tanh(W_a h_t + b_a)$.
+                \item \textbf{Prediction:} $\hat{y} = \sigma(W_c c + b_c) \in [0, 1]$ ($6\text{h}$ early warning).
             \end{itemize}
         \end{block}
 
         \column{0.46\textwidth}
         \begin{block}{Dataset \& Input Specifications}
-            \footnotesize
+            \scriptsize
             \begin{itemize}
-                \item \textbf{Source \& Size:} {[Dataset identifier, sample count, dimensions]}
-                \item \textbf{Data Partitioning:} {[Splits / validation protocol used]}
-                \item \textbf{Preprocessing:} {[Steps applied to raw inputs]}
+                \item \textbf{Source:} PhysioNet 2019 ($40,327$ pts, $1.55\text{M}$ rows, $40$ features).
+                \item \textbf{Split:} Patient-disjoint 70/15/15 ($6,050$ test pts, $102,994$ windows).
+                \item \textbf{Preprocessing:} Causal forward-fill + Robust IQR scaling.
             \end{itemize}
         \end{block}
 
         \begin{block}{Evaluation Metrics}
-            \footnotesize
+            \scriptsize
             \begin{itemize}
-                \item \textbf{[Metric 1]:} {[Purpose / definition]}
-                \item \textbf{[Metric 2]:} {[Purpose / definition]}
+                \item \textbf{Discrimination:} AUROC ($B=2,000$ cluster CI) and AUPRC.
+                \item \textbf{Calibration \& Utility:} ECE, Brier, and DCA Net Benefit.
             \end{itemize}
         \end{block}
     \end{columns}
 \end{frame}
 
-% =========================================================================
-% SECTION 2: IMPLEMENTATION COMPLETION (100%)
-% =========================================================================
-\section{Implementation Details}
-
-% --- SLIDE 4: IMPLEMENTATION COMPLETION (100%) - OVERVIEW ---
-\begin{frame}{4. Implementation Details -- Overview}
-    \framesubtitle{Module-Wise Implementation \& Pipeline Integration Status}
-    \begin{table}
-        \centering
-        \footnotesize
-        \renewcommand{\arraystretch}{1.25}
-        \begin{tabular}{p{3.6cm} p{6.2cm} c}
-            \toprule
-            \textbf{Module / Stage} & \textbf{Implemented Functionality} & \textbf{Status} \\
-            \midrule
-            {[Module 1: Data / Input Pipeline]} & {[Summary of completed data ingestion and preprocessing]} & 100\% (Integrated) \\
-            {[Module 2: Baseline / Reference]} & {[Summary of implemented baseline or comparison setup]} & 100\% (Integrated) \\
-            {[Module 3: Core Proposed Method]} & {[Summary of implemented core algorithm / model]} & 100\% (Integrated) \\
-            {[Module 4: Evaluation \& Prototype]} & {[Summary of end-to-end execution and evaluation pipeline]} & 100\% (Functional) \\
-            \bottomrule
-        \end{tabular}
-    \end{table}
-
-    \begin{block}{Implementation Environment \& Repository}
-        \footnotesize
-        \begin{itemize}
-            \item \textbf{Software / Compute Environment:} {[List programming environment, libraries, and compute resources used]}
-            \item \textbf{Source Repository \& Execution Readiness:} {[Insert repository URL / commit reference and execution status]}
-        \end{itemize}
-    \end{block}
-\end{frame}
-
-% --- SLIDE 5: CORE MODULE IMPLEMENTATION DETAILS ---
-% Note to students: Duplicate this frame if needed to explain additional implemented modules.
-\begin{frame}{5. Core Module Implementation Details}
-    \framesubtitle{Internal Module Mechanics, Parameter Configurations \& Interfaces}
+% --- SLIDE 9: SECTION 3B - DRIFT DETECTION & PERSONALIZATION FORMULATIONS ---
+\begin{frame}{3. Methodological Components \& Formulation}
+    \framesubtitle{Novel Drift Detection (AD-CUSUM) \& Edge Personalization (CSSP/DDP-ERP)}
     \begin{columns}[T]
         \column{0.50\textwidth}
-        \begin{block}{[Core Module A Name]}
-            \footnotesize
+        \begin{block}{Adaptive Divergence-Weighted CUSUM (AD-CUSUM)}
+            \scriptsize
             \begin{itemize}
-                \item \textbf{Inputs \& Outputs:} {[Specify module input and output formats]}
-                \item \textbf{Implementation Details:} {[Explain how the module logic is realized in code]}
-                \item \textbf{Key Parameters:} {[Specify configured parameters]}
-            \end{itemize}
-        \end{block}
-
-        \begin{block}{[Core Module B Name]}
-            \footnotesize
-            \begin{itemize}
-                \item \textbf{Inputs \& Outputs:} {[Specify module input and output formats]}
-                \item \textbf{Integration Interface:} {[Explain how this module connects to the pipeline]}
+                \item \textbf{Streaming JSD ($0$ Labels):}
+                $D_{\text{JSD}}(P_t \parallel P_{t-1}) = \frac{1}{2} D_{\text{KL}}(P_t \parallel M) + \frac{1}{2} D_{\text{KL}}(P_{t-1} \parallel M)$
+                where $M = \frac{1}{2}(P_t + P_{t-1})$.
+                \item \textbf{Gradient Damping:}
+                $w_{\text{grad}}^{(t)} = \left[1 + \gamma \, \text{Var}(\{\nabla_\theta \mathcal{L}_i\})\right]^{-1}$ suppresses stochastic noise.
+                \item \textbf{Cumulative Statistic:}
+                $S_t = \max\left(0, S_{t-1} + w_{\text{grad}}^{(t)} \left[(L_{\text{val},t} - \mu_0) + \beta D_{\text{JSD}} - \kappa_t\right]\right)$
+                with dynamic slack $\kappa_t = \kappa_0 + \alpha \sigma_{\text{hist}}$.
             \end{itemize}
         \end{block}
 
         \column{0.46\textwidth}
-        \centering
-        \vspace{0.2cm}
-        \fbox{\begin{minipage}[c][5.0cm]{0.94\textwidth}
-            \centering
-            \textbf{[Insert Module Interaction Diagram / Pipeline Execution Snapshot]} \\[0.2cm]
-            {\scriptsize [Placeholder: Show how implemented modules exchange data or execute end-to-end]}
-        \end{minipage}}
+        \begin{block}{Edge Personalization: CSSP \& DDP-ERP Objective}
+            \scriptsize
+            \begin{itemize}
+                \item \textbf{CSSP Uplink Freeze:} When $S_t \ge H = 3.0$, freezes uplink ($\nabla_{\theta_{\text{shared}}} = 0$), protecting consensus weights from drift corruption.
+                \item \textbf{Bandwidth Savings:} Cuts wide-area network transfer by $38.0\%$ ($1.52\text{ GB}$ vs. $2.48\text{ GB}$ in Ditto).
+                \item \textbf{DDP-ERP Objective:}
+                $\mathcal{L} = \mathcal{L}_{\text{BCE}}(\hat{y}, y) + \frac{\lambda}{2} \|\phi_k - \phi_{\text{global}}\|^2 - \gamma \, \mathcal{H}(\hat{y})$.
+                \item \textbf{Calibration Impact:} $\lambda = 0.10$ retains consensus; $\gamma = 0.01$ cuts ECE by $71\%$ ($0.315 \rightarrow 0.0902$).
+            \end{itemize}
+        \end{block}
     \end{columns}
 \end{frame}
 
 % =========================================================================
-% SECTION 3: PRELIMINARY VERIFICATION & DEMONSTRATION
+% SECTION 4: IMPLEMENTATION DETAILS – OVERVIEW
 % =========================================================================
-\section{Verification \& Demonstration}
+\section{Implementation Details}
 
-% --- SLIDE 6: PRELIMINARY VERIFICATION & QUANTITATIVE RESULTS ---
-\begin{frame}{6. Preliminary Verification \& Quantitative Results}
-    \framesubtitle{Experimental Benchmarking \& Comparative Evaluation}
+% --- SLIDE 10: SECTION 4 - IMPLEMENTATION OVERVIEW ---
+\begin{frame}{4. Implementation Details -- Overview}
+    \framesubtitle{Module-Wise Implementation \& Pipeline Integration Status}
     \begin{table}
         \centering
-        \footnotesize
-        \renewcommand{\arraystretch}{1.25}
-        \begin{tabular}{p{4.5cm} c c c}
+        \scriptsize
+        \renewcommand{\arraystretch}{0.96}
+        \begin{tabular}{p{3.4cm} p{7.0cm} c}
             \toprule
-            \textbf{Method / Configuration} & \textbf{[Metric 1]} & \textbf{[Metric 2]} & \textbf{[Metric 3]} \\
+            \textbf{Pipeline Module} & \textbf{Core Engineering \& Algorithmic Functionality} & \textbf{Deployment State} \\
             \midrule
-            {[Baseline / Reference Method 1]} & {[Value]} & {[Value]} & {[Value]} \\
-            {[Baseline / Reference Method 2]} & {[Value]} & {[Value]} & {[Value]} \\
-            {[Ablation / Variant Configuration]} & {[Value]} & {[Value]} & {[Value]} \\
-            \textbf{[Proposed Methodology]} & \textbf{[Value]} & \textbf{[Value]} & \textbf{[Value]} \\
+            \textbf{Module 1: Telemetry Pipeline} & Ingestion ($40,327$ patients), 70/15/15 patient-disjoint split, causal backward fill (0 lookahead), robust IQR normalizer & Production Pipeline \\
+            \textbf{Module 2: Federated Engine} & Split-weight FL orchestrator, BiLSTM attention backbone, FedAvg, FedProx, Ditto baselines, Apple Silicon MPS/CUDA & Distributed Consensus \\
+            \textbf{Module 3: AD-CUSUM \& CSSP} & Streaming JSD drift detector, gradient variance damping, dynamic slack $\kappa_r$, CSSP selective freeze, DDP-ERP regularization & Autonomous Drift Guard \\
+            \textbf{Module 4: Bedside CDSS} & Asynchronous FastAPI REST backend, SQLite clinical warehouse ($50$ streaming beds), React-Vite bedside CDSS, Hour-1 bundles & Live Bedside Workstation \\
             \bottomrule
         \end{tabular}
     \end{table}
+    \vspace{-0.06cm}
 
-    \begin{block}{Experimental Verification Summary}
-        \footnotesize
+    \begin{block}{Implementation Environment \& Source Verification}
+        \scriptsize
         \begin{itemize}
-            \item \textbf{Quantitative Findings:} {[Summarize key improvements or trends observed in the table above]}
-            \item \textbf{Verification of Expected Behavior:} {[Explain how the results confirm the research hypothesis]}
+            \item \textbf{Software / Compute Environment:} Python 3.11+, PyTorch 2.4.0 (MPS/CUDA), FastAPI 0.115, SQLite 3.43, React 18.3, TypeScript, Vite 5.4, TailwindCSS, Docker.
+            \item \textbf{Source Repository \& Test Verification:} \url{https://github.com/aksharsakhi/23CSE498-Project-Phase-II} (Commit \texttt{05fbfe8}). 22/22 automated unit tests passing; 12,990 verified LOC.
         \end{itemize}
     \end{block}
 \end{frame}
 
-% --- SLIDE 7: EXPERIMENTAL VISUALIZATIONS & PROTOTYPE DEMONSTRATION ---
-% Note to students: Use a single full-width box or two side-by-side boxes as appropriate for your plots/screenshots.
-\begin{frame}{7. Experimental Visualizations \& Prototype Demonstration}
-    \framesubtitle{Result Visualizations, Convergence / Performance Curves \& Live Demo}
+% =========================================================================
+% SECTION 5: CORE MODULE IMPLEMENTATION DETAILS
+% =========================================================================
+% --- SLIDE 11: SECTION 5A - BILSTM BACKBONE & FEDERATED SERVER ---
+\begin{frame}{5. Core Module Implementation Details}
+    \framesubtitle{Dual-Phase Attention LSTM \& Split-Weight Federated Engine}
     \begin{columns}[T]
-        \column{0.48\textwidth}
-        \centering
-        \fbox{\begin{minipage}[c][4.8cm]{0.94\textwidth}
-            \centering
-            \textbf{[Insert Experimental Result Plot / Performance Graph]} \\[0.2cm]
-            {\scriptsize [Placeholder: Quantitative chart, convergence curve, or comparative plot]}
-        \end{minipage}}
+        \column{0.52\textwidth}
+        \begin{block}{\footnotesize Core Module 1: Attention-BiLSTM}
+            \scriptsize
+            \begin{itemize}
+                \item \textbf{Inputs \& Outputs:} $X \in \mathbb{R}^{B \times 24 \times 40}$ ($24$h vitals/labs); outputs risk $\hat{y} \in [0, 1]$, context $z \in \mathbb{R}^{128}$.
+                \item \textbf{Architecture:} \texttt{models/bilstm\_attention.py}; 2-layer BiLSTM ($h=64$) + 4-head attention ($c = \sum \alpha_t h_t$).
+                \item \textbf{Parameters:} Hidden dim $64$, lr $10^{-3}$, Adam, dropout $0.20$, 6h lead time.
+            \end{itemize}
+        \end{block}
+        \vspace{-0.15cm}
 
-        \column{0.48\textwidth}
+        \begin{block}{\footnotesize Core Module 2: Split-Weight FL Server}
+            \scriptsize
+            \begin{itemize}
+                \item \textbf{Inputs \& Outputs:} Aggregates client weights $\theta_{\text{shared}}^{(k)}$; broadcasts consensus $\Theta_{\text{global}}$.
+                \item \textbf{Integration Interface:} \texttt{federated/server.py}; decouples private heads $\phi_k$ from shared layers.
+            \end{itemize}
+        \end{block}
+
+        \column{0.45\textwidth}
         \centering
-        \fbox{\begin{minipage}[c][4.8cm]{0.94\textwidth}
-            \centering
-            \textbf{[Insert Working Prototype / Qualitative Output Snapshot]} \\[0.2cm]
-            {\scriptsize [Placeholder: Execution output, visualization, or demonstration screenshot]}
-        \end{minipage}}
+        \vspace{0.01cm}
+        \begin{tikzpicture}[node distance=0.78cm, auto,
+            box/.style={rectangle, draw=amritaMaroon, fill=amritaMaroon!8, rounded corners=2pt, font=\fontsize{5}{6}\selectfont\bfseries, align=center, inner sep=2.5pt, text width=2.4cm},
+            server/.style={rectangle, draw=deepTeal, fill=deepTeal!12, rounded corners=2pt, font=\fontsize{5}{6}\selectfont\bfseries, align=center, inner sep=2.5pt, text width=2.2cm},
+            priv/.style={rectangle, draw=purple!80, fill=purple!10, rounded corners=2pt, font=\fontsize{5}{6}\selectfont\bfseries, align=center, inner sep=2.5pt, text width=2.4cm},
+            arr/.style={->, >=stealth, thick, amritaMaroon}
+        ]
+            \node[box] (input) {ICU Telemetry $X \in \mathbb{R}^{24 \times 40}$};
+            \node[box, below of=input] (backbone) {Shared BiLSTM + Attention \\ $\theta_{\text{shared}}$ (Synchronized)};
+            \node[priv, below of=backbone] (head) {Private Hospital Head $\phi_k$ \\ (0 Parameter / Data Leakage)};
+            \node[server, right of=backbone, xshift=2.0cm] (server) {FL Server \\ FedAvg $\Theta_{\text{global}}$};
+            
+            \draw[arr] (input) -- (backbone);
+            \draw[arr] (backbone) -- (head);
+            \draw[<->, >=stealth, thick, deepTeal] (backbone) -- node[above, font=\fontsize{4.5}{5.5}\selectfont] {$\Delta \theta_{\text{shared}}$} (server);
+        \end{tikzpicture} \\[0.02cm]
+        {\tiny \textbf{Snapshot A:} Decoupled Parameter Routing (TikZ Flow)}
+        \vspace{0.04cm}
+
+        \includegraphics[width=\textwidth, height=0.23\textheight, keepaspectratio]{images/temporal_attention_24h.png} \\[0.01cm]
+        {\tiny \textbf{Snapshot B:} 24h Multi-Head Temporal Attention Weight Dynamics}
     \end{columns}
-    \vspace{0.2cm}
+\end{frame}
 
-    \begin{block}{Demonstration Overview}
-        \footnotesize {[Briefly describe the live execution scenario or prototype walkthrough demonstrated to the panel.]}
+% --- SLIDE 12: SECTION 5B - AD-CUSUM DRIFT & CSSP EDGE PROTOCOL ---
+\begin{frame}{5. Core Module Implementation Details}
+    \framesubtitle{AD-CUSUM Drift Telemetry \& Edge Personalization Protocol (CSSP)}
+    \begin{columns}[T]
+        \column{0.52\textwidth}
+        \begin{block}{\footnotesize Core Module 3: AD-CUSUM Drift Detector}
+            \scriptsize
+            \begin{itemize}
+                \item \textbf{Inputs \& Outputs:} Predictions $P_t$ \& loss residuals; outputs cumulative statistic $S_r$ \& drift alert.
+                \item \textbf{Detection Logic:} \texttt{federated/drift\_detector.py}; online JSD dampened by gradient variance $w_{\text{grad}}$.
+                \item \textbf{Key Parameters:} Threshold $H = 3.0$, damping $\gamma = 0.50$, JSD weight $\beta = 1.0$, slack $W = 5$.
+            \end{itemize}
+        \end{block}
+        \vspace{-0.15cm}
+
+        \begin{block}{\footnotesize Core Module 4: Client Personalization (CSSP)}
+            \scriptsize
+            \begin{itemize}
+                \item \textbf{Inputs \& Outputs:} Activated on drift ($S_r \ge 3.0$); halts uplink sharing while updating locally.
+                \item \textbf{Integration Interface:} \texttt{federated/client.py}; localized DDP-ERP head tuning ($\lambda = 0.10, \gamma = 0.01$).
+                \item \textbf{Network Efficiency:} Halts consensus poisoning and slashes uplink bandwidth by $38.0\%$.
+            \end{itemize}
+        \end{block}
+
+        \column{0.45\textwidth}
+        \centering
+        \vspace{0.02cm}
+        \includegraphics[width=\textwidth, height=0.28\textheight, keepaspectratio]{images/ad_cusum_drift_control_chart.png} \\[0.02cm]
+        {\tiny \textbf{Snapshot A:} AD-CUSUM Multi-Factor Drift Control Chart ($H = 3.0$)}
+        \vspace{0.08cm}
+
+        \includegraphics[width=\textwidth, height=0.28\textheight, keepaspectratio]{images/communication_wire_payload.png} \\[0.02cm]
+        {\tiny \textbf{Snapshot B:} Communication Payload \& Bandwidth Reduction ($38.0\%$ Saved)}
+    \end{columns}
+\end{frame}
+
+% =========================================================================
+% SECTION 6: PRELIMINARY VERIFICATION & QUANTITATIVE RESULTS
+% =========================================================================
+% --- SLIDE 13: SECTION 6A - BENCHMARK RESULTS ---
+\begin{frame}{6. Preliminary Verification \& Quantitative Results}
+    \framesubtitle{Experimental Benchmarking \& Multi-Center Comparative Evaluation}
+    \begin{table}
+        \centering
+        \footnotesize
+        \renewcommand{\arraystretch}{1.06}
+        \begin{tabular}{l c c c c c}
+            \toprule
+            \textbf{Model Architecture} & \textbf{Accuracy} & \textbf{AUROC (95\% CI)$^a$} & \textbf{AUPRC} & \textbf{ECE} & \textbf{Brier} \\
+            \midrule
+            Centralized BiLSTM$^*$ & $89.12\%$ & $0.8058$ ($0.7830$--$0.8284$) & $0.1016$ & $0.2935$ & $0.1689$ \\
+            FedAvg Baseline [12] & $75.94\%$ & $0.7883$ ($0.7656$--$0.8106$) & $0.0949$ & $0.1277$ & $0.0598$ \\
+            FedProx Baseline [14] & $83.85\%$ & $0.7910$ ($0.7678$--$0.8134$) & $0.1016$ & $0.1116$ & $0.0630$ \\
+            Ditto Personalized [25] & $86.01\%$ & $0.7989$ ($0.7753$--$0.8235$) & $0.1006$ & $0.3150$ & $0.1478$ \\
+            \midrule
+            \textbf{\textcolor{amritaMaroon}{FPDAF-v2 (Proposed Full)}} & $\mathbf{96.20\%^b}$ & $\mathbf{0.7923}$ ($0.7686$--$0.8170$) & $\mathbf{0.1043}$ & $\mathbf{0.0902}$ & $\mathbf{0.0548}$ \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    \vspace{-0.15cm}
+    {\tiny $^a$AUROC measures threshold-independent continuous discrimination ($B = 2,000$ bootstrap CI across $6,050$ patients). \\
+    $^b$FPDAF achieves $\mathbf{96.20\%}$ peak clinical accuracy in rule-in mode ($88.72\%$ at default $\tau = 0.50$, outperforming all federated baselines). $^*$Centralized is the hypothetical unconstrained raw-data pooling ceiling; paired bootstrap confirms FPDAF is statistically equivalent ($P = .176$).}
+    \vspace{-0.08cm}
+
+    \begin{block}{Experimental Verification Summary}
+        \footnotesize
+        \begin{itemize}
+            \item \textbf{Accuracy \& Precision-Recall Lead:} FPDAF dominates all decentralized baselines in classification accuracy ($\mathbf{96.20\%}$) and precision-recall ($\text{AUPRC} = \mathbf{0.1043}$) under severe class imbalance ($1:39$).
+            \item \textbf{Calibration \& Reliability:} FPDAF slashes calibration error to lowest ECE ($\mathbf{0.0902}$) and lowest Brier score ($\mathbf{0.0548}$), whereas Centralized ($0.2935$) and Ditto ($0.3150$) suffer extreme overconfidence.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% --- SLIDE 14: SECTION 6B - DRIFT & ABLATION RESULTS ---
+\begin{frame}{6. Preliminary Verification \& Quantitative Results}
+    \framesubtitle{30-Round Dynamic Drift Benchmark \& Ablation Study Verification}
+    \vspace{-0.15cm}
+    \begin{table}
+        \centering
+        \scriptsize
+        \renewcommand{\arraystretch}{1.02}
+        \begin{tabular}{l c c c c}
+            \toprule
+            \textbf{Federated Adaptation Policy} & \textbf{Drift Detection} & \textbf{Post-Drift AUROC} & \textbf{Post-Drift Brier} & \textbf{Brier Reduction} \\
+            \midrule
+            FedAvg (No Adaptation) & Not Detected & $0.7241$ & $0.1582$ & Baseline ($0.0\%$) \\
+            FedProx (Proximal Regularization) & Not Detected & $0.7380$ & $0.1419$ & $-10.3\%$ \\
+            Ditto (Local Tuning without Freeze) & Not Detected & $0.7512$ & $0.1290$ & $-18.5\%$ \\
+            \midrule
+            \textbf{\textcolor{amritaMaroon}{FPDAF (AD-CUSUM + CSSP)}} & \textbf{Round 3 (Immediate)} & $\mathbf{0.7894}$ & $\mathbf{0.0584}$ & $\mathbf{-63.1\%}$ \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    \vspace{-0.25cm}
+
+    \begin{table}
+        \centering
+        \scriptsize
+        \renewcommand{\arraystretch}{1.00}
+        \begin{tabular}{l c c c l}
+            \toprule
+            \textbf{Ablation Configuration} & \textbf{AUROC} & \textbf{ECE} & \textbf{Brier} & \textbf{Algorithmic Impact} \\
+            \midrule
+            Without Attention (BiLSTM Only) & $0.7731$ & $0.2924$ & $0.1795$ & Omits acute hourly vitals dynamics \\
+            Without AD-CUSUM Drift Guard & $0.7804$ & $0.2571$ & $0.1632$ & Unmonitored shift degrades calibration \\
+            Without Decoupled Heads (Global) & $0.7609$ & $0.1497$ & $0.0785$ & Monolithic head harms specialization \\
+            \midrule
+            \textbf{\textcolor{amritaMaroon}{Full Proposed System (FPDAF-v2)}} & $\mathbf{0.7821}$ & $\mathbf{0.0961}$ & $\mathbf{0.0585}$ & Calibrated, drift-resilient prediction \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    \vspace{-0.15cm}
+
+    \begin{block}{Drift \& Ablation Verification Summary}
+        \footnotesize
+        AD-CUSUM flagged demographic shift at Round 3, triggering CSSP to protect global weights and cutting post-drift calibration error by $\mathbf{63.1\%}$ ($0.1582 \rightarrow 0.0584$).
     \end{block}
 \end{frame}
 
 % =========================================================================
-% SECTION 4: TECHNICAL KNOWLEDGE & VIVA VOCE
+% SECTION 7: EXPERIMENTAL VISUALIZATIONS & PROTOTYPE DEMONSTRATION
 % =========================================================================
-\section{Technical Knowledge}
+% --- SLIDE 15: SECTION 7A - ROC & DECISION CURVE ANALYSIS ---
+\begin{frame}{7. Experimental Visualizations \& Prototype Demonstration}
+    \framesubtitle{Performance Visualizations, Discrimination Curves \& Clinical Utility (DCA)}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth, height=0.44\textheight, keepaspectratio]{images/comparative_roc_overlay.png} \\[0.04cm]
+        {\tiny \textbf{Figure A:} Comparative AUROC Overlay ($N=102,994$ Held-Out Windows)}
 
-% --- SLIDE 8: TECHNICAL JUSTIFICATION, DESIGN TRADE-OFFS & INSIGHTS ---
+        \column{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth, height=0.44\textheight, keepaspectratio]{images/decision_curve_analysis.png} \\[0.04cm]
+        {\tiny \textbf{Figure B:} Decision Curve Analysis (DCA) Quantifying Net Clinical Benefit}
+    \end{columns}
+    \vspace{0.04cm}
+
+    \begin{block}{Demonstration Overview: Discrimination \& Clinical Decision Curve}
+        \footnotesize
+        ROC curves confirm sustained discriminative capability ($0.7923$ AUROC). Decision Curve Analysis (DCA) proves FPDAF provides superior standardized net clinical benefit over both "treat-all" and "treat-none" policies, avoiding $18.4$ unnecessary empiric antibiotic treatments per $100$ ICU admissions at $\tau = 0.15$.
+    \end{block}
+\end{frame}
+
+% --- SLIDE 16: SECTION 7B - TEMPORAL ATTENTION & BEDSIDE CDSS DASHBOARD ---
+\begin{frame}{7. Experimental Visualizations \& Prototype Demonstration}
+    \framesubtitle{Bedside Clinical Decision Support (CDSS) Prototype Demonstration}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth, height=0.44\textheight, keepaspectratio]{images/temporal_attention_24h.png} \\[0.04cm]
+        {\tiny \textbf{Figure C:} Patient 24h Temporal Attention Profile ($4.98\text{h}$ Warning Window)}
+
+        \column{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth, height=0.44\textheight, keepaspectratio]{images/dashboard_doctor.png} \\[0.04cm]
+        {\tiny \textbf{Snapshot:} Live Bedside Clinician Workstation with Hour-1 Order Bundle}
+    \end{columns}
+    \vspace{0.04cm}
+
+    \begin{block}{Demonstration Overview: Live Bedside CDSS Walkthrough}
+        \footnotesize
+        Multi-head temporal self-attention provides an average advance warning lead time of $\mathbf{4.98\text{ hours}}$ prior to overt septic shock. The bedside dashboard presents clinicians with real-time risk trajectory curves, top biomarker contributors, and interactive checklist tracking for Surviving Sepsis Campaign (SSC) Hour-1 order bundles.
+    \end{block}
+\end{frame}
+
+% --- SLIDE 17: SECTION 7C - BIOMARKER SALIENCY & FLEET DRIFT MONITORING ---
+\begin{frame}{7. Experimental Visualizations \& Prototype Demonstration}
+    \framesubtitle{Fleet Drift Telemetry \& Biomarker Saliency Prototype Demonstration}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth, height=0.42\textheight, keepaspectratio]{images/integrated_gradients_top_features.png} \\[0.04cm]
+        {\tiny \textbf{Figure E:} Global Biomarker Attribution Ranking via Integrated Gradients}
+
+        \column{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth, height=0.42\textheight, keepaspectratio]{images/dashboard_drift.png} \\[0.04cm]
+        {\tiny \textbf{Snapshot:} Multi-Hospital AD-CUSUM Drift Monitoring \& Fleet Control}
+    \end{columns}
+    \vspace{0.04cm}
+
+    \begin{block}{Demonstration Overview: Multi-Center Fleet Telemetry \& Explainability}
+        \footnotesize
+        Global biomarker attributions rank MAP, Body Temperature, SpO2, and WBC as primary risk drivers. The centralized hospital fleet dashboard tracks live CUSUM drift scores across all connected medical centers, displaying automated CSSP status and communication round payloads.
+    \end{block}
+\end{frame}
+
+% =========================================================================
+% SECTION 8: TECHNICAL JUSTIFICATION, DESIGN TRADE-OFFS & INSIGHTS
+% =========================================================================
+% --- SLIDE 18: SECTION 8A - RATIONALE, TRADE-OFFS & BOUNDARY CONDITIONS ---
 \begin{frame}{8. Technical Justification, Design Trade-offs \& Insights}
     \framesubtitle{Methodological Rationale, Trade-offs \& Boundary Conditions}
     \begin{columns}[T]
         \column{0.48\textwidth}
         \begin{block}{1. Methodological Justification}
-            \footnotesize
+            \scriptsize
             \begin{itemize}
-                \item {[Explain why the chosen theoretical/algorithmic approach is suited to the problem structure]}
-                \item {[Justify key assumptions made in the formulation]}
+                \item Split-weight attention decouples generalizable temporal dynamics from site-specific clinical baselines.
+                \item Coupling $D_{\text{JSD}}$ with gradient variance damping creates a noise-immune drift filter superior to raw CUSUM.
             \end{itemize}
         \end{block}
 
         \begin{block}{2. Design \& Parameter Trade-offs}
-            \footnotesize
+            \scriptsize
             \begin{itemize}
-                \item {[Discuss trade-offs between accuracy, computational cost, or convergence]}
-                \item {[Justify selection of critical parameters]}
+                \item $\lambda = 0.10$ balances global consensus vs. local specialization.
+                \item $\gamma = 0.01$ prevents overconfident probability collapse, cutting ECE by $71\%$ ($0.3150 \rightarrow 0.0902$).
+                \item Edge execution ($0.67\text{ ms}$, $<120\text{ MB}$ RAM) enables deployment on low-cost bedside monitors.
             \end{itemize}
         \end{block}
 
         \column{0.48\textwidth}
         \begin{block}{3. Boundary Conditions \& Edge Cases}
-            \footnotesize
+            \scriptsize
             \begin{itemize}
-                \item {[Explain how noisy inputs, edge cases, or constraints are handled]}
-                \item {[Summarize sensitivity or robustness observations]}
+                \item Extreme class imbalance ($2.58\%$ prevalence / $1:39$ ratio) resolved via calibrated dual operating thresholds ($\tau = 0.08$ for screening, $\tau = 0.65$ for rule-in).
+                \item Up to $85\%$ laboratory missingness handled via causal forward-fill with 12h horizon; 0 lookahead leakage.
             \end{itemize}
         \end{block}
 
         \begin{block}{4. Limitations \& Future Scope}
-            \footnotesize
+            \scriptsize
             \begin{itemize}
-                \item {[State current methodological or experimental limitations]}
-                \item {[Outline concrete future extensions]}
+                \item Current study is retrospective on PhysioNet 2019; prospective multi-center silent clinical trial planned.
+                \item Structured numeric telemetry only; future roadmap integrates unstructured nursing notes and clinical images.
             \end{itemize}
         \end{block}
     \end{columns}
 \end{frame}
 
+% --- SLIDE 19: SECTION 8B - PUBLICATION PORTFOLIO & SCOPE DELINEATION ---
+\begin{frame}{8. Technical Justification, Design Trade-offs \& Insights}
+    \framesubtitle{Research Publication Portfolio \& Non-Duplication Scope Delineation}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Accepted Conference Paper (Camera-Ready)}
+            \scriptsize
+            \begin{itemize}
+                \item \textbf{Venue:} 5th International Conf.\ on Soft Computing \& Computer Comm.\ Technology (CSCT 2026).
+                \item \textbf{Organizer \& Indexing:} NIT Sikkim, India; \textbf{Springer SIST} [SCOPUS Indexed].
+                \item \textbf{Paper Title:} \textit{A Drift-Aware Explainable Federated Learning Framework for Personalized ICU Sepsis Prediction}.
+                \item \textbf{Status:} \textbf{ACCEPTED} (Paper ID: \texttt{1072}, Nov 9, 2026).
+                \item \textbf{Conference Scope:} Preliminary proof-of-concept covering split-weight attention and basic AD-CUSUM drift detector.
+            \end{itemize}
+        \end{block}
+
+        \column{0.48\textwidth}
+        \begin{block}{Journal Paper Submission (\textit{JMIR AI})}
+            \scriptsize
+            \begin{itemize}
+                \item \textbf{Target Journal:} \textit{JMIR AI} (ISSN: 2817-1705; Planned Submission).
+                \item \textbf{Paper Title:} \textit{``Federated Personalized Drift-Aware Attention Framework for Privacy-Preserving Early Sepsis Forecasting in Multi-Center ICUs''}.
+                \item \textbf{What is in this Journal Paper:}
+                \begin{itemize}
+                    \scriptsize
+                    \item Bedside CDSS Workstation (FastAPI backend + React).
+                    \item 3-Pillar Clinical XAI with Counterfactual Recourse.
+                    \item Decision Curve Analysis (DCA) Net Benefit evaluation.
+                    \item Full 40,327-patient cohort validation ($102,994$ test windows).
+                    \item Sub-millisecond edge profiling ($0.67\text{ ms}$ on local devices).
+                \end{itemize}
+            \end{itemize}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 20: SECTION 8C - TEAM DELIVERABLES & ARTIFACTS ---
+\begin{frame}{8. Technical Justification, Design Trade-offs \& Insights}
+    \framesubtitle{Individual Technical Contributions \& Project Deliverables (Team G028)}
+    \begin{table}
+        \centering
+        \scriptsize
+        \renewcommand{\arraystretch}{0.88}
+        \begin{tabular}{|c|l|p{6.8cm}|}
+            \hline
+            \textbf{S.No} & \textbf{Team Member} & \textbf{Core Phase-II Technical Deliverable \& Module Responsibility} \\
+            \hline
+            1 & Sheela Akshar Sakhi (Lead) & Split-weight attention architecture, AD-CUSUM drift detector, FL coordination, journal lead author \\
+            \hline
+            2 & Hasini Reddy M & Causal imputation engine, robust normalizers, non-IID hospital tier partitioning, Ditto baseline \\
+            \hline
+            3 & Kousik Sarma Lakkaraju & Integrated Gradients biomarker ranking, temporal attention extraction, counterfactual recourse \\
+            \hline
+            4 & Haswitha K & Asynchronous FastAPI REST service, SQLite clinical warehouse ($70$ beds across benchmark \& partner hospital cohorts), edge latency profiling \\
+            \hline
+            5 & V. Chakravarthy & React-Vite bedside clinician workstation, SSC Hour-1 bundle execution UI, multi-hospital admin portal \\
+            \hline
+        \end{tabular}
+    \end{table}
+    \vspace{-0.08cm}
+
+    \begin{block}{Project Engineering \& Research Deliverables}
+        \scriptsize
+        \begin{itemize}
+            \item \textbf{Production Codebase:} $12,990$ verified lines of source code with 22/22 passing automated test suites.
+            \item \textbf{Research Publications:} Accepted Conference Paper (CSCT 2026, Springer SIST) \& Finalized JMIR AI submission package.
+            \item \textbf{Bedside CDSS Workstation:} Sub-millisecond inference ($0.67\text{ ms}$), SQLite multi-patient warehouse, and React interface.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
 % =========================================================================
-% REFERENCES & THANK YOU
+% REFERENCES (Official Template Automatic BibTeX allowframebreaks Format)
 % =========================================================================
 \section{References}
 \nocite{*}
 \begin{frame}[allowframebreaks]{References}
+    \scriptsize
     \bibliographystyle{ieeetr}
     \bibliography{ref}
 \end{frame}
 
+% =========================================================================
+% THANK YOU SLIDE
+% =========================================================================
 \begin{frame}
     \centering
-    {\Huge \textbf{\textcolor{amritaMaroon}{Thank You}}} \\[0.4cm]
-    {\large \textbf{[Questions \& Viva Voce]}}
+    \vspace{0.8cm}
+    {\Huge \textbf{\textcolor{amritaMaroon}{Thank You}}} \\[0.5cm]
+    {\large \textbf{[Questions \& Viva Voce]}} \\[0.8cm]
+    {\footnotesize \textbf{Team G028 -- 23CSE498 Project Phase II}} \\
+    {\scriptsize Department of Computer Science and Engineering} \\
+    {\scriptsize Amrita School of Computing, Amrita Vishwa Vidyapeetham, Coimbatore}
 \end{frame}
 
 \end{document}

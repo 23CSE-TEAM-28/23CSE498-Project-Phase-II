@@ -190,7 +190,7 @@ export const DashboardCDSS: React.FC<DashboardCDSSProps> = ({ onSelectPatient, s
             </h2>
           </div>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            50 Beds Monitored &bull; Model Early Lead Time: <span className="font-semibold text-teal-600 dark:text-teal-400">5.9 Hours</span> &bull; False-Alarm Reduction: <span className="font-semibold text-emerald-600 dark:text-emerald-400">41.8%</span>
+            {patients.length > 0 ? patients.length : 70} Beds Monitored (50 Benchmark + 20 Hospital Cohort) &bull; Model Early Lead Time: <span className="font-semibold text-teal-600 dark:text-teal-400">5.9 Hours</span> &bull; False-Alarm Reduction: <span className="font-semibold text-emerald-600 dark:text-emerald-400">41.8%</span>
           </p>
         </div>
         

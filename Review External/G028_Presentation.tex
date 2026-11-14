@@ -156,7 +156,7 @@
             \item \textbf{Objective 1 (Drift-Aware Model Architecture):} Design a split-weight BiLSTM with multi-head temporal attention and an online drift detector to flag clinical shift without ground-truth labels.
             \item \textbf{Objective 2 (Personalization \& Communication Efficiency):} Formulate an edge-personalization objective and selective freeze protocol to adapt to local hospital demographics while slashing uplink bandwidth by $38.0\%$.
             \item \textbf{Objective 3 (Three-Pillar Clinician Explainability):} Build an interpretable bedside XAI pipeline providing 24h temporal risk heatmaps, biomarker saliency rankings, and interactive counterfactual recourse simulations.
-            \item \textbf{Objective 4 (Full-System CDSS Development):} Engineer an operational, point-of-care clinical decision workstation integrating an asynchronous FastAPI telemetry engine, SQLite clinical database, and real-time React dashboard.
+            \item \textbf{Objective 4 (Full-System CDSS Development):} Realize an operational, point-of-care clinical decision workstation integrating an asynchronous FastAPI telemetry engine, SQLite clinical database ($70$ beds across benchmark \& partner hospital cohorts), and dual-view React bedside interface.
         \end{itemize}
     \end{block}
     \vspace{-0.10cm}
@@ -342,12 +342,26 @@
 
         \column{0.45\textwidth}
         \centering
-        \vspace{0.02cm}
-        \includegraphics[width=\textwidth, height=0.28\textheight, keepaspectratio]{images/ArcDigram.jpeg} \\[0.02cm]
-        {\tiny \textbf{Snapshot A:} Decoupled FL Architecture \& Parameter Routing}
-        \vspace{0.08cm}
+        \vspace{0.01cm}
+        \begin{tikzpicture}[node distance=0.78cm, auto,
+            box/.style={rectangle, draw=amritaMaroon, fill=amritaMaroon!8, rounded corners=2pt, font=\fontsize{5}{6}\selectfont\bfseries, align=center, inner sep=2.5pt, text width=2.4cm},
+            server/.style={rectangle, draw=deepTeal, fill=deepTeal!12, rounded corners=2pt, font=\fontsize{5}{6}\selectfont\bfseries, align=center, inner sep=2.5pt, text width=2.2cm},
+            priv/.style={rectangle, draw=purple!80, fill=purple!10, rounded corners=2pt, font=\fontsize{5}{6}\selectfont\bfseries, align=center, inner sep=2.5pt, text width=2.4cm},
+            arr/.style={->, >=stealth, thick, amritaMaroon}
+        ]
+            \node[box] (input) {ICU Telemetry $X \in \mathbb{R}^{24 \times 40}$};
+            \node[box, below of=input] (backbone) {Shared BiLSTM + Attention \\ $\theta_{\text{shared}}$ (Synchronized)};
+            \node[priv, below of=backbone] (head) {Private Hospital Head $\phi_k$ \\ (0 Parameter / Data Leakage)};
+            \node[server, right of=backbone, xshift=2.0cm] (server) {FL Server \\ FedAvg $\Theta_{\text{global}}$};
+            
+            \draw[arr] (input) -- (backbone);
+            \draw[arr] (backbone) -- (head);
+            \draw[<->, >=stealth, thick, deepTeal] (backbone) -- node[above, font=\fontsize{4.5}{5.5}\selectfont] {$\Delta \theta_{\text{shared}}$} (server);
+        \end{tikzpicture} \\[0.02cm]
+        {\tiny \textbf{Snapshot A:} Decoupled Parameter Routing (TikZ Flow)}
+        \vspace{0.04cm}
 
-        \includegraphics[width=\textwidth, height=0.28\textheight, keepaspectratio]{images/temporal_attention_24h.png} \\[0.02cm]
+        \includegraphics[width=\textwidth, height=0.23\textheight, keepaspectratio]{images/temporal_attention_24h.png} \\[0.01cm]
         {\tiny \textbf{Snapshot B:} 24h Multi-Head Temporal Attention Weight Dynamics}
     \end{columns}
 \end{frame}
@@ -637,7 +651,7 @@
             \hline
             3 & Kousik Sarma Lakkaraju & Integrated Gradients biomarker ranking, temporal attention extraction, counterfactual recourse \\
             \hline
-            4 & Haswitha K & Asynchronous FastAPI REST service, SQLite clinical warehouse ($50$ beds), edge latency profiling \\
+            4 & Haswitha K & Asynchronous FastAPI REST service, SQLite clinical warehouse ($70$ beds across benchmark \& partner hospital cohorts), edge latency profiling \\
             \hline
             5 & V. Chakravarthy & React-Vite bedside clinician workstation, SSC Hour-1 bundle execution UI, multi-hospital admin portal \\
             \hline

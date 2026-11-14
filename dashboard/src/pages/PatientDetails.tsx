@@ -191,55 +191,55 @@ export const PatientDetails: React.FC<PatientDetailsProps> = ({ patient, setActi
         {/* 6-Parameter Latest Telemetry Strip */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-2">
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#08101d] border border-slate-200 dark:border-slate-800 text-center">
-            <span className="text-[10px] text-slate-400 uppercase font-medium flex items-center justify-center gap-1">
-              <Heart className="h-3 w-3 text-red-400" /> Heart Rate
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-medium flex items-center justify-center gap-1">
+              <Heart className="h-3 w-3 text-red-500 dark:text-red-400" /> Heart Rate
             </span>
-            <span className={`text-base font-bold font-mono ${profile.latestVitals.heartRate > 100 ? 'text-red-400' : 'text-slate-200'}`}>
+            <span className={`text-base font-bold font-mono ${profile.latestVitals.heartRate > 100 ? 'text-red-600 dark:text-red-400' : 'text-slate-800 dark:text-slate-100'}`}>
               {profile.latestVitals.heartRate} <span className="text-[10px] text-slate-500 font-normal">bpm</span>
             </span>
           </div>
 
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#08101d] border border-slate-200 dark:border-slate-800 text-center">
-            <span className="text-[10px] text-slate-400 uppercase font-medium flex items-center justify-center gap-1">
-              <Activity className="h-3 w-3 text-blue-400" /> Blood Pressure
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-medium flex items-center justify-center gap-1">
+              <Activity className="h-3 w-3 text-blue-500 dark:text-blue-400" /> Blood Pressure
             </span>
-            <span className="text-base font-bold font-mono text-slate-200">
+            <span className="text-base font-bold font-mono text-slate-800 dark:text-slate-100">
               {profile.latestVitals.bloodPressure} <span className="text-[10px] text-slate-500 font-normal">mmHg</span>
             </span>
           </div>
 
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#08101d] border border-slate-200 dark:border-slate-800 text-center">
-            <span className="text-[10px] text-slate-400 uppercase font-medium flex items-center justify-center gap-1">
-              <Activity className="h-3 w-3 text-indigo-400" /> Derived MAP
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-medium flex items-center justify-center gap-1">
+              <Activity className="h-3 w-3 text-indigo-500 dark:text-indigo-400" /> Derived MAP
             </span>
-            <span className={`text-base font-bold font-mono ${profile.latestVitals.meanArterialPressure < 65 ? 'text-red-400' : 'text-slate-200'}`}>
+            <span className={`text-base font-bold font-mono ${profile.latestVitals.meanArterialPressure < 65 ? 'text-red-600 dark:text-red-400' : 'text-slate-800 dark:text-slate-100'}`}>
               {profile.latestVitals.meanArterialPressure} <span className="text-[10px] text-slate-500 font-normal">mmHg</span>
             </span>
           </div>
 
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#08101d] border border-slate-200 dark:border-slate-800 text-center">
-            <span className="text-[10px] text-slate-400 uppercase font-medium flex items-center justify-center gap-1">
-              <Wind className="h-3 w-3 text-cyan-400" /> SpO₂
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-medium flex items-center justify-center gap-1">
+              <Wind className="h-3 w-3 text-cyan-500 dark:text-cyan-400" /> SpO₂
             </span>
-            <span className={`text-base font-bold font-mono ${profile.latestVitals.spo2 < 92 ? 'text-red-400' : 'text-cyan-400'}`}>
+            <span className={`text-base font-bold font-mono ${profile.latestVitals.spo2 < 92 ? 'text-red-600 dark:text-red-400' : 'text-teal-600 dark:text-teal-400'}`}>
               {profile.latestVitals.spo2}%
             </span>
           </div>
 
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#08101d] border border-slate-200 dark:border-slate-800 text-center">
-            <span className="text-[10px] text-slate-400 uppercase font-medium flex items-center justify-center gap-1">
-              <Thermometer className="h-3 w-3 text-amber-400" /> Temp
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-medium flex items-center justify-center gap-1">
+              <Thermometer className="h-3 w-3 text-amber-500 dark:text-amber-400" /> Temp
             </span>
-            <span className="text-base font-bold font-mono text-slate-200">
+            <span className="text-base font-bold font-mono text-slate-800 dark:text-slate-100">
               {profile.latestVitals.temperature}°C
             </span>
           </div>
 
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#08101d] border border-slate-200 dark:border-slate-800 text-center">
-            <span className="text-[10px] text-slate-400 uppercase font-medium flex items-center justify-center gap-1">
-              <Activity className="h-3 w-3 text-teal-400" /> Resp Rate
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-medium flex items-center justify-center gap-1">
+              <Activity className="h-3 w-3 text-teal-500 dark:text-teal-400" /> Resp Rate
             </span>
-            <span className={`text-base font-bold font-mono ${profile.latestVitals.respiration > 22 ? 'text-amber-400' : 'text-slate-200'}`}>
+            <span className={`text-base font-bold font-mono ${profile.latestVitals.respiration > 22 ? 'text-amber-600 dark:text-amber-400' : 'text-slate-800 dark:text-slate-100'}`}>
               {profile.latestVitals.respiration} <span className="text-[10px] text-slate-500 font-normal">/min</span>
             </span>
           </div>
@@ -380,7 +380,7 @@ export const PatientDetails: React.FC<PatientDetailsProps> = ({ patient, setActi
                     <span className="text-[10px] text-slate-400">Ref: {lab.ref}</span>
                   </div>
                   <div className="text-right font-mono">
-                    <span className={`font-bold ${lab.isAlert ? 'text-red-400' : 'text-slate-200'}`}>
+                    <span className={`font-bold ${lab.isAlert ? 'text-red-600 dark:text-red-400' : 'text-slate-800 dark:text-slate-100'}`}>
                       {lab.val} {lab.unit}
                     </span>
                     {lab.isAlert && (
