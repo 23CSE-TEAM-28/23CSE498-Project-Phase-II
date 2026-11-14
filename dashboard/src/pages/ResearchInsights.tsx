@@ -7,6 +7,7 @@ import {
   Award
 } from 'lucide-react';
 import { fetchAblationData } from '../services/api';
+import { FPDAFLogo } from '../components/FPDAFLogo';
 
 export const ResearchInsights: React.FC = () => {
   const [ablationData, setAblationData] = useState<any>(null);
@@ -29,20 +30,21 @@ export const ResearchInsights: React.FC = () => {
   }
 
   return (
-    <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-3.5rem)]">
-      {/* Title */}
-      <div className="flex justify-between items-center flex-wrap gap-4">
-        <div>
-          <h2 className="text-lg font-semibold text-slate-800 dark:text-white leading-tight">Research & Methodology</h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Proposed FPDAF framework architecture, bi-level Ditto optimizations, and validation reviews</p>
+    <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-3.5rem)] font-sans">
+      {/* Brand Hero Banner */}
+      <div className="bg-white/80 dark:bg-[#0c1527]/80 backdrop-blur-2xl border border-black/[0.06] dark:border-white/[0.08] p-6 rounded-3xl shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="w-full max-w-[500px]">
+          <FPDAFLogo variant="full" className="w-full h-auto filter drop-shadow-[0_4px_16px_rgba(45,212,191,0.18)]" />
         </div>
-        <a 
-          href="/FPDAF_Research_Paper.pdf" 
-          download="FPDAF_Research_Paper.pdf"
-          className="flex items-center gap-1.5 bg-teal-600 hover:bg-teal-700 text-white font-medium px-3.5 py-1.5 rounded transition-colors text-xs"
-        >
-          <FileDown className="h-4 w-4" /> Download Manuscript PDF
-        </a>
+        <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+          <a 
+            href="/FPDAF_Research_Paper.pdf" 
+            download="FPDAF_Research_Paper.pdf"
+            className="flex items-center gap-2 bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-400 hover:to-cyan-400 text-slate-950 font-bold px-4 py-2.5 rounded-xl transition-all text-xs shadow-md shadow-teal-500/20"
+          >
+            <FileDown className="h-4 w-4" /> Download Manuscript PDF
+          </a>
+        </div>
       </div>
 
       {/* Grid: Abstract & Problem Statement */}

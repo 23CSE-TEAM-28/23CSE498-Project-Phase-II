@@ -8,7 +8,6 @@ import {
   BarChart3, 
   FileText, 
   LogOut,
-  HeartPulse,
   ChevronLeft,
   ChevronRight,
   Building,
@@ -16,6 +15,7 @@ import {
   Sliders,
   Cpu
 } from 'lucide-react';
+import { FPDAFLogo } from './FPDAFLogo';
 
 interface SidebarProps {
   userRole: 'Doctor' | 'Admin' | 'Full Access';
@@ -78,15 +78,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
       isCollapsed ? 'w-16' : 'w-64'
     }`}>
       {/* Brand Header with macOS Window Chrome */}
-      <div className="px-4 py-3.5 border-b border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between">
+      <div className="px-3.5 py-3 border-b border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between">
         <div className="flex items-center gap-2.5 overflow-hidden">
-          <div className="h-8 w-8 rounded-xl bg-teal-500/10 border border-teal-500/25 flex items-center justify-center text-teal-600 dark:text-teal-400 shrink-0 shadow-xs">
-            <HeartPulse className="h-4 w-4" />
+          <div className="h-8 w-8 rounded-xl bg-teal-500/10 border border-teal-500/25 flex items-center justify-center p-1 shrink-0 shadow-xs">
+            <FPDAFLogo variant="icon" className="w-full h-full" />
           </div>
           {!isCollapsed && (
             <div className="overflow-hidden">
-              <h1 className="font-extrabold text-xs text-slate-900 dark:text-white tracking-tight leading-tight">FPDAF CDSS</h1>
-              <span className="text-[10px] text-teal-600 dark:text-teal-400 font-semibold tracking-wide block">Clinical AI Suite</span>
+              <h1 className="font-extrabold text-xs text-slate-900 dark:text-white tracking-tight leading-tight flex items-center gap-1.5">
+                <span>FPDAF</span>
+                <span className="text-[9px] font-bold uppercase px-1.5 py-0.2 rounded bg-teal-500/15 text-teal-600 dark:text-teal-400 border border-teal-500/20">CDSS</span>
+              </h1>
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium tracking-tight block">Clinical AI Suite</span>
             </div>
           )}
         </div>

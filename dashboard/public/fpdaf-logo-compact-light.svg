@@ -1,0 +1,157 @@
+
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 180" width="940" height="230">
+        <g transform="scale(0.72) translate(-5, 0)">
+          
+    <!-- Defs -->
+    <defs>
+      <linearGradient id="emblemGrad_light_compact" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#0284c7" />
+        <stop offset="100%" stop-color="#0d9488" />
+      </linearGradient>
+      <linearGradient id="arcGrad_light_compact" x1="0%" y1="100%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0284c7" />
+        <stop offset="100%" stop-color="#0d9488" />
+      </linearGradient>
+      <linearGradient id="crossFill_light_compact" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="rgba(13, 148, 136, 0.08)" />
+        <stop offset="100%" stop-color="rgba(13, 148, 136, 0.02)" />
+      </linearGradient>
+      <filter id="tealGlow_light_compact" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="3.5" result="blur" />
+        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      </filter>
+    </defs>
+
+    <!-- Group: Emblem -->
+    <g transform="translate(10, 8)">
+      <!-- 3 Federated Hospital Nodes Arc -->
+      <path d="M 64 74 C 82 28, 162 28, 180 74" 
+            fill="none" 
+            stroke="#0284c7" 
+            stroke-width="2.2" 
+            stroke-dasharray="4,4" 
+            opacity="0.85" />
+
+      <!-- Node 1: Left Hospital (Hospital 1) -->
+      <g transform="translate(42, 50)">
+        <rect x="0" y="8" width="28" height="20" rx="3.5" fill="#ffffff" stroke="#0d9488" stroke-width="2.2" />
+        <path d="M 14 0 L 14 8 M 10 4 L 18 4" stroke="#0d9488" stroke-width="2.2" stroke-linecap="round" />
+        <rect x="5" y="13" width="5" height="5" rx="1" fill="#0d9488" />
+        <rect x="18" y="13" width="5" height="5" rx="1" fill="#0d9488" />
+        <rect x="11.5" y="21" width="5" height="7" rx="1" fill="#e2e8f0" stroke="#0d9488" stroke-width="1.2" />
+      </g>
+
+      <!-- Node 2: Top Center Hospital (Federated Aggregator) -->
+      <g transform="translate(108, 12)">
+        <rect x="0" y="8" width="28" height="20" rx="3.5" fill="#ffffff" stroke="#0284c7" stroke-width="2.2" />
+        <path d="M 14 0 L 14 8 M 10 4 L 18 4" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" />
+        <rect x="5" y="13" width="5" height="5" rx="1" fill="#0284c7" />
+        <rect x="18" y="13" width="5" height="5" rx="1" fill="#0284c7" />
+        <rect x="11.5" y="21" width="5" height="7" rx="1" fill="#e2e8f0" stroke="#0284c7" stroke-width="1.2" />
+        <!-- Broadcast beacon pulse ring -->
+        <circle cx="14" cy="4" r="8.5" fill="none" stroke="#0284c7" stroke-width="1.2" opacity="0.4" />
+      </g>
+
+      <!-- Node 3: Right Hospital (Hospital 3) -->
+      <g transform="translate(172, 50)">
+        <rect x="0" y="8" width="28" height="20" rx="3.5" fill="#ffffff" stroke="#0d9488" stroke-width="2.2" />
+        <path d="M 14 0 L 14 8 M 10 4 L 18 4" stroke="#0d9488" stroke-width="2.2" stroke-linecap="round" />
+        <rect x="5" y="13" width="5" height="5" rx="1" fill="#0d9488" />
+        <rect x="18" y="13" width="5" height="5" rx="1" fill="#0d9488" />
+        <rect x="11.5" y="21" width="5" height="7" rx="1" fill="#e2e8f0" stroke="#0d9488" stroke-width="1.2" />
+      </g>
+
+      <!-- Main Medical Cross -->
+      <g transform="translate(74, 84)">
+        <path d="M 32 0 
+                 H 60 
+                 A 8 8 0 0 1 68 8 
+                 V 32 
+                 H 92 
+                 A 8 8 0 0 1 100 40 
+                 V 68 
+                 A 8 8 0 0 1 92 76 
+                 H 68 
+                 V 100 
+                 A 8 8 0 0 1 60 108 
+                 H 32 
+                 A 8 8 0 0 1 24 100 
+                 V 76 
+                 H 8 
+                 A 8 8 0 0 1 0 68 
+                 V 40 
+                 A 8 8 0 0 1 8 32 
+                 H 24 
+                 V 8 
+                 A 8 8 0 0 1 32 0 Z" 
+              fill="url(#crossFill_light_compact)" 
+              stroke="url(#emblemGrad_light_compact)" 
+              stroke-width="5" 
+              stroke-linejoin="round" />
+
+        <!-- High-Precision Real-time ECG Pulse Wave -->
+        <path d="M 6 54 
+                 L 26 54 
+                 L 32 54 
+                 L 36 47 
+                 L 41 63 
+                 L 48 14 
+                 L 57 88 
+                 L 64 48 
+                 L 70 59 
+                 L 76 54 
+                 L 94 54" 
+              fill="none" 
+              stroke="url(#emblemGrad_light_compact)" 
+              stroke-width="4.8" 
+              stroke-linecap="round" 
+              stroke-linejoin="round"
+               />
+        
+        <!-- Peak marker dot -->
+        <circle cx="48" cy="14" r="3.2" fill="#0284c7" />
+      </g>
+
+      <!-- Dynamic Orbiting Crescent Swoosh -->
+      <path d="M 44 172 
+               C 36 216, 110 230, 162 218 
+               C 206 206, 230 170, 234 146 
+               C 228 168, 196 198, 150 206 
+               C 96 216, 50 198, 44 172 Z" 
+            fill="url(#arcGrad_light_compact)" 
+            opacity="0.95" />
+    </g>
+  
+        </g>
+        <line x1="188" y1="20" x2="188" y2="155" stroke="rgba(0,0,0,0.15)" stroke-width="2.2" stroke-linecap="round" />
+        <g transform="translate(210, 0)">
+          <text x="0" y="86" 
+                font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif" 
+                font-weight="900" 
+                font-size="78" 
+                fill="#0f172a" 
+                letter-spacing="0.01em">FPDAF</text>
+          <!-- Swoosh on A -->
+          <path d="M 198 74 C 218 56, 246 48, 275 48 C 248 50, 222 60, 201 76 Z" 
+                fill="url(#arcGrad_light_compact)" 
+                 />
+          
+          <text x="2" y="122" 
+                font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', sans-serif" 
+                font-size="16" 
+                font-weight="700" 
+                fill="#0f172a" 
+                letter-spacing="0.03em">
+            Clinical AI Suite &bull; CDSS
+          </text>
+          <text x="2" y="148" 
+                font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', sans-serif" 
+                font-size="13" 
+                font-weight="600" 
+                fill="#0d9488" 
+                letter-spacing="0.04em">
+            Federated Sepsis Intelligence
+          </text>
+        </g>
+      </svg>
+    

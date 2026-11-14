@@ -11,6 +11,7 @@ import {
   Code2, 
   Sparkles
 } from 'lucide-react';
+import { FPDAFLogo } from '../components/FPDAFLogo';
 
 interface LoginProps {
   onLoginSuccess: (role: 'Doctor' | 'Admin', name: string) => void;
@@ -87,19 +88,16 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         {/* Left Side: System Narrative & Architecture Stats */}
         <div className="flex-1 p-8 sm:p-10 pt-16 flex flex-col justify-between border-b md:border-b-0 md:border-r border-white/[0.06] bg-gradient-to-b from-white/[0.02] to-transparent">
           <div>
+            {/* Redesigned Official Logo matching Apple Dashboard Theme */}
+            <div className="mb-6">
+              <FPDAFLogo variant="full" className="w-full max-w-[440px] filter drop-shadow-[0_8px_28px_rgba(45,212,191,0.22)]" />
+            </div>
+
             {/* Hospital & Lab Badge */}
-            <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/20 mb-6">
+            <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/20 mb-5">
               <Hospital className="h-3.5 w-3.5 text-teal-400" />
               <span className="text-teal-300 text-[11px] font-semibold tracking-wide uppercase">Amrita School of Computing &bull; Medical ICU</span>
             </div>
-
-            {/* Title */}
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight mb-3">
-              Federated Sepsis <br />
-              <span className="bg-gradient-to-r from-teal-400 via-cyan-300 to-blue-400 bg-clip-text text-transparent">
-                Clinical Intelligence
-              </span>
-            </h1>
 
             <p className="text-xs sm:text-sm text-slate-300/80 leading-relaxed max-w-md mb-8">
               Prospective 6-hour early sepsis onset forecasting with BiLSTM temporal attention. Autonomous per-hospital edge personalization with AD-CUSUM drift telemetry.

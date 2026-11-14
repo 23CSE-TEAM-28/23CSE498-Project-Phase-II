@@ -8,12 +8,12 @@ import {
   Volume2, 
   VolumeX, 
   Clock, 
-  Hospital,
   Stethoscope,
   Code2,
   Sparkles,
   ShieldAlert
 } from 'lucide-react';
+import { FPDAFLogo } from './FPDAFLogo';
 
 interface HeaderProps {
   userRole: 'Doctor' | 'Admin' | 'Full Access';
@@ -84,16 +84,16 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Left: Hospital Brand & Real-time Live Status */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2.5">
-          <div className="p-1.5 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20 shadow-xs">
-            <Hospital className="h-4 w-4" />
+          <div className="h-8 w-8 p-1 rounded-xl bg-teal-500/10 border border-teal-500/20 shadow-xs flex items-center justify-center">
+            <FPDAFLogo variant="icon" className="w-full h-full" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-slate-900 dark:text-white text-xs md:text-sm tracking-tight">
-                MEDICAL CENTER
+                FPDAF CDSS
               </span>
-              <span className="hidden sm:inline text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-white/[0.06] border border-black/[0.04] dark:border-white/[0.06]">
-                ICU Station 01
+              <span className="hidden sm:inline text-[9px] font-bold text-teal-600 dark:text-teal-400 uppercase px-1.5 py-0.5 rounded-md bg-teal-500/10 border border-teal-500/20">
+                Station 01
               </span>
             </div>
           </div>
