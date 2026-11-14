@@ -370,7 +370,7 @@ Figure \ref{fig:visual_results} presents experimental ROC and Precision-Recall c
         \midrule
         \textbf{Source Code Repository} & 100\% completed codebase with PyTorch FL engine, FastAPI backend, React CDSS, and unit tests (\texttt{23CSE498-Project-Phase-II}) & \textbf{Completed} \\
         \addlinespace[2pt]
-        \textbf{Conference Publication} & Accepted \& Camera-Ready for CSCT 2026 (Springer LNCS, Paper ID: 1072, PTP ID: Paper\_4324) & \textbf{Completed} \\
+        \textbf{Conference Publication} & Accepted \& Camera-Ready for CSCT 2026 (NIT Sikkim / Springer SIST, Paper ID: 1072, Accepted Nov 9, 2026) & \textbf{Completed} \\
         \addlinespace[2pt]
         \textbf{Individual Certifications} & 5 completed 12--20 hr MOOC certifications: S. A. Sakhi (Coursera DL), H. Reddy (FastAPI), K. S. Lakkaraju (XAI), Haswitha K. (FL), V. Chakravarthy (Time Series) & \textbf{Completed} \\
         \addlinespace[2pt]
@@ -385,6 +385,38 @@ Figure \ref{fig:visual_results} presents experimental ROC and Precision-Recall c
     \end{tabular}
     \caption{Summary of Completed Project Deliverables and Technical Enrichment Activities (Group G028).}
     \label{tab:deliverables}
+\end{table}
+
+\subsection{Scholarly Publication Dissemination: Conference Acceptance \& Full Journal Delineation}
+A primary research milestone achieved during Phase II is academic peer-reviewed publication. A foundational research paper titled \textit{``A Drift-Aware Explainable Federated Learning Framework for Personalized ICU Sepsis Prediction''}~\cite{sakhi2026drift} was peer-reviewed and formally accepted at the \textbf{5th International Conference on Soft Computing and Computer Communication Technology (CSCT 2026)}, organized by the \textbf{National Institute of Technology (NIT), Sikkim, India} (Paper ID: \texttt{1072}, Acceptance Notification: November 9, 2026). The accepted conference proceedings will be published in the SCOPUS-indexed Springer Book Series, \textit{Smart Innovation, Systems and Technologies} (SIST).
+
+To uphold strict academic non-duplication and scholarly publication ethics, a rigorous boundary is maintained between the accepted conference publication and the comprehensive extended journal manuscript finalized for submission to \textbf{IEEE Journal of Biomedical and Health Informatics (J-BHI)} / \textbf{Elsevier Artificial Intelligence in Medicine (AIIM)} (Table~\ref{tab:conf_vs_journal}):
+\begin{itemize}[noitemsep, topsep=1pt]
+    \item \textbf{Accepted Conference Paper Scope ($\sim 10$--$12$ Pages):} Focuses on the core algorithmic and mathematical proof-of-concept, establishing the theoretical derivation of BiLSTM with Multi-Head Self-Attention, the AD-CUSUM drift formula ($D_{\text{JSD}}$ divergence with gradient variance damping), and a 3-client simulated Non-IID PhysioNet 2019 benchmark. Due to strict conference page constraints, full software interfaces, bedside workflows, and decision utility analyses were necessarily omitted.
+    \item \textbf{Full Extended Journal Paper Scope (100\% Full System, $\sim 15$--$20$ Pages):} Encapsulates the entire translational healthcare AI ecosystem: (i) an interactive, point-of-care Clinical Decision Support System (CDSS) with an asynchronous FastAPI telemetry server, an SQLite relational clinical database ($N = 50$ streaming bedside patient monitors), and a dual-view clinician/administrator React/TypeScript dashboard with Surviving Sepsis Campaign Hour-1 bundle execution; (ii) an integrated three-pillar explainability pipeline featuring token-level 24-hour temporal heatmaps, global Integrated Gradients biomarker attribution across all 40 variables, and physiologically constrained counterfactual ``What-If'' clinical scenario simulations; (iii) formal Decision Curve Analysis (DCA) quantifying standardized net clinical benefit across operational risk thresholds $\tau \in [0.05, 0.40]$; (iv) exhaustive cohort auditing across all 40,327 PhysioNet admissions ($1,551,697$ hourly records, $684,701$ sliding windows) and architectural ingestion pipelines for prospective multi-cohort extensions (MIMIC-IV v2.2 and eICU-CRD); and (v) complete data governance ensuring zero raw patient data transmission under HIPAA, GDPR, and Indian DPDPA 2023 mandates.
+\end{itemize}
+
+\begin{table}[!htbp]
+    \centering
+    \scriptsize
+    \renewcommand{\arraystretch}{1.10}
+    \begin{tabular}{l p{5.0cm} p{5.5cm}}
+        \toprule
+        \textbf{System Capability / Dimension} & \textbf{Accepted Conference Paper (CSCT 2026)} & \textbf{Full Extended Journal Paper (Target Q1/Q2)} \\
+        \midrule
+        \textbf{Target Scope \& Length} & Algorithmic proof-of-concept ($\sim 10$--$12$ pages) & \textbf{100\% Full End-to-End System} ($\sim 15$--$20$ double-col pp) \\
+        \textbf{Neural Architecture} & BiLSTM + Multi-Head Self-Attention backbone & BiLSTM + Multi-Head Self-Attention backbone \\
+        \textbf{Drift Tracking Engine} & AD-CUSUM ($D_{\text{JSD}}$ divergence + gradient variance) & AD-CUSUM ($D_{\text{JSD}}$ divergence + gradient variance) \\
+        \textbf{Edge Personalization} & DDP-ERP anchoring + CSSP edge freezing & DDP-ERP anchoring + CSSP edge freezing \\
+        \textbf{CDSS Web Workstation} & \textbf{Omitted} (strict conference page limit) & \textbf{Included:} Interactive Dual-View React UI + FastAPI Backend \\
+        \textbf{Explainability (XAI)} & Basic 24h temporal attention profile & \textbf{Included:} 3-Pillar XAI + Constrained Counterfactuals \\
+        \textbf{Clinical Utility Analysis} & Traditional ROC and PR curves & \textbf{Included:} Decision Curve Analysis (DCA) Net Benefit \\
+        \textbf{Multi-Center Cohort} & 3-client simulated Non-IID PhysioNet partition & \textbf{Included:} Full 40,327 cohort ($1.55\text{M}$ records) + MIMIC/eICU roadmap \\
+        \textbf{Publication Venue} & \textbf{Springer SIST} (NIT Sikkim, Scopus, ID: 1072) & \textbf{IEEE J-BHI / Elsevier AIIM / JMIR} (Full system) \\
+        \bottomrule
+    \end{tabular}
+    \caption{Comparative Scope and Contribution Delineation: Accepted Conference Paper vs. Full Journal System.}
+    \label{tab:conf_vs_journal}
 \end{table}
 
 % --- REFERENCES ---

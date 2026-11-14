@@ -155,10 +155,9 @@ Evaluated across **40,327 ICU patient encounters** from the PhysioNet 2019 Compu
 │   ├── main.tex / main.pdf     # Primary LaTeX manuscript draft
 │   └── ref.bib                 # 45 curated Q1 clinical AI citations
 │
-├── journal paper/              # 3 Q1 Journal Submission Formats
-│   ├── IEEE/                   # IEEE Journal of Biomedical & Health Informatics (J-BHI)
-│   ├── Elsevier/               # Computer Methods and Programs in Biomedicine (CMPB)
-│   └── Springer_Nature/        # Scientific Reports
+├── Research Papers/            # Scholarly Publication Packages
+│   ├── conf paper/             # CSCT 2026 Accepted Camera-Ready Paper & Proof (Springer SIST)
+│   └── journal paper/          # 4 Finalized Q1/Q2 Journal Packages (IEEE, Elsevier, JMIR, Springer Nature)
 │
 ├── Review 3/ & Review 4/       # Capstone Defense Deliverables
 │   ├── presentation.pdf / .tex # LaTeX Madrid Beamer presentation slides
