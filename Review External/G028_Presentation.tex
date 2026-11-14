@@ -97,9 +97,9 @@
     \includegraphics[width=0.82\textwidth, height=0.50\textheight, keepaspectratio]{images/guide_approval_ss.png}
     \vspace{0.05cm}
 
-    \begin{block}{\footnotesize Formal Review \& Defense Approval Status}
+    \begin{block}{\footnotesize Project Defense Authorization}
         \footnotesize
-        $\checkmark$ Audited, verified, and officially approved by Project Guide \textbf{Dr. G. R. Ramya} and Co-Guide \textbf{Dr. S. Vandhana} for Final External Defense.
+        Officially reviewed, evaluated, and approved by Project Guide \textbf{Dr. G. R. Ramya} and Co-Guide \textbf{Dr. S. Vandhana} for Final External Defense.
     \end{block}
 \end{frame}
 
@@ -163,7 +163,7 @@
         \scriptsize
         \begin{itemize}
             \item \textbf{Accepted Conference Paper (CSCT 2026, Springer SIST):} Preliminary proof-of-concept covering split-weight attention and basic AD-CUSUM drift detection.
-            \item \textbf{Full Phase-II System Scope (100\% Complete):} Extensive $>70\%$ non-overlapping expansion incorporating full bedside CDSS workstation, counterfactual recourse, DCA clinical utility, edge profiling ($0.67\text{ ms}$), and $102,994$-window cluster bootstrap validation.
+            \item \textbf{Full Phase-II System Scope (Comprehensive Expansion):} Extensive non-overlapping architectural expansion incorporating full bedside CDSS workstation, counterfactual recourse, DCA clinical utility, edge profiling ($0.67\text{ ms}$), and $102,994$-window cluster bootstrap validation.
         \end{itemize}
     \end{block}
 \end{frame}
@@ -289,25 +289,25 @@
     \begin{table}
         \centering
         \scriptsize
-        \renewcommand{\arraystretch}{0.92}
-        \begin{tabular}{p{3.5cm} p{7.0cm} c}
+        \renewcommand{\arraystretch}{0.96}
+        \begin{tabular}{p{3.4cm} p{7.0cm} c}
             \toprule
-            \textbf{Module / Stage} & \textbf{Implemented Functionality} & \textbf{Status} \\
+            \textbf{Pipeline Module} & \textbf{Core Engineering \& Algorithmic Functionality} & \textbf{Deployment State} \\
             \midrule
-            \textbf{Module 1: Data Pipeline} & PhysioNet 2019 ingestion, 70/15/15 patient split ($40,327$ pts), causal backward-only forward fill, robust IQR scaling & 100\% (Integrated) \\
-            \textbf{Module 2: Federated Engine} & Split-weight FL orchestrator, BiLSTM attention backbone, FedAvg, FedProx, Ditto baselines, Apple Silicon MPS/CUDA & 100\% (Integrated) \\
-            \textbf{Module 3: AD-CUSUM \& CSSP} & Streaming JSD drift detector, gradient variance damping, dynamic slack $\kappa_r$, CSSP selective freeze, DDP-ERP regularization & 100\% (Integrated) \\
-            \textbf{Module 4: Bedside CDSS} & Asynchronous FastAPI REST backend, SQLite clinical warehouse ($50$ streaming beds), React-Vite bedside CDSS, Hour-1 bundles & 100\% (Functional) \\
+            \textbf{Module 1: Telemetry Pipeline} & Ingestion ($40,327$ patients), 70/15/15 patient-disjoint split, causal backward fill (0 lookahead), robust IQR normalizer & Production Pipeline \\
+            \textbf{Module 2: Federated Engine} & Split-weight FL orchestrator, BiLSTM attention backbone, FedAvg, FedProx, Ditto baselines, Apple Silicon MPS/CUDA & Distributed Consensus \\
+            \textbf{Module 3: AD-CUSUM \& CSSP} & Streaming JSD drift detector, gradient variance damping, dynamic slack $\kappa_r$, CSSP selective freeze, DDP-ERP regularization & Autonomous Drift Guard \\
+            \textbf{Module 4: Bedside CDSS} & Asynchronous FastAPI REST backend, SQLite clinical warehouse ($50$ streaming beds), React-Vite bedside CDSS, Hour-1 bundles & Live Bedside Workstation \\
             \bottomrule
         \end{tabular}
     \end{table}
-    \vspace{-0.08cm}
+    \vspace{-0.06cm}
 
-    \begin{block}{Implementation Environment \& Repository}
+    \begin{block}{Implementation Environment \& Source Verification}
         \scriptsize
         \begin{itemize}
             \item \textbf{Software / Compute Environment:} Python 3.11+, PyTorch 2.4.0 (MPS/CUDA), FastAPI 0.115, SQLite 3.43, React 18.3, TypeScript, Vite 5.4, TailwindCSS, Docker.
-            \item \textbf{Source Repository \& Verification:} \url{https://github.com/aksharsakhi/23CSE498-Project-Phase-II} (Commit \texttt{27abde2}). 22/22 unit tests passing; 12,990 verified LOC.
+            \item \textbf{Source Repository \& Test Verification:} \url{https://github.com/aksharsakhi/23CSE498-Project-Phase-II} (Commit \texttt{05fbfe8}). 22/22 automated unit tests passing; 12,990 verified LOC.
         \end{itemize}
     \end{block}
 \end{frame}
@@ -320,21 +320,33 @@
     \framesubtitle{Dual-Phase Attention LSTM \& Split-Weight Federated Engine}
     \begin{columns}[T]
         \column{0.52\textwidth}
-        \begin{block}{Modules 1 \& 2: BiLSTM Backbone \& Federated Server}
+        \begin{block}{\footnotesize Core Module 1: Attention-BiLSTM}
             \scriptsize
             \begin{itemize}
-                \item \textbf{Module 1 (BiLSTM Attention):} Input $X \in \mathbb{R}^{B \times 24 \times 40}$; 2-layer BiLSTM ($h=64$) with 4-head self-attention pooling; outputs context $z \in \mathbb{R}^{128}$ and sepsis risk score $\hat{y} \in [0, 1]$.
-                \item \textbf{Module 1 Implementation:} Realized in \texttt{models/bilstm\_attention.py}; lr $10^{-3}$, Adam optimizer, dropout $0.20$, 6h early warning lead time.
-                \item \textbf{Module 2 (Split FL Server):} Aggregates client backbone weights $\theta_{\text{shared}}^{(k)}$ into consensus $\Theta_{\text{global}}$; decouples private hospital classification heads $\phi_k$.
-                \item \textbf{Module 2 Interface:} Realized in \texttt{federated/server.py}; zero-leakage parameter serialization across non-IID hospital tiers.
+                \item \textbf{Inputs \& Outputs:} $X \in \mathbb{R}^{B \times 24 \times 40}$ ($24$h vitals/labs); outputs risk $\hat{y} \in [0, 1]$, context $z \in \mathbb{R}^{128}$.
+                \item \textbf{Architecture:} \texttt{models/bilstm\_attention.py}; 2-layer BiLSTM ($h=64$) + 4-head attention ($c = \sum \alpha_t h_t$).
+                \item \textbf{Parameters:} Hidden dim $64$, lr $10^{-3}$, Adam, dropout $0.20$, 6h lead time.
+            \end{itemize}
+        \end{block}
+        \vspace{-0.15cm}
+
+        \begin{block}{\footnotesize Core Module 2: Split-Weight FL Server}
+            \scriptsize
+            \begin{itemize}
+                \item \textbf{Inputs \& Outputs:} Aggregates client weights $\theta_{\text{shared}}^{(k)}$; broadcasts consensus $\Theta_{\text{global}}$.
+                \item \textbf{Integration Interface:} \texttt{federated/server.py}; decouples private heads $\phi_k$ from shared layers.
             \end{itemize}
         \end{block}
 
-        \column{0.44\textwidth}
+        \column{0.45\textwidth}
         \centering
-        \vspace{0.05cm}
-        \includegraphics[width=\textwidth, height=0.48\textheight, keepaspectratio]{images/Dataflow2.png} \\[0.05cm]
-        {\tiny \textbf{Snapshot:} Split-Weight Parameter Decoupling \& Aggregation Pipeline}
+        \vspace{0.02cm}
+        \includegraphics[width=\textwidth, height=0.28\textheight, keepaspectratio]{images/ArcDigram.jpeg} \\[0.02cm]
+        {\tiny \textbf{Snapshot A:} Decoupled FL Architecture \& Parameter Routing}
+        \vspace{0.08cm}
+
+        \includegraphics[width=\textwidth, height=0.28\textheight, keepaspectratio]{images/temporal_attention_24h.png} \\[0.02cm]
+        {\tiny \textbf{Snapshot B:} 24h Multi-Head Temporal Attention Weight Dynamics}
     \end{columns}
 \end{frame}
 
@@ -343,21 +355,34 @@
     \framesubtitle{AD-CUSUM Drift Telemetry \& Edge Personalization Protocol (CSSP)}
     \begin{columns}[T]
         \column{0.52\textwidth}
-        \begin{block}{Modules 3 \& 4: AD-CUSUM Detector \& CSSP Protocol}
+        \begin{block}{\footnotesize Core Module 3: AD-CUSUM Drift Detector}
             \scriptsize
             \begin{itemize}
-                \item \textbf{Module 3 (AD-CUSUM Detector):} Realized in \texttt{federated/drift\_detector.py}; tracks streaming prediction entropy ($D_{\text{JSD}}$) dampened by gradient variance $w_{\text{grad}}$.
-                \item \textbf{Module 3 Parameters:} Threshold $H = 3.0$, damping factor $\gamma = 0.50$, slack window $W = 5$; operates with $0$ ground-truth labels.
-                \item \textbf{Module 4 (CSSP Edge Protocol):} Realized in \texttt{federated/client.py}; triggers on $S_r \ge 3.0$ to freeze uplink ($\nabla_{\theta_{\text{shared}}} = 0$), protecting consensus weights.
-                \item \textbf{Module 4 Optimization:} Switches edge client to localized DDP-ERP head fine-tuning, cutting communication bandwidth by $38.0\%$.
+                \item \textbf{Inputs \& Outputs:} Predictions $P_t$ \& loss residuals; outputs cumulative statistic $S_r$ \& drift alert.
+                \item \textbf{Detection Logic:} \texttt{federated/drift\_detector.py}; online JSD dampened by gradient variance $w_{\text{grad}}$.
+                \item \textbf{Key Parameters:} Threshold $H = 3.0$, damping $\gamma = 0.50$, JSD weight $\beta = 1.0$, slack $W = 5$.
+            \end{itemize}
+        \end{block}
+        \vspace{-0.15cm}
+
+        \begin{block}{\footnotesize Core Module 4: Client Personalization (CSSP)}
+            \scriptsize
+            \begin{itemize}
+                \item \textbf{Inputs \& Outputs:} Activated on drift ($S_r \ge 3.0$); halts uplink sharing while updating locally.
+                \item \textbf{Integration Interface:} \texttt{federated/client.py}; localized DDP-ERP head tuning ($\lambda = 0.10, \gamma = 0.01$).
+                \item \textbf{Network Efficiency:} Halts consensus poisoning and slashes uplink bandwidth by $38.0\%$.
             \end{itemize}
         \end{block}
 
-        \column{0.44\textwidth}
+        \column{0.45\textwidth}
         \centering
-        \vspace{0.05cm}
-        \includegraphics[width=\textwidth, height=0.48\textheight, keepaspectratio]{images/ad_cusum_drift_control_chart.png} \\[0.05cm]
-        {\tiny \textbf{Snapshot:} AD-CUSUM Multi-Factor Drift Control Chart ($H = 3.0$)}
+        \vspace{0.02cm}
+        \includegraphics[width=\textwidth, height=0.28\textheight, keepaspectratio]{images/ad_cusum_drift_control_chart.png} \\[0.02cm]
+        {\tiny \textbf{Snapshot A:} AD-CUSUM Multi-Factor Drift Control Chart ($H = 3.0$)}
+        \vspace{0.08cm}
+
+        \includegraphics[width=\textwidth, height=0.28\textheight, keepaspectratio]{images/communication_wire_payload.png} \\[0.02cm]
+        {\tiny \textbf{Snapshot B:} Communication Payload \& Bandwidth Reduction ($38.0\%$ Saved)}
     \end{columns}
 \end{frame}
 
@@ -574,7 +599,7 @@
             \begin{itemize}
                 \item \textbf{Lead Target:} \textit{JMIR AI} (ISSN: 2817-1705; JMIR Publications, Toronto; Editor-in-Chief: Prof. Khaled El Emam). Complete manuscript, cover letter, and compliance checklist finalized.
                 \item \textbf{Alternative Target:} \textit{IEEE JBHI} [Q1, IF: 6.7].
-                \item \textbf{Full-System Journal Scope ($>70\%$ Expansion):}
+                \item \textbf{Full-System Scope (Comprehensive Expansion):}
                 \begin{itemize}
                     \scriptsize
                     \item Full bedside CDSS workstation (FastAPI + React).
@@ -613,46 +638,30 @@
     \end{table}
     \vspace{-0.08cm}
 
-    \begin{block}{Project Artifacts \& Verification Proof}
+    \begin{block}{Project Engineering \& Research Deliverables}
         \scriptsize
-        $\checkmark$ \textbf{12,990 Verified Production Codebase LOC} with 22/22 passing automated unit tests. \\
-        $\checkmark$ \textbf{Accepted Conference Paper (CSCT 2026)} \& Finalized \textbf{JMIR AI Journal Submission Package}. \\
-        $\checkmark$ \textbf{Production Bedside CDSS Prototype} with sub-millisecond edge execution ($0.67\text{ ms}$).
+        \begin{itemize}
+            \item \textbf{Production Codebase:} $12,990$ verified lines of source code with 22/22 passing automated test suites.
+            \item \textbf{Research Publications:} Accepted Conference Paper (CSCT 2026, Springer SIST) \& Finalized JMIR AI submission package.
+            \item \textbf{Bedside CDSS Workstation:} Sub-millisecond inference ($0.67\text{ ms}$), SQLite multi-patient warehouse, and React interface.
+        \end{itemize}
     \end{block}
 \end{frame}
 
 % =========================================================================
-% REFERENCES & THANK YOU
+% REFERENCES (Official Template Automatic BibTeX allowframebreaks Format)
 % =========================================================================
 \section{References}
-
-\begin{frame}{References I}
-    \framesubtitle{Foundational Clinical Benchmarks, Federated Learning \& Drift Telemetry}
-    \footnotesize
-    \begin{itemize}
-        \item[{[1]}] Singer M, Deutschman CS, Seymour CW, et al. The Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3). \textit{JAMA}. 2016;315(8):801--810.
-        \item[{[2]}] Evans L, Rhodes A, Alhazzani W, et al. Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock 2021. \textit{Intensive Care Med}. 2021;47(11):1181--1247.
-        \item[{[3]}] Reyna MA, Josef CS, Jeter R, et al. Early Prediction of Sepsis From Clinical Data: The PhysioNet/Computing in Cardiology Challenge 2019. \textit{Crit Care Med}. 2020;48(2):210--217.
-        \item[{[4]}] McMahan B, Moore E, Ramage D, Hampson S, y Arcas BA. Communication-Efficient Learning of Deep Networks from Decentralized Data. In: \textit{Proc AISTATS}; 2017:1273--1282.
-        \item[{[5]}] Li T, Sahu AK, Zaheer M, Sanjabi M, Talwalkar A, Smith V. Federated Optimization in Heterogeneous Networks. In: \textit{Proc MLSys}; 2020:429--450.
-        \item[{[6]}] Sakhi SA, Ramya GR, Vandhana S, et al. A Drift-Aware Explainable Federated Learning Framework for Personalized ICU Sepsis Prediction. In: \textit{Proc CSCT 2026}; Springer SIST; 2026. [Paper ID 1072, Accepted Nov 9, 2026].
-    \end{itemize}
+\nocite{*}
+\begin{frame}[allowframebreaks]{References}
+    \scriptsize
+    \bibliographystyle{ieeetr}
+    \bibliography{ref}
 \end{frame}
 
-\begin{frame}{References II}
-    \framesubtitle{Personalized Federated Learning, Clinical Explainability \& Non-Stationary Shift}
-    \footnotesize
-    \begin{itemize}
-        \item[{[7]}] Li T, Hu S, Beirami A, Smith V. Ditto: Fair and Robust Federated Learning Through Personalization. In: \textit{Proc ICML}; 2021:6357--6368.
-        \item[{[8]}] Sundararajan M, Taly A, Yan Q. Axiomatic Attribution for Deep Networks. In: \textit{Proc ICML}; 2017:3319--3328.
-        \item[{[9]}] Page ES. Continuous Inspection Schemes. \textit{Biometrika}. 1954;41(1/2):100--115.
-        \item[{[10]}] Shashikumar SP, Josef C, Sharma A, Nemati S. DeepAISE: A deep learning sepsis prediction algorithm for heterogeneous intensive care unit populations. \textit{Physiol Meas}. 2021;42(9):095006.
-        \item[{[11]}] Desautels T, Calvert J, Hoffman J, et al. Prediction of Sepsis in the Intensive Care Unit With Minimal Specifications for Background Information. \textit{JMIR Med Inform}. 2016;4(3):e28.
-        \item[{[12]}] Wachter S, Mittelstadt B, Russell C. Counterfactual explanations without opening the black box: Automated decisions and the GDPR. \textit{Harv JL Tech}. 2018;31:841.
-    \end{itemize}
-\end{frame}
-
-% --- THANK YOU SLIDE ---
+% =========================================================================
+% THANK YOU SLIDE
+% =========================================================================
 \begin{frame}
     \centering
     \vspace{0.8cm}
