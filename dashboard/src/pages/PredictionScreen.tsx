@@ -14,7 +14,11 @@ import {
   Send, 
   Cpu, 
   Radio,
-  RefreshCw
+  RefreshCw,
+  ArrowLeft,
+  ArrowRight,
+  FileText,
+  Users
 } from 'lucide-react';
 import { 
   BarChart, 
@@ -34,7 +38,7 @@ interface PredictionScreenProps {
   setActiveTab: (tab: string) => void;
 }
 
-export const PredictionScreen: React.FC<PredictionScreenProps> = ({ patient }) => {
+export const PredictionScreen: React.FC<PredictionScreenProps> = ({ patient, setActiveTab }) => {
   const [activeSubTab, setActiveSubTab] = useState<'simulator' | 'bundle'>('simulator');
   const [showReportModal, setShowReportModal] = useState(false);
   const [orderDispatched, setOrderDispatched] = useState(false);
@@ -127,34 +131,49 @@ export const PredictionScreen: React.FC<PredictionScreenProps> = ({ patient }) =
 
   return (
     <div className="p-6 space-y-5 overflow-y-auto max-h-[calc(100vh-3.5rem)] font-sans">
-      {/* 1. Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-2 border-b border-slate-200 dark:border-[#1a2744]">
-        <div>
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <h2 className="text-xl font-bold text-slate-800 dark:text-white tracking-tight">
-              Bedside Sepsis Diagnostic Predictor & Neural Inference
-            </h2>
-            <span className="text-[10px] font-extrabold uppercase bg-purple-500/15 text-purple-400 border border-purple-500/30 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-              <Cpu className="h-3 w-3" />
-              PyTorch 2.14.0 Engine
-            </span>
-            <span className="text-[10px] font-bold uppercase bg-teal-500/15 text-teal-400 border border-teal-500/30 px-2 py-0.5 rounded">
-              FPDAF-v2 DDP-ERP
-            </span>
-          </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Continuous 6-hour sepsis onset forecasting and verified bedside telemetry acquisition stream.
-          </p>
-        </div>
-        
+      {/* 0. Top Navigation Strip (Back to CDSS, Go to Records, All Cohorts) */}
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-black/[0.06] dark:border-white/[0.08]">
         <div className="flex items-center gap-2">
-          <div className="flex bg-slate-100 dark:bg-[#0a1323] p-1 rounded-xl border border-slate-200 dark:border-[#1a2744] text-xs font-semibold">
+          {/* Back Button */}
+          <button
+            onClick={() => setActiveTab('dashboard')}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] hover:bg-black/[0.08] dark:hover:bg-white/[0.1] text-xs font-semibold text-slate-700 dark:text-slate-200 border border-black/[0.05] dark:border-white/[0.08] transition-all hover:-translate-x-0.5 shadow-xs cursor-pointer"
+            title="Return to ICU Central Telemetry Dashboard"
+          >
+            <ArrowLeft className="h-4 w-4 text-teal-600 dark:text-teal-400" />
+            <span>Back to Dashboard</span>
+          </button>
+
+          {/* Go to Records Page */}
+          <button
+            onClick={() => setActiveTab('patient-details')}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-teal-500/10 hover:bg-teal-500/20 text-xs font-bold text-teal-700 dark:text-teal-300 border border-teal-500/25 transition-all shadow-xs cursor-pointer"
+            title={`View full electronic health record, vital trend lines, and clinical notes for ${patient.id}`}
+          >
+            <FileText className="h-4 w-4 text-teal-600 dark:text-teal-400" />
+            <span>Go to Records Page</span>
+          </button>
+
+          {/* All Patient Cohorts */}
+          <button
+            onClick={() => setActiveTab('patients')}
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] text-xs font-semibold text-slate-600 dark:text-slate-300 border border-black/[0.04] dark:border-white/[0.06] transition-all cursor-pointer"
+            title="View 70-bed patient cohort registry"
+          >
+            <Users className="h-4 w-4 text-slate-400" />
+            <span>Patient Registry</span>
+          </button>
+        </div>
+
+        {/* Action Controls: Subtabs & Summary */}
+        <div className="flex items-center gap-2">
+          <div className="flex bg-slate-100 dark:bg-black/30 p-1 rounded-xl border border-black/[0.05] dark:border-white/[0.08] text-xs font-semibold">
             <button
               onClick={() => setActiveSubTab('simulator')}
               className={`px-3 py-1.5 rounded-lg transition-all ${
                 activeSubTab === 'simulator' 
                   ? 'bg-teal-600 text-white shadow-xs' 
-                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-200'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               Diagnostic Inferences
@@ -164,7 +183,7 @@ export const PredictionScreen: React.FC<PredictionScreenProps> = ({ patient }) =
               className={`px-3 py-1.5 rounded-lg transition-all ${
                 activeSubTab === 'bundle' 
                   ? 'bg-teal-600 text-white shadow-xs' 
-                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-200'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               Hour-1 SSC Bundle
@@ -178,6 +197,25 @@ export const PredictionScreen: React.FC<PredictionScreenProps> = ({ patient }) =
             <Printer className="h-3.5 w-3.5 text-teal-400" /> Summary
           </button>
         </div>
+      </div>
+
+      {/* 1. Page Sub-Header */}
+      <div className="pb-1">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <h2 className="text-xl font-bold text-slate-800 dark:text-white tracking-tight">
+            Bedside Sepsis Diagnostic Predictor & Neural Inference
+          </h2>
+          <span className="text-[10px] font-extrabold uppercase bg-purple-500/15 text-purple-400 border border-purple-500/30 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+            <Cpu className="h-3 w-3" />
+            PyTorch 2.14.0 Engine
+          </span>
+          <span className="text-[10px] font-bold uppercase bg-teal-500/15 text-teal-400 border border-teal-500/30 px-2 py-0.5 rounded">
+            FPDAF-v2 DDP-ERP
+          </span>
+        </div>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+          Continuous 6-hour sepsis onset forecasting and verified bedside telemetry acquisition stream.
+        </p>
       </div>
 
       {/* 2. Patient Header Strip */}
@@ -209,14 +247,26 @@ export const PredictionScreen: React.FC<PredictionScreenProps> = ({ patient }) =
           </div>
         </div>
 
-        {/* Live Engine Status Badge */}
-        <div className="flex items-center gap-3 bg-slate-50 dark:bg-[#08101d] px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-mono">
-          <div className="flex items-center gap-1.5 text-emerald-400">
-            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-semibold">{liveResult ? `PyTorch Inferred (${liveResult.inferenceLatencyMs} ms)` : 'PyTorch Initializing'}</span>
+        {/* Live Engine Status Badge & Direct Records Button */}
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <button
+            onClick={() => setActiveTab('patient-details')}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
+            title={`Open ${patient.id} Electronic Health Record`}
+          >
+            <FileText className="h-3.5 w-3.5" />
+            <span>Open {patient.id} Records</span>
+            <ArrowRight className="h-3 w-3" />
+          </button>
+
+          <div className="flex items-center gap-3 bg-slate-50 dark:bg-[#08101d] px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-mono">
+            <div className="flex items-center gap-1.5 text-emerald-400">
+              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="font-semibold">{liveResult ? `PyTorch Inferred (${liveResult.inferenceLatencyMs} ms)` : 'PyTorch Initializing'}</span>
+            </div>
+            <span className="text-slate-500 hidden sm:inline">|</span>
+            <span className="text-slate-500 dark:text-slate-400 hidden sm:inline">24h Telemetry</span>
           </div>
-          <span className="text-slate-500">|</span>
-          <span className="text-slate-500 dark:text-slate-400">Input: 24h Telemetry (40 Signals)</span>
         </div>
       </div>
 

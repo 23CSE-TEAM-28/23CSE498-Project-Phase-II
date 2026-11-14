@@ -173,6 +173,7 @@ function App() {
           {activeTab === 'xai' && (
             <ExplainableAI 
               patient={currentPatient} 
+              setActiveTab={setActiveTab}
             />
           )}
 

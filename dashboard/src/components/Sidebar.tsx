@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Eye, 
-  LineChart, 
-  Network, 
-  BarChart3, 
-  FileText, 
+import {
+  LayoutDashboard,
+  Users,
+  Eye,
+  LineChart,
+  Network,
+  BarChart3,
+  FileText,
   LogOut,
   ChevronLeft,
   ChevronRight,
@@ -74,9 +74,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
   ];
 
   return (
-    <aside className={`bg-white/80 dark:bg-[#0a1324]/85 backdrop-blur-2xl text-slate-700 dark:text-slate-300 flex flex-col min-h-screen border-r border-black/[0.06] dark:border-white/[0.08] shrink-0 transition-all duration-300 select-none ${
-      isCollapsed ? 'w-16' : 'w-64'
-    }`}>
+    <aside className={`bg-white/80 dark:bg-[#0a1324]/85 backdrop-blur-2xl text-slate-700 dark:text-slate-300 flex flex-col min-h-screen border-r border-black/[0.06] dark:border-white/[0.08] shrink-0 transition-all duration-300 select-none ${isCollapsed ? 'w-16' : 'w-64'
+      }`}>
       {/* Brand Header with macOS Window Chrome */}
       <div className="px-3.5 py-3 border-b border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between">
         <div className="flex items-center gap-2.5 overflow-hidden">
@@ -125,11 +124,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
                     title={isCollapsed ? item.label : undefined}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all duration-150 ${
-                      isActive 
-                        ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300 border border-teal-500/25 font-bold shadow-xs' 
-                        : 'text-slate-600 dark:text-slate-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.05] hover:text-slate-900 dark:hover:text-white border border-transparent'
-                    } ${isCollapsed ? 'justify-center px-0' : ''}`}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all duration-150 ${isActive
+                      ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300 border border-teal-500/25 font-bold shadow-xs'
+                      : 'text-slate-600 dark:text-slate-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.05] hover:text-slate-900 dark:hover:text-white border border-transparent'
+                      } ${isCollapsed ? 'justify-center px-0' : ''}`}
                   >
                     <div className="flex items-center gap-2.5 truncate">
                       <Icon className={`h-4 w-4 shrink-0 transition-transform ${isActive ? 'text-teal-600 dark:text-teal-400 scale-105' : 'text-slate-400'}`} />
@@ -137,11 +135,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
                     </div>
 
                     {!isCollapsed && item.badge && (
-                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md font-mono ${
-                        isActive 
-                          ? 'bg-teal-500/20 text-teal-800 dark:text-teal-200 border border-teal-500/30' 
-                          : 'bg-black/[0.04] dark:bg-white/[0.06] text-slate-500 dark:text-slate-400'
-                      }`}>
+                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md font-mono ${isActive
+                        ? 'bg-teal-500/20 text-teal-800 dark:text-teal-200 border border-teal-500/30'
+                        : 'bg-black/[0.04] dark:bg-white/[0.06] text-slate-500 dark:text-slate-400'
+                        }`}>
                         {item.badge}
                       </span>
                     )}
@@ -169,13 +166,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
             </div>
           </div>
         )}
-        
-        <button 
+
+        <button
           onClick={onLogout}
           title={isCollapsed ? "Sign Out" : undefined}
-          className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-500 dark:text-slate-400 hover:bg-red-500/10 hover:text-red-500 transition-colors ${
-            isCollapsed ? 'justify-center px-0' : ''
-          }`}
+          className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-500 dark:text-slate-400 hover:bg-red-500/10 hover:text-red-500 transition-colors ${isCollapsed ? 'justify-center px-0' : ''
+            }`}
         >
           <LogOut className="h-3.5 w-3.5 shrink-0" />
           {!isCollapsed && <span>Sign Out</span>}

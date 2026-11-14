@@ -24,16 +24,21 @@ import {
   Droplet,
   Wind,
   Thermometer,
-  Heart
+  Heart,
+  ArrowLeft,
+  FileText,
+  Users,
+  Cpu
 } from 'lucide-react';
 import { fetchPatientAttention, getFeatureImportance, fetchPatientVitals } from '../services/api';
 import type { Patient, AttentionData, VitalSignRecord } from '../services/api';
 
 interface ExplainableAIProps {
   patient: Patient;
+  setActiveTab?: (tab: string) => void;
 }
 
-export const ExplainableAI: React.FC<ExplainableAIProps> = ({ patient }) => {
+export const ExplainableAI: React.FC<ExplainableAIProps> = ({ patient, setActiveTab }) => {
   const [attentionData, setAttentionData] = useState<AttentionData[]>([]);
   const [vitalsData, setVitalsData] = useState<VitalSignRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -109,6 +114,49 @@ export const ExplainableAI: React.FC<ExplainableAIProps> = ({ patient }) => {
   return (
     <div className="p-4 md:p-6 space-y-5 overflow-y-auto max-h-[calc(100vh-3.5rem)] font-sans">
       
+      {/* 0. Top Navigation Toolbar */}
+      {setActiveTab && (
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-black/[0.06] dark:border-white/[0.08]">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setActiveTab('dashboard')}
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] hover:bg-black/[0.08] dark:hover:bg-white/[0.1] text-xs font-semibold text-slate-700 dark:text-slate-200 border border-black/[0.05] dark:border-white/[0.08] transition-all hover:-translate-x-0.5 shadow-xs cursor-pointer"
+              title="Return to ICU Central Telemetry Dashboard"
+            >
+              <ArrowLeft className="h-4 w-4 text-teal-600 dark:text-teal-400" />
+              <span>Back to Dashboard</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('patient-details')}
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-teal-500/10 hover:bg-teal-500/20 text-xs font-bold text-teal-700 dark:text-teal-300 border border-teal-500/25 transition-all shadow-xs cursor-pointer"
+              title={`View full electronic health record, vital trend lines, and clinical notes for ${patient.id}`}
+            >
+              <FileText className="h-4 w-4 text-teal-600 dark:text-teal-400" />
+              <span>Go to Records Page</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('prediction')}
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-xs font-bold text-purple-700 dark:text-purple-300 border border-purple-500/25 transition-all shadow-xs cursor-pointer"
+              title="Run live neural inference and early onset simulation"
+            >
+              <Cpu className="h-4 w-4 text-purple-500" />
+              <span>Neural Predictor</span>
+            </button>
+          </div>
+
+          <button
+            onClick={() => setActiveTab('patients')}
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] text-xs font-semibold text-slate-600 dark:text-slate-300 border border-black/[0.04] dark:border-white/[0.06] transition-all cursor-pointer"
+            title="View 70-bed patient cohort registry"
+          >
+            <Users className="h-4 w-4 text-slate-400" />
+            <span>ICU Patient Registry</span>
+          </button>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-200 dark:border-[#1a2942] pb-4">
         <div>
