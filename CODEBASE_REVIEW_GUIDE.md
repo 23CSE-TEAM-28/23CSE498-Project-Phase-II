@@ -119,6 +119,15 @@ When an external reviewer asks you to show the code, use this instant lookup tab
 
 ## 3. End-to-End System Architecture: How the Modules Connect Together
 
+<div align="center">
+  <img src="./docs/system_architecture_diagram.png" alt="FPDAF End-to-End System Architecture & Neural Call Graph" style="max-width: 95%; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 12px 40px rgba(0,0,0,0.5); margin-bottom: 1.5rem;" />
+</div>
+
+> **Figure 1:** End-to-end data journey across the 3 system tiers: React 19 Bedside Workstation (Port 5173), FastAPI Telemetry Service (Port 8000), and the in-memory PyTorch Neural Inference Engine executing `DualPhaseAttentionLSTM`.
+
+<details>
+<summary><b>Click to expand raw Mermaid Source Code</b></summary>
+
 ```mermaid
 flowchart TD
     subgraph Frontend["React 19 Bedside Workstation (Port 5173)"]
@@ -150,6 +159,7 @@ flowchart TD
 
     PREDICTION -->|JSON Response| UI
 ```
+</details>
 
 ### End-to-End Execution Walkthrough (For Review Panel Defense)
 1. **Bedside Interaction (Frontend):**  
