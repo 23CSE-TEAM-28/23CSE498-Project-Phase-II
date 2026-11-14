@@ -111,19 +111,20 @@
 % --- SLIDE 3: SECTION 1A - PROBLEM STATEMENT & CLINICAL CONTEXT ---
 \begin{frame}{1. Problem Definition \& Research Motivation}
     \framesubtitle{Problem Statement \& Clinical Urgency in Critical Care Telemetry}
-    \begin{block}{Problem Statement}
+    \begin{block}{What is Sepsis? \& Global / Indian Healthcare Burden}
         \footnotesize
         \begin{itemize}
-            \item \textbf{Core Research Problem:} Prospective forecasting of acute Sepsis-3 onset $\mathbf{6\text{ hours}}$ in advance from continuous $24\text{h}$ multivariate ICU telemetry ($40$ physiological signals and laboratory biomarkers).
-            \item \textbf{Domain Context \& Clinical Urgency:} Sepsis accounts for $>11$ million annual deaths globally ($1$ in every $5$ deaths). In septic shock, each hour of delayed antimicrobial therapy increases mortality risk by $\approx \mathbf{7.6\% - 8.0\%}$.
+            \item \textbf{Clinical Definition (Sepsis-3):} Life-threatening acute organ dysfunction caused by a dysregulated host immune response to systemic infection.
+            \item \textbf{Mortality Toll (World vs. India):} Sepsis claims $> \mathbf{11\text{ million}}$ lives annually worldwide ($1$ in every $5$ deaths). In \textbf{India alone}, sepsis causes $\approx \mathbf{3\text{ million}}$ deaths every year ($\approx 30\%$ of total ICU mortality).
         \end{itemize}
     \end{block}
+    \vspace{-0.10cm}
 
-    \begin{block}{Clinical Motivation \& High-Stakes Decision Support}
+    \begin{block}{Core Research Problem \& Early Warning Urgency}
         \footnotesize
         \begin{itemize}
-            \item Current ICU scoring criteria (SOFA, qSOFA, MEWS) rely on static thresholding and react only \textit{after} overt physiological organ collapse has occurred.
-            \item A reliable automated early warning system must provide sustained discriminative power, well-calibrated probabilistic risk scores, and interpretable trajectory guidance to enable Surviving Sepsis Campaign (SSC) Hour-1 bundle execution.
+            \item \textbf{Forecasting Objective:} Prospective early detection of acute Sepsis-3 onset $\mathbf{6\text{ hours}}$ in advance from continuous 24h multivariate ICU telemetry ($40$ vitals and laboratory biomarkers).
+            \item \textbf{High-Stakes Decision Window:} In septic shock, each hour of therapeutic delay increases mortality risk by $\approx \mathbf{7.6\% - 8.0\%}$. Standard ICU scores (SOFA, MEWS) react only \textit{after} overt physiological collapse.
         \end{itemize}
     \end{block}
 \end{frame}
@@ -395,7 +396,7 @@
     \begin{table}
         \centering
         \footnotesize
-        \renewcommand{\arraystretch}{1.18}
+        \renewcommand{\arraystretch}{1.06}
         \begin{tabular}{l c c c c c}
             \toprule
             \textbf{Model Architecture} & \textbf{AUROC (95\% CI)$^a$} & \textbf{AUPRC} & \textbf{ECE} & \textbf{Brier} & \textbf{Edge Latency} \\
@@ -409,14 +410,15 @@
             \bottomrule
         \end{tabular}
     \end{table}
-    \vspace{-0.1cm}
-    {\scriptsize $^a$AUROC reported with patient-level cluster bootstrap 95\% CI ($B = 2,000$ resamples across $6,050$ disjoint patients).}
+    \vspace{-0.15cm}
+    {\scriptsize $^a$AUROC measures threshold-independent discrimination (FPDAF raw accuracy reaches $88.72\%$--$96.20\%$). Bootstrap 95\% CI ($B = 2,000$ resamples across $6,050$ patients).}
+    \vspace{-0.08cm}
 
     \begin{block}{Experimental Verification Summary}
         \footnotesize
         \begin{itemize}
-            \item \textbf{Quantitative Findings:} FPDAF achieves top precision-recall ($\text{AUPRC} = \mathbf{0.1043}$) under severe class imbalance ($1:39$), while slashing calibration error to lowest ECE ($\mathbf{0.0902}$) and Brier score ($\mathbf{0.0548}$). Centralized ($0.2935$) and Ditto ($0.3150$) suffer extreme overconfidence.
-            \item \textbf{Verification of Expected Behavior:} Paired cluster bootstrap confirms FPDAF achieves statistical equivalence to Centralized ($P = .176$) while upholding zero raw-data transfer and enabling sub-millisecond edge execution ($0.67\text{ ms}$).
+            \item \textbf{Quantitative Discrimination:} FPDAF achieves top precision-recall ($\text{AUPRC} = \mathbf{0.1043}$) under severe class imbalance ($1:39$), while slashing calibration error to lowest ECE ($\mathbf{0.0902}$) and Brier score ($\mathbf{0.0548}$). Centralized ($0.2935$) and Ditto ($0.3150$) suffer extreme overconfidence.
+            \item \textbf{Statistical Equivalence to Theoretical Ceiling:} Centralized ($0.8058$) is the hypothetical, legally prohibited raw-data pooling ceiling. Paired cluster bootstrap confirms FPDAF ($0.7923$) achieves statistical equivalence ($P = .176$) with zero data transfer and $0.67\text{ ms}$ latency.
         \end{itemize}
     \end{block}
 \end{frame}
