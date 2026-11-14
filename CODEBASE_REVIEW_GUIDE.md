@@ -120,10 +120,15 @@ When an external reviewer asks you to show the code, use this instant lookup tab
 ## 3. End-to-End System Architecture: How the Modules Connect Together
 
 <div align="center">
-  <img src="./docs/system_architecture_diagram.png" alt="FPDAF End-to-End System Architecture & Neural Call Graph" style="max-width: 95%; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 12px 40px rgba(0,0,0,0.5); margin-bottom: 1.5rem;" />
+  <a href="./docs/system_architecture_diagram.svg" target="_blank">
+    <img src="./docs/system_architecture_diagram.png" alt="FPDAF End-to-End System Architecture & Neural Call Graph" style="width: 100%; max-width: 1200px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 16px 48px rgba(0,0,0,0.6); margin-bottom: 0.75rem;" />
+  </a>
+  <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1.5rem;">
+    <b>Figure 1:</b> FPDAF-v2 End-to-End 3-Tier System Architecture & Neural Call Graph. <br/>
+    <a href="./docs/system_architecture_diagram.svg">🔍 Click here to open Scalable Vector SVG</a> &nbsp;|&nbsp; 
+    <a href="./docs/system_architecture_diagram.png">🖼️ High-Resolution 4K PNG</a>
+  </p>
 </div>
-
-> **Figure 1:** End-to-end data journey across the 3 system tiers: React 19 Bedside Workstation (Port 5173), FastAPI Telemetry Service (Port 8000), and the in-memory PyTorch Neural Inference Engine executing `DualPhaseAttentionLSTM`.
 
 <details>
 <summary><b>Click to expand raw Mermaid Source Code</b></summary>

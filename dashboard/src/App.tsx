@@ -18,9 +18,29 @@ import { fetchPatients } from './services/api';
 import type { Patient } from './services/api';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<{ role: 'Doctor' | 'Admin' | 'Full Access'; name: string } | null>(null);
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return localStorage.getItem('fpdaf_auth') === 'true';
+  });
+  const [user, setUser] = useState<{ role: 'Doctor' | 'Admin' | 'Full Access'; name: string } | null>(() => {
+    const saved = localStorage.getItem('fpdaf_user');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  });
+  const [activeTab, setActiveTab] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get('tab');
+      if (tabParam) return tabParam;
+      if (window.location.hash) return window.location.hash.replace('#', '');
+    }
+    return 'dashboard';
+  });
   const [patients, setPatients] = useState<Patient[]>([]);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [theme, setTheme] = useState<'light' | 'dark'>('dark'); // Default to dark mode for medical aesthetics
@@ -52,19 +72,26 @@ function App() {
 
   const handleLoginSuccess = (role: 'Doctor' | 'Admin', name?: string) => {
     const verifiedName = role === 'Doctor' ? 'Dr. Pallavi' : (name && name.includes('Akshar') ? name : 'Akshar');
-    setUser({ role, name: verifiedName });
+    const newUser = { role, name: verifiedName };
+    setUser(newUser);
     setIsAuthenticated(true);
-    // Role-dependent landing tab
-    if (role === 'Admin') {
-      setActiveTab('hospital-network');
-    } else {
-      setActiveTab('dashboard');
+    localStorage.setItem('fpdaf_auth', 'true');
+    localStorage.setItem('fpdaf_user', JSON.stringify(newUser));
+    // Role-dependent landing tab if not preset
+    if (activeTab === 'dashboard') {
+      if (role === 'Admin') {
+        setActiveTab('hospital-network');
+      } else {
+        setActiveTab('dashboard');
+      }
     }
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
     setUser(null);
+    localStorage.removeItem('fpdaf_auth');
+    localStorage.removeItem('fpdaf_user');
     setActiveTab('dashboard');
   };
 
