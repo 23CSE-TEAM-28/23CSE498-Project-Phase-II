@@ -49,8 +49,9 @@ function App() {
     }
   }, [theme]);
 
-  const handleLoginSuccess = (role: 'Doctor' | 'Admin', name: string) => {
-    setUser({ role, name });
+  const handleLoginSuccess = (role: 'Doctor' | 'Admin', name?: string) => {
+    const verifiedName = role === 'Doctor' ? 'Dr. Pallavi' : (name && name.includes('Akshar') ? name : 'Akshar');
+    setUser({ role, name: verifiedName });
     setIsAuthenticated(true);
     // Role-dependent landing tab
     if (role === 'Admin') {
@@ -107,7 +108,12 @@ function App() {
         <Header 
           userRole={user.role}
           setUserRole={(newRole) => {
-            setUser(prev => prev ? { ...prev, role: newRole } : null);
+            const newName = newRole === 'Doctor' 
+              ? 'Dr. Pallavi' 
+              : newRole === 'Admin' 
+              ? 'Akshar' 
+              : 'Akshar & Dr. Pallavi';
+            setUser({ role: newRole, name: newName });
             if (newRole === 'Admin') setActiveTab('hospital-network');
             if (newRole === 'Doctor') setActiveTab('dashboard');
           }}
