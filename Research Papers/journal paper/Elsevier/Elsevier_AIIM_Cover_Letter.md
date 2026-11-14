@@ -45,7 +45,7 @@ To address these limitations within a unified privacy-preserving paradigm, this 
 - Delivers 4.98-hour mean advance warning window with counterfactual recourse simulation.
 
 ### 4. Author Declarations & Compliance
-- **Originality:** This manuscript represents original work that has not been previously published and is not concurrently under review elsewhere.
+- **Prior Conference Presentation & Non-Overlapping Scope Disclosure:** A preliminary proof-of-concept focusing on the mathematical formulation of the attention mechanism and initial 3-client federated training was accepted at the 5th International Conference on Soft Computing and Computer Communication Technology (CSCT 2026, NIT Sikkim, Springer SIST, Paper ID 1072, Accepted Nov 9, 2026). The present journal submission represents an extensive (more than 70% new material), non-overlapping expansion delivering the 100% full project scope: an operational point-of-care Clinical Decision Support System (CDSS) with FastAPI and React, three-pillar explainability (temporal attention, Integrated Gradients, constrained counterfactuals), formal Decision Curve Analysis (DCA), complete multi-cohort ingestion pipelines (MIMIC-IV, eICU-CRD), and edge latency benchmarking.
 - **Compliance with Ethical Standards:** The study protocol was approved by the Institutional Ethics Committee of Amrita Vishwa Vidyapeetham with waiver of informed consent, analyzing de-identified open-access PhysioNet 2019 data compliant with HIPAA Safe Harbor and India's DPDPA 2023.
 - **Conflicts of Interest:** The authors declare no competing financial or personal conflicts of interest.
 - **Reproducibility:** Source code, models, and evaluation scripts are available at `https://github.com/aksharsakhi/23CSE498-Project-Phase-II`.
