@@ -105,7 +105,7 @@
 
 % --- SLIDE 3: SECTION 1A - PROBLEM STATEMENT & CLINICAL CONTEXT ---
 \begin{frame}{1. Problem Definition \& Research Motivation}
-    \framesubtitle{Problem Statement \& Clinical Urgency in Critical Care Telemetry}
+    \framesubtitle{Problem Statement \& Clinical Disease Severity Context}
     \begin{block}{What is Sepsis? \& Global / Indian Healthcare Burden}
         \footnotesize
         \begin{itemize}
@@ -115,30 +115,30 @@
     \end{block}
     \vspace{-0.10cm}
 
-    \begin{block}{Core Research Problem \& Early Warning Urgency}
+    \begin{block}{Problem Statement}
         \footnotesize
         \begin{itemize}
-            \item \textbf{Forecasting Objective:} Prospective early detection of acute Sepsis-3 onset $\mathbf{6\text{ hours}}$ in advance from continuous 24h multivariate ICU telemetry ($40$ vitals and laboratory biomarkers).
-            \item \textbf{High-Stakes Decision Window:} In septic shock, each hour of therapeutic delay increases mortality risk by $\approx \mathbf{7.6\% - 8.0\%}$. Standard ICU scores (SOFA, MEWS) react only \textit{after} overt physiological collapse.
+            \item \textbf{Core Research Problem:} Prospective early detection of acute Sepsis-3 onset $\mathbf{6\text{ hours}}$ in advance from continuous 24h multivariate ICU telemetry ($40$ vitals and laboratory biomarkers).
+            \item \textbf{Domain Context:} In septic shock, each hour of therapeutic delay increases mortality risk by $\approx \mathbf{7.6\% - 8.0\%}$. Standard ICU scores (SOFA, MEWS) react only \textit{after} overt physiological collapse, lacking proactive early warning.
         \end{itemize}
     \end{block}
 \end{frame}
 
 % --- SLIDE 4: SECTION 1B - EXISTING LIMITATIONS & RESEARCH GAPS ---
 \begin{frame}{1. Problem Definition \& Research Motivation}
-    \framesubtitle{Existing Limitations \& The Three Critical Healthcare Translation Gaps}
-    \begin{block}{Summary of Existing Approaches}
+    \framesubtitle{Existing Limitations \& Research Gap}
+    \begin{block}{Existing Limitations \& Research Gap}
         \footnotesize
-        Centralized deep learning (DeepAISE, InSight) or static federated learning (FedAvg, FedProx) that assume uniform data distributions and unconstrained data pooling.
-    \end{block}
-
-    \begin{block}{Identified Research Gaps (The Three Healthcare Barriers)}
-        \footnotesize
-        \begin{enumerate}
-            \item \textbf{Statutory Privacy Barriers:} Strict regulations (HIPAA, GDPR, India's DPDPA 2023) legally forbid pooling sensitive multi-hospital Electronic Health Records (EHR) into centralized cloud repositories.
-            \item \textbf{Cross-Site Heterogeneity \& Concept Drift:} Non-IID demographic shifts across community, trauma, and academic ICUs degrade static federated consensus models; existing FL methods lack drift-aware adaptation.
-            \item \textbf{Model Opacity \& Clinician Alarm Fatigue:} Black-box models trigger $80\%-90\%$ false positive alerts, causing severe bedside alert fatigue and distrust among intensivists.
-        \end{enumerate}
+        \begin{itemize}
+            \item \textbf{Summary of Existing Approaches:} Centralized deep learning (DeepAISE, InSight) or static federated learning (FedAvg, FedProx) that assume uniform data distributions and unconstrained cloud data pooling.
+            \item \textbf{Identified Research Gap:}
+            \begin{enumerate}
+                \scriptsize
+                \item \textbf{Statutory Privacy Barriers:} Strict regulations (HIPAA, GDPR, India's DPDPA 2023) legally forbid pooling sensitive multi-hospital Electronic Health Records (EHR) into centralized cloud repositories.
+                \item \textbf{Cross-Site Heterogeneity \& Concept Drift:} Non-IID demographic shifts across community, trauma, and academic ICUs degrade static federated consensus models; existing FL methods lack drift-aware adaptation.
+                \item \textbf{Model Opacity \& Clinician Alarm Fatigue:} Black-box models trigger $80\%-90\%$ false positive alerts, causing severe bedside alert fatigue and distrust among intensivists.
+            \end{enumerate}
+        \end{itemize}
     \end{block}
 \end{frame}
 
