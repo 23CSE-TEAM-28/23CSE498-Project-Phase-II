@@ -253,7 +253,7 @@ export const HospitalAdmin: React.FC = () => {
                 <XAxis dataKey="hour" tick={{ fill: '#94a3b8', fontSize: 11 }} />
                 <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#0c1626', borderColor: '#1f2e4d', borderRadius: '0.75rem', fontSize: '11px' }}
+                  cursor={{ stroke: 'rgba(100, 116, 139, 0.2)', strokeWidth: 1 }}
                 />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
                 <Area type="monotone" dataKey="admissions" stroke="#0d9488" fillOpacity={1} fill="url(#adminAdmit)" name="ICU Admissions" strokeWidth={2} />

@@ -553,8 +553,7 @@ export const DashboardCDSS: React.FC<DashboardCDSSProps> = ({ onSelectPatient, s
                 <XAxis dataKey="time" stroke="#94a3b8" fontSize={10} tickLine={false} />
                 <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#0c1626', border: '1px solid #1c2c48', borderRadius: '8px', fontSize: '11px' }} 
-                  labelStyle={{ color: '#fff', fontSize: '11px', fontWeight: 700 }}
+                  cursor={{ fill: 'rgba(100, 116, 139, 0.08)' }}
                 />
                 <Legend wrapperStyle={{ fontSize: '10px' }} />
                 <Bar dataKey="admissions" fill="#0d9488" radius={[3, 3, 0, 0]} name="Admissions" />
@@ -590,8 +589,7 @@ export const DashboardCDSS: React.FC<DashboardCDSSProps> = ({ onSelectPatient, s
                 <XAxis dataKey="date" stroke="#94a3b8" fontSize={10} tickLine={false} />
                 <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#0c1626', border: '1px solid #1c2c48', borderRadius: '8px', fontSize: '11px' }} 
-                  labelStyle={{ color: '#fff', fontSize: '11px', fontWeight: 700 }}
+                  cursor={{ stroke: 'rgba(100, 116, 139, 0.2)', strokeWidth: 1 }}
                 />
                 <Legend wrapperStyle={{ fontSize: '10px' }} />
                 <Area type="monotone" dataKey="sepsisAlerts" stroke="#ef4444" strokeWidth={1.5} fillOpacity={1} fill="url(#colorSepsis)" name="Sepsis Alerts" />

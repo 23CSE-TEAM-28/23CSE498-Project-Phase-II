@@ -258,7 +258,7 @@ export const HospitalNetwork: React.FC = () => {
                   <XAxis dataKey="metric" tick={{ fill: '#94a3b8', fontSize: 11 }} />
                   <YAxis domain={[70, 100]} tick={{ fill: '#94a3b8', fontSize: 11 }} />
                   <Tooltip 
-                    contentStyle={{ backgroundColor: '#0c1626', borderColor: '#1f2e4d', borderRadius: '0.75rem', fontSize: '11px' }}
+                    cursor={{ fill: 'rgba(100, 116, 139, 0.08)' }}
                   />
                   <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
                   <Bar dataKey="Node" fill="#0d9488" name={`${selectedNode.shortName} (Personalized)`} radius={[6, 6, 0, 0]} />

@@ -298,7 +298,7 @@ export const PatientDetails: React.FC<PatientDetailsProps> = ({ patient, setActi
                   <XAxis dataKey="hour" tick={{ fill: '#94a3b8', fontSize: 11 }} />
                   <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} />
                   <Tooltip 
-                    contentStyle={{ backgroundColor: '#0c1626', borderColor: '#1f2e4d', borderRadius: '0.75rem', fontSize: '11px' }}
+                    cursor={{ stroke: 'rgba(100, 116, 139, 0.2)', strokeWidth: 1 }}
                   />
                   {(activeMetric === 'all' || activeMetric === 'hr') && (
                     <Line type="monotone" dataKey="heartRate" stroke="#ef4444" name="Heart Rate (bpm)" strokeWidth={2} dot={false} />
@@ -346,7 +346,7 @@ export const PatientDetails: React.FC<PatientDetailsProps> = ({ patient, setActi
                   <XAxis dataKey="hour" tick={{ fill: '#94a3b8', fontSize: 11 }} />
                   <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} />
                   <Tooltip 
-                    contentStyle={{ backgroundColor: '#0c1626', borderColor: '#1f2e4d', borderRadius: '0.75rem', fontSize: '11px' }}
+                    cursor={{ stroke: 'rgba(100, 116, 139, 0.2)', strokeWidth: 1 }}
                     formatter={(val: any) => [(Number(val) * 100).toFixed(1) + '%', 'Attention Saliency']}
                   />
                   <Area type="monotone" dataKey="attentionScore" stroke="#0d9488" fillOpacity={1} fill="url(#patAttnGrad)" strokeWidth={2} name="Attention Weight" />

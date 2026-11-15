@@ -195,6 +195,112 @@ body {
 }
 
 /* ==============================================================================
+   RECHARTS DATA VISUALIZATION COLOR GRADING & HIGH-CONTRAST TOOLTIP POLISH
+   ============================================================================== */
+.recharts-tooltip-cursor {
+  fill: rgba(100, 116, 139, 0.08) !important;
+  stroke: rgba(100, 116, 139, 0.15) !important;
+}
+
+.dark .recharts-tooltip-cursor {
+  fill: rgba(255, 255, 255, 0.06) !important;
+  stroke: rgba(255, 255, 255, 0.12) !important;
+}
+
+.recharts-default-tooltip {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  color: #0f172a !important;
+  padding: 10px 14px !important;
+}
+
+.dark .recharts-default-tooltip {
+  background-color: rgba(12, 22, 38, 0.96) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 14px 35px -5px rgba(0, 0, 0, 0.6) !important;
+  color: #f8fafc !important;
+}
+
+.recharts-tooltip-label {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+  font-size: 11px !important;
+  margin-bottom: 4px !important;
+}
+
+.dark .recharts-tooltip-label {
+  color: #f8fafc !important;
+}
+
+.recharts-tooltip-item {
+  color: #1e293b !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+}
+
+.dark .recharts-tooltip-item {
+  color: #e2e8f0 !important;
+}
+
+.recharts-tooltip-item-name, 
+.recharts-tooltip-item-separator {
+  color: #475569 !important;
+}
+
+.dark .recharts-tooltip-item-name,
+.dark .recharts-tooltip-item-separator {
+  color: #94a3b8 !important;
+}
+
+.recharts-tooltip-item-value {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+.dark .recharts-tooltip-item-value {
+  color: #38bdf8 !important;
+}
+
+/* Cartesian Grid lines */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #e2e8f0 !important;
+  opacity: 0.8 !important;
+}
+
+.dark .recharts-cartesian-grid-horizontal line,
+.dark .recharts-cartesian-grid-vertical line {
+  stroke: #1e293b !important;
+  opacity: 0.6 !important;
+}
+
+/* Axis Labels */
+.recharts-cartesian-axis-tick text {
+  fill: #64748b !important;
+  font-weight: 500 !important;
+}
+
+.dark .recharts-cartesian-axis-tick text {
+  fill: #94a3b8 !important;
+}
+
+.recharts-legend-item-text {
+  color: #475569 !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+}
+
+.dark .recharts-legend-item-text {
+  color: #94a3b8 !important;
+}
+
+/* ==============================================================================
    CLINICAL PRINT STYLESHEET (Official Hospital CDSS Chart Printing)
    ============================================================================== */
 @media print {

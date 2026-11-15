@@ -240,13 +240,6 @@ export const ModelComparison: React.FC = () => {
                 />
                 <Tooltip 
                   formatter={(value: any, name: any) => [`${(Number(value) * 100).toFixed(1)}%`, name]}
-                  contentStyle={{ 
-                    backgroundColor: '#0d1829', 
-                    border: '1px solid #1a2744', 
-                    borderRadius: '8px', 
-                    fontSize: '11px',
-                    color: '#f8fafc' 
-                  }} 
                 />
                 <Legend wrapperStyle={{ fontSize: '10px', paddingTop: '10px' }} />
                 <Line type="monotone" dataKey="fpdaf_v2" stroke="#14b8a6" strokeWidth={3} name="FPDAF-v2 Proposed (79.23%)" dot={false} activeDot={{ r: 5 }} />
@@ -320,14 +313,8 @@ export const ModelComparison: React.FC = () => {
                   tickLine={false}
                 />
                 <Tooltip 
+                  cursor={{ fill: 'rgba(100, 116, 139, 0.08)' }}
                   formatter={(value: any, name: any) => [`${Number(value).toFixed(2)}%`, name]}
-                  contentStyle={{ 
-                    backgroundColor: '#0d1829', 
-                    border: '1px solid #1a2744', 
-                    borderRadius: '8px', 
-                    fontSize: '11px',
-                    color: '#f8fafc' 
-                  }} 
                 />
                 <Legend wrapperStyle={{ fontSize: '10px', paddingTop: '10px' }} />
 

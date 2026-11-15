@@ -171,7 +171,9 @@ export const DriftMonitor: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" stroke="#1a2744" className="hidden dark:block" />
               <XAxis dataKey="round" stroke="#94a3b8" fontSize={10} />
               <YAxis stroke="#94a3b8" fontSize={10} domain={[0, 5]} />
-              <Tooltip contentStyle={{ backgroundColor: '#0d1829', border: '1px solid #1a2744', borderRadius: '12px', fontSize: '11px' }} />
+              <Tooltip 
+                cursor={{ stroke: 'rgba(100, 116, 139, 0.2)', strokeWidth: 1 }}
+              />
               <Legend wrapperStyle={{ fontSize: '10px' }} />
               <ReferenceLine y={threshold} stroke="#ef4444" strokeDasharray="4 4" label={{ value: 'Threshold Limit: 3.0', position: 'insideBottomRight', fill: '#ef4444', fontSize: 10, fontWeight: 'bold' }} />
               <Line type="monotone" dataKey="client0" stroke="#0d9488" strokeWidth={2} name="Hospital 1 (Client Node 0)" dot={{ r: 4 }} activeDot={{ r: 6 }} />

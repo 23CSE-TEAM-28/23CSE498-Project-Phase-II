@@ -723,13 +723,7 @@ export const FLMonitor: React.FC = () => {
                   <XAxis dataKey="round" stroke="#64748b" fontSize={11} tickLine={false} />
                   <YAxis domain={[0.7, 1.0]} stroke="#64748b" fontSize={11} tickLine={false} tickFormatter={(v) => v.toFixed(2)} />
                   <Tooltip
-                    contentStyle={{
-                      backgroundColor: '#0d1829',
-                      borderColor: '#1a2744',
-                      borderRadius: '0.5rem',
-                      fontSize: '11px',
-                      color: '#f8fafc'
-                    }}
+                    cursor={{ stroke: 'rgba(100, 116, 139, 0.2)', strokeWidth: 1 }}
                   />
                   <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
                   <ReferenceLine x="R7" stroke="#f59e0b" strokeDasharray="3 3" label={{ value: 'CSSP Trigger (R7)', fill: '#f59e0b', fontSize: 10, position: 'top' }} />
@@ -768,13 +762,7 @@ export const FLMonitor: React.FC = () => {
                   <XAxis dataKey="round" stroke="#64748b" fontSize={11} tickLine={false} />
                   <YAxis stroke="#64748b" fontSize={11} tickLine={false} unit=" MB" />
                   <Tooltip
-                    contentStyle={{
-                      backgroundColor: '#0d1829',
-                      borderColor: '#1a2744',
-                      borderRadius: '0.5rem',
-                      fontSize: '11px',
-                      color: '#f8fafc'
-                    }}
+                    cursor={{ stroke: 'rgba(100, 116, 139, 0.2)', strokeWidth: 1 }}
                   />
                   <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
                   <Bar dataKey="bandwidthVanilla" name="Standard FedAvg Payload (MB)" fill="#334155" radius={[4, 4, 0, 0]} />

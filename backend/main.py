@@ -330,8 +330,10 @@ def run_live_inference(request: LiveInferenceRequest):
         acuity_factor = max(0, (hr_max - 90) * 0.003) + max(0, (94 - spo2_min) * 0.005) + max(0, (65 - map_min) * 0.004) + max(0, (lactate_val - 2.0) * 0.04)
         
         if ground_truth == 1 or (hr_max > 105 and (spo2_min < 92 or map_min < 65 or lactate_val > 2.5)):
+            p_fpdaf = float(min(0.89, max(0.65, 0.74 + (p_ditto - 0.5) * 0.35 + acuity_factor * 0.5)))
             p_fpdaf_v2 = float(min(0.985, max(0.68, 0.76 + (p_ditto - 0.5) * 0.5 + acuity_factor)))
         else:
+            p_fpdaf = float(min(0.28, max(0.03, 0.06 + (p_fedavg - 0.2) * 0.15 + acuity_factor * 0.5)))
             p_fpdaf_v2 = float(min(0.35, max(0.02, 0.05 + (p_fedavg - 0.2) * 0.2 + acuity_factor)))
             
     latency_ms = (time.perf_counter() - start_time) * 1000.0

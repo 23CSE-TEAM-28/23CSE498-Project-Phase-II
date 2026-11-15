@@ -467,8 +467,7 @@ export const ExplainableAI: React.FC<ExplainableAIProps> = ({ patient, setActive
                     tickFormatter={(val) => `${Math.round(val * 100)}%`}
                   />
                   <Tooltip 
-                    contentStyle={{ backgroundColor: '#0c1626', border: '1px solid #1c2c48', borderRadius: '8px', fontSize: '11px' }}
-                    labelStyle={{ color: '#fff', fontSize: '11px', fontWeight: 700 }}
+                    cursor={{ fill: 'rgba(100, 116, 139, 0.08)' }}
                     formatter={(value: any) => [`${(Number(value) * 100).toFixed(2)}%`, 'Temporal Attention Weight']}
                     labelFormatter={(label) => `ICU Telemetry Hour ${label}`}
                   />
@@ -553,7 +552,7 @@ export const ExplainableAI: React.FC<ExplainableAIProps> = ({ patient, setActive
                   <XAxis type="number" stroke="#94a3b8" fontSize={10} domain={[0, 45]} tickLine={false} tickFormatter={(v) => `${v}%`} />
                   <YAxis dataKey="name" type="category" stroke="#94a3b8" fontSize={10} width={135} tickLine={false} />
                   <Tooltip 
-                    contentStyle={{ backgroundColor: '#0c1626', border: '1px solid #1c2c48', borderRadius: '8px', fontSize: '11px' }}
+                    cursor={{ fill: 'rgba(100, 116, 139, 0.08)' }}
                     formatter={(val: any) => [`${val}%`, 'Clinical Saliency Weight']}
                   />
                   <Bar dataKey="importance" radius={[0, 4, 4, 0]} barSize={16}>
