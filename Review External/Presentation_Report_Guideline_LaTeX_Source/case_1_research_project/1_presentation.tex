@@ -68,7 +68,7 @@
             \hline
             \textbf{S.No} & \textbf{Register Number} & \textbf{Student Name} \\
             \hline
-            1 & CB.SC.U4CSE23547 & Sheela Akshar Sakhi (Lead) \\
+            1 & CB.SC.U4CSE23547 & Sheela Akshar Sakhi \\
             \hline
             2 & CB.SC.U4CSE23529 & Hasini Reddy M \\
             \hline
@@ -161,11 +161,12 @@
     \end{block}
     \vspace{-0.10cm}
 
-    \begin{block}{System Scope: Framework vs. Model Delineation}
+    \begin{block}{System Architecture Hierarchy: Framework vs. Validation Model}
         \scriptsize
         \begin{itemize}
-            \item \textbf{Accepted Conference Paper (CSCT 2026, Springer SIST):} Preliminary proof-of-concept covering split-weight attention and basic AD-CUSUM drift detection.
-            \item \textbf{Full Phase-II System Scope:} Proposes the complete \textbf{FPDAF Framework}; to prove its effectiveness, we engineered the \textbf{FPDAF-v2 Model} and deployed it within the operational \textbf{FPDAF CDSS Bedside Workstation} ($0.67\text{ ms}$ inference).
+            \item \textbf{1. The Solution (FPDAF Framework):} Our proposed privacy-preserving federated architecture solving statutory multi-hospital data privacy (HIPAA/DPDPA), cross-site concept drift, and clinician distrust.
+            \item \textbf{2. The Validation Engine (FPDAF-v2 Model):} Deep neural network (\texttt{DualPhaseAttentionLSTM}) engineered specifically to evaluate and prove the FPDAF framework on 40 ICU signals.
+            \item \textbf{3. Clinical Translation \& National Honors:} Operational bedside CDSS workstation ($0.67\text{ ms}$) $\bullet$ Accepted at \textbf{CSCT 2026 (Springer SIST)} $\bullet$ Selected in \textbf{Top 40 Ideas in MSME Idea Hackathon 6.0} (Govt.\ of India, Rs.~15L Grant).
         \end{itemize}
     \end{block}
 \end{frame}
@@ -600,17 +601,26 @@
 
 % --- SLIDE 19: SECTION 8B - PUBLICATION PORTFOLIO & SCOPE DELINEATION ---
 \begin{frame}{8. Technical Justification, Design Trade-offs \& Insights}
-    \framesubtitle{Research Publication Portfolio \& Non-Duplication Scope Delineation}
+    \framesubtitle{Research Publications, MSME National Hackathon \& Scope Delineation}
     \begin{columns}[T]
         \column{0.48\textwidth}
         \begin{block}{Accepted Conference Paper (Camera-Ready)}
             \scriptsize
             \begin{itemize}
-                \item \textbf{Venue:} 5th International Conf.\ on Soft Computing \& Computer Comm.\ Technology (CSCT 2026).
-                \item \textbf{Organizer \& Indexing:} NIT Sikkim, India; \textbf{Springer SIST} [SCOPUS Indexed].
-                \item \textbf{Paper Title:} \textit{A Drift-Aware Explainable Federated Learning Framework for Personalized ICU Sepsis Prediction}.
+                \item \textbf{Venue:} 5th Int.\ Conf.\ on Soft Computing \& Comm.\ Technology (CSCT 2026).
+                \item \textbf{Organizer \& Indexing:} NIT Sikkim, India; \textbf{Springer SIST} [SCOPUS].
+                \item \textbf{Title:} \textit{A Drift-Aware Explainable Federated Learning Framework for Personalized ICU Sepsis Prediction}.
                 \item \textbf{Status:} \textbf{ACCEPTED} (Paper ID: \texttt{1072}, Nov 9, 2026).
-                \item \textbf{Conference Scope:} Preliminary proof-of-concept covering split-weight attention and basic AD-CUSUM drift detector.
+            \end{itemize}
+        \end{block}
+        \vspace{-0.15cm}
+
+        \begin{block}{National Hackathon: MSME Idea Hackathon 6.0}
+            \scriptsize
+            \begin{itemize}
+                \item \textbf{Ministry of MSME, Govt.\ of India:} Frontier Technologies.
+                \item \textbf{Achievement:} Ranked in \textbf{Top 40 Ideas Recommended} at Host Institution Level (S.No.~22, Idea Ref: \texttt{26INC06TN056374}).
+                \item \textbf{Grant Recommended:} \textbf{Rs.~15,00,000 (INR 15 Lakhs)} for Edge-AI bedside hardware appliance fabrication.
             \end{itemize}
         \end{block}
 
@@ -620,14 +630,14 @@
             \begin{itemize}
                 \item \textbf{Target Journal:} \textit{JMIR AI} (ISSN: 2817-1705; Planned Submission).
                 \item \textbf{Paper Title:} \textit{``Federated Personalized Drift-Aware Attention Framework for Privacy-Preserving Early Sepsis Forecasting in Multi-Center ICUs''}.
-                \item \textbf{What is in this Journal Paper:}
+                \item \textbf{Full Phase-II System Scope:}
                 \begin{itemize}
                     \scriptsize
-                    \item Bedside CDSS Workstation (FastAPI backend + React).
+                    \item Bedside CDSS Workstation (FastAPI + React).
                     \item 3-Pillar Clinical XAI with Counterfactual Recourse.
-                    \item Decision Curve Analysis (DCA) Net Benefit evaluation.
-                    \item Full 40,327-patient cohort validation ($102,994$ test windows).
-                    \item Sub-millisecond edge profiling ($0.67\text{ ms}$ on local devices).
+                    \item Decision Curve Analysis (DCA) Net Benefit.
+                    \item Full 40,327-patient cohort ($102,994$ test windows).
+                    \item Sub-millisecond edge profiling ($0.67\text{ ms}$).
                 \end{itemize}
             \end{itemize}
         \end{block}
@@ -645,7 +655,7 @@
             \hline
             \textbf{S.No} & \textbf{Team Member} & \textbf{Core Phase-II Technical Deliverable \& Module Responsibility} \\
             \hline
-            1 & Sheela Akshar Sakhi (Lead) & Split-weight attention architecture, AD-CUSUM drift detector, FL coordination, journal lead author \\
+            1 & Sheela Akshar Sakhi & Split-weight attention architecture, AD-CUSUM drift detector, FL coordination, journal lead author \\
             \hline
             2 & Hasini Reddy M & Causal imputation engine, robust normalizers, non-IID hospital tier partitioning, Ditto baseline \\
             \hline
@@ -663,7 +673,7 @@
         \scriptsize
         \begin{itemize}
             \item \textbf{Production Codebase:} $12,990$ verified lines of source code with 22/22 passing automated test suites.
-            \item \textbf{Research Publications:} Accepted Conference Paper (CSCT 2026, Springer SIST) \& Finalized JMIR AI submission package.
+            \item \textbf{Publications \& National Recognition:} Accepted at \textbf{CSCT 2026 (Springer SIST, ID: 1072)}, \textbf{Top 40 in MSME Idea Hackathon 6.0} (Rs.~15L Grant, Ref: \texttt{26INC06TN056374}), and finalized \textbf{JMIR AI} manuscript.
             \item \textbf{Bedside CDSS Workstation:} Sub-millisecond inference ($0.67\text{ ms}$), SQLite multi-patient warehouse, and React interface.
         \end{itemize}
     \end{block}
