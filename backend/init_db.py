@@ -301,7 +301,7 @@ def init_database():
         else:
             phys_content += "Continuing routine monitoring. Stable parameters."
             
-        notes.append(("Physician Note", "Dr. S. K", "Attending", phys_content))
+        notes.append(("Physician Note", "Dr. Pallavi", "Lead Intensivist", phys_content))
         
         for n, (cat, auth, role, content) in enumerate(notes):
             note_id = f"NOTE-{pat_id}-{n}"

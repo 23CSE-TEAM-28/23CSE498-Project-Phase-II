@@ -113,6 +113,14 @@ export interface FeatureAttribution {
   status: 'Critical' | 'Normal' | 'Warning';
 }
 
+export interface ClinicalExplainability {
+  headline: string;
+  primaryDriver: string;
+  why: string;
+  how: string;
+  doctorGuidance: string;
+}
+
 export interface LiveInferenceResponse {
   patientId: string;
   inferenceEngine: string;
@@ -140,6 +148,7 @@ export interface LiveInferenceResponse {
     isCritical: boolean;
   }>;
   topFeatureAttributions: FeatureAttribution[];
+  clinicalExplainability?: ClinicalExplainability;
   timestamp: string;
 }
 
@@ -286,6 +295,7 @@ export interface PatientFullProfile {
   };
   vitalsHistory: VitalSignRecord[];
   attentionWeights: Array<{ hour: number; attentionScore: number }>;
+  clinicalExplainability?: ClinicalExplainability;
   notes: ClinicalNote[];
 }
 

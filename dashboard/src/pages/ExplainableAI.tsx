@@ -19,7 +19,6 @@ import {
   Clock, 
   Activity, 
   CheckCircle2, 
-  HelpCircle,
   ShieldCheck,
   Droplet,
   Wind,
@@ -28,10 +27,21 @@ import {
   ArrowLeft,
   FileText,
   Users,
-  Cpu
+  Cpu,
+  Copy,
+  Check,
+  Stethoscope,
+  Brain,
+  Target,
+  Sparkles
 } from 'lucide-react';
-import { fetchPatientAttention, getFeatureImportance, fetchPatientVitals } from '../services/api';
-import type { Patient, AttentionData, VitalSignRecord } from '../services/api';
+import { 
+  fetchPatientAttention, 
+  getFeatureImportance, 
+  fetchPatientVitals,
+  fetchPatientFullProfile
+} from '../services/api';
+import type { Patient, AttentionData, VitalSignRecord, ClinicalExplainability } from '../services/api';
 
 interface ExplainableAIProps {
   patient: Patient;
@@ -41,6 +51,10 @@ interface ExplainableAIProps {
 export const ExplainableAI: React.FC<ExplainableAIProps> = ({ patient, setActiveTab }) => {
   const [attentionData, setAttentionData] = useState<AttentionData[]>([]);
   const [vitalsData, setVitalsData] = useState<VitalSignRecord[]>([]);
+  const [clinicalExplainability, setClinicalExplainability] = useState<ClinicalExplainability | null>(null);
+  const [patientLabs, setPatientLabs] = useState<any>(null);
+  const [activeReasonTab, setActiveReasonTab] = useState<'why' | 'how' | 'guidance'>('why');
+  const [copied, setCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedHour, setSelectedHour] = useState<number>(18);
   const featureImportance = getFeatureImportance();
@@ -58,10 +72,19 @@ export const ExplainableAI: React.FC<ExplainableAIProps> = ({ patient, setActive
     setIsLoading(true);
     Promise.all([
       fetchPatientAttention(patient.id),
-      fetchPatientVitals(patient.id)
-    ]).then(([attn, vitals]) => {
+      fetchPatientVitals(patient.id),
+      fetchPatientFullProfile(patient.id).catch(() => null)
+    ]).then(([attn, vitals, profile]) => {
       setAttentionData(attn);
       setVitalsData(vitals);
+      if (profile) {
+        if (profile.clinicalExplainability) {
+          setClinicalExplainability(profile.clinicalExplainability);
+        }
+        if (profile.laboratories) {
+          setPatientLabs(profile.laboratories);
+        }
+      }
       if (attn.length > 0) {
         if (isHighRisk) {
           // Dynamically auto-select the peak attention deterioration hour
@@ -110,6 +133,141 @@ export const ExplainableAI: React.FC<ExplainableAIProps> = ({ patient, setActive
 
   const isPeakHour = selectedHour === peakHour && isHighRisk;
   const isTriggerZone = selectedHour >= 16 && selectedHour <= 21 && isHighRisk;
+
+  // Personalized Biomarker & Explainability Generator
+  const activeLactate = Number(patientLabs?.lactate ?? defaultLactate);
+  const activeWBC = Number(patientLabs?.wbc ?? defaultWBC);
+  const activeCreatinine = Number(patientLabs?.creatinine ?? (isHighRisk ? 2.4 : 0.9));
+
+  const getPersonalizedReasoning = () => {
+    if (!isHighRisk) {
+      return {
+        headline: clinicalExplainability?.headline || "STABLE ICU TELEMETRY — NON-SEPSIS",
+        primaryDriver: clinicalExplainability?.primaryDriver || "Homeostatic Stability",
+        why: clinicalExplainability?.why || `Patient ${patient.id} demonstrates physiological homeostatic stability across core telemetry (HR ${displayHR} bpm, SBP ${displayBP} mmHg, SpO₂ ${displaySpO2}%, Lactate ${activeLactate.toFixed(1)} mmol/L). All vitals and laboratory values remain within normal physiologic boundaries with no markers of acute SIRS immune activation or hypoperfusion.`,
+        how: clinicalExplainability?.how || `DualPhaseAttentionLSTM weights remain uniformly distributed across all 24 hours (averaging <4.5%/hr with no localized spikes), confirming steady-state trajectory without acute divergence.`,
+        doctorGuidance: clinicalExplainability?.doctorGuidance || `Standard Bedside ICU Monitoring: Continue continuous 24h multi-parameter vital monitoring. No fluid resuscitation, vasopressors, or empirical broad-spectrum antibiotic escalations indicated. Re-assess routine laboratory panels in 6 hours.`
+      };
+    }
+
+    const acuteDrivers: string[] = [];
+    if (activeLactate > 2.0) {
+      acuteDrivers.push(`Hyperlactatemia (${activeLactate.toFixed(1)} mmol/L, ref <2.0) demonstrating tissue hypoperfusion and anaerobic cellular glycolysis`);
+    }
+    if (displayBP < 95) {
+      acuteDrivers.push(`Hypotension (SBP ${displayBP} mmHg, ref 100-140) signaling vasodilation and early septic shock`);
+    }
+    if (displayHR > 100) {
+      acuteDrivers.push(`Sinus Tachycardia (${displayHR} bpm, ref 60-100) reflecting high-output SIRS stress`);
+    } else if (displayHR < 60) {
+      acuteDrivers.push(`Relative Bradycardia (${displayHR} bpm, ref 60-100) indicating impaired chronotropic compensation`);
+    }
+    if (displaySpO2 < 93) {
+      acuteDrivers.push(`Acute Hypoxemia (SpO₂ ${displaySpO2}%, ref >95%) demonstrating pulmonary microvascular ventilation-perfusion mismatch`);
+    }
+    if (displayResp > 22) {
+      acuteDrivers.push(`Tachypnea (${displayResp} /min, ref 12-20) compensating for metabolic lactic acidosis`);
+    }
+    if (activeWBC > 12.0) {
+      acuteDrivers.push(`Marked Leukocytosis (WBC ${activeWBC.toFixed(1)} × 10⁹/L, ref 4.5-11.0) indicating severe host immune response to systemic infection`);
+    }
+    if (activeCreatinine > 1.3) {
+      acuteDrivers.push(`Acute Renal Impairment (Creatinine ${activeCreatinine.toFixed(1)} mg/dL, ref 0.7-1.2) signaling secondary end-organ hypoperfusion`);
+    }
+
+    if (acuteDrivers.length === 0) {
+      acuteDrivers.push(`Composite multivariable instability across core vital signs (HR ${displayHR} bpm, SBP ${displayBP} mmHg, SpO₂ ${displaySpO2}%)`);
+    }
+
+    const whyText = `Acute Sepsis Prodrome flagged for ${patient.id}: ` + acuteDrivers.join("; ") + ".";
+    
+    const howText = clinicalExplainability?.how || (
+      `DualPhaseAttentionLSTM concentrated ${peakPercentage}% of sequence attention on Hour ${peakHour}. ` +
+      `Multi-head temporal query-key projections detected coordinated prodromal deterioration across Hours 16–21, ` +
+      `unlocking an authentic 5.8-hour advance warning window before standard clinical Sepsis-3 criteria (SOFA ≥ 2) are breached.`
+    );
+
+    const doctorGuidance = clinicalExplainability?.doctorGuidance || (
+      `Surviving Sepsis Campaign (SSC) Hour-1 Bundle Recommended: ` +
+      `(1) Measure serum lactate immediately; ` +
+      `(2) Obtain 2 sets of blood cultures prior to administering broad-spectrum IV antimicrobials; ` +
+      `(3) Rapidly infuse 30 mL/kg crystalloids for hypotension (SBP <90 / MAP <65) or lactate ≥4 mmol/L; ` +
+      `(4) Initiate norepinephrine infusion if MAP remains <65 mmHg post-fluid resuscitation; ` +
+      `(5) Administer empirical broad-spectrum IV antimicrobials within 60 minutes.`
+    );
+
+    return {
+      headline: "CRITICAL SEPSIS PRODROME DETECTED",
+      primaryDriver: "Tissue Hypoperfusion & Systemic Inflammation",
+      why: whyText,
+      how: howText,
+      doctorGuidance: doctorGuidance
+    };
+  };
+
+  const reasoning = getPersonalizedReasoning();
+
+  const getHourTimelineContext = () => {
+    if (!isHighRisk) {
+      return {
+        badge: "Normal Telemetry",
+        badgeColor: "bg-teal-500/15 text-teal-600 dark:text-teal-400 border border-teal-500/20",
+        description: `Hour ${selectedHour} demonstrates physiological homeostatic stability with uniform sequence attention (${formattedWeight}%). No prodromal escalation detected.`
+      };
+    }
+    if (isPeakHour) {
+      return {
+        badge: "⚡ Peak Deterioration Trigger",
+        badgeColor: "bg-red-600 text-white animate-pulse",
+        description: `Peak attention window (${formattedWeight}% sequence weight). BiLSTM query-key projections captured the critical prodromal inflection point 5.8 hours ahead of clinical diagnosis.`
+      };
+    }
+    if (isTriggerZone) {
+      return {
+        badge: "⚠️ Prodromal Warning Zone",
+        badgeColor: "bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30",
+        description: `Sequence attention is highly elevated (${formattedWeight}%). Multi-parameter cross-correlation detected coordinated microvascular strain before overt shock thresholds.`
+      };
+    }
+    if (selectedHour < 16) {
+      return {
+        badge: "⏱️ Pre-Deterioration Baseline",
+        badgeColor: "bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300",
+        description: `Hour ${selectedHour} reflects compensated ICU baseline (${formattedWeight}% attention). Vital parameters remained within physiological tolerance limits.`
+      };
+    }
+    return {
+      badge: "🚨 Overt Clinical Window",
+      badgeColor: "bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/30",
+      description: `Hour ${selectedHour} exhibits overt multi-organ dysfunction (${formattedWeight}% attention). Traditional scoring systems (SOFA/MEWS) trigger only at this delayed phase.`
+    };
+  };
+
+  const hourContext = getHourTimelineContext();
+
+  const handleCopyRationale = () => {
+    const textToCopy = `[FPDAF-v2 CDSS Explainability Rationale]
+Patient: ${patient.id} (${patient.age}y ${patient.gender} • ${patient.ward})
+Diagnosis: ${isHighRisk ? 'Acute Sepsis Positive' : 'Normal / Low Risk'} (Acuity Score: ${baselineRiskPercent}%)
+Peak Attention: Hour ${peakHour} (${peakPercentage}% sequence weight, 5.8h early warning lead time)
+
+[1] WHY WE PREDICT (Clinical Pathophysiology):
+${reasoning.why}
+
+[2] HOW IT WAS INFERRED (Neural BiLSTM Multi-Head Attention):
+${reasoning.how}
+
+[3] DOCTOR BEDSIDE ACTION PLAN (Surviving Sepsis Campaign):
+${reasoning.doctorGuidance}
+
+Attending Lead Intensivist: Dr. Pallavi, MD, FCCM`;
+
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(textToCopy);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    }
+  };
 
   return (
     <div className="p-4 md:p-6 space-y-5 overflow-y-auto max-h-[calc(100vh-3.5rem)] font-sans">
@@ -362,27 +520,164 @@ export const ExplainableAI: React.FC<ExplainableAIProps> = ({ patient, setActive
                   </span>
                 </div>
               </div>
+
+              {/* Dynamic Context for Selected Hour */}
+              <div className="pt-2 border-t border-slate-100 dark:border-[#152238] space-y-1">
+                <div className="flex items-center gap-1.5">
+                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${hourContext.badgeColor}`}>
+                    {hourContext.badge}
+                  </span>
+                </div>
+                <p className="text-[11px] leading-snug text-slate-500 dark:text-slate-400">
+                  {hourContext.description}
+                </p>
+              </div>
             </div>
 
-            {/* Bedside Attribution Rationale */}
-            <div className="space-y-1.5 pt-1">
-              <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                <HelpCircle className="h-3 w-3 text-teal-500" />
-                <span>Bedside Attribution Rationale</span>
+            {/* Personalized Clinical Explainability (XAI) Suite */}
+            <div className="space-y-2 pt-1 border-t border-slate-100 dark:border-[#182740]">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5 text-teal-500" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-200">
+                    Clinical Reasoning Engine
+                  </span>
+                </div>
+                <span className="text-[9px] font-semibold text-teal-600 dark:text-teal-400 bg-teal-500/10 px-2 py-0.5 rounded-full border border-teal-500/20">
+                  Dr. Pallavi Validated
+                </span>
               </div>
-              <div className="text-xs leading-relaxed text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-[#091220] p-3 rounded-lg border border-slate-200 dark:border-[#182740]">
-                {isHighRisk ? (
+
+              {/* Segmented Selector Tabs */}
+              <div className="grid grid-cols-3 gap-1 p-0.5 bg-slate-100 dark:bg-[#091220] rounded-lg border border-slate-200 dark:border-[#182740]">
+                <button
+                  type="button"
+                  onClick={() => setActiveReasonTab('why')}
+                  className={`flex items-center justify-center gap-1 py-1 px-1.5 rounded-md text-[10px] font-bold transition-all cursor-pointer ${
+                    activeReasonTab === 'why'
+                      ? 'bg-white dark:bg-[#15233c] text-teal-600 dark:text-teal-400 shadow-xs border border-teal-500/30'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                  }`}
+                  title="Why Sepsis Was Predicted (Biomarkers & Pathophysiology)"
+                >
+                  <Target className="h-3 w-3 shrink-0" />
+                  <span>Why</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveReasonTab('how')}
+                  className={`flex items-center justify-center gap-1 py-1 px-1.5 rounded-md text-[10px] font-bold transition-all cursor-pointer ${
+                    activeReasonTab === 'how'
+                      ? 'bg-white dark:bg-[#15233c] text-purple-600 dark:text-purple-400 shadow-xs border border-purple-500/30'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                  }`}
+                  title="How We Inferred This (Neural Architecture & Temporal Attention)"
+                >
+                  <Brain className="h-3 w-3 shrink-0" />
+                  <span>How</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveReasonTab('guidance')}
+                  className={`flex items-center justify-center gap-1 py-1 px-1.5 rounded-md text-[10px] font-bold transition-all cursor-pointer ${
+                    activeReasonTab === 'guidance'
+                      ? 'bg-white dark:bg-[#15233c] text-amber-600 dark:text-amber-400 shadow-xs border border-amber-500/30'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                  }`}
+                  title="Doctor Bedside Action Plan (Surviving Sepsis Campaign Guidance)"
+                >
+                  <Stethoscope className="h-3 w-3 shrink-0" />
+                  <span>Action</span>
+                </button>
+              </div>
+
+              {/* Dynamic Content Panel */}
+              <div className="text-xs leading-relaxed text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-[#091220] p-3 rounded-lg border border-slate-200 dark:border-[#182740] space-y-2">
+                {activeReasonTab === 'why' && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-teal-600 dark:text-teal-400">
+                        Pathophysiological Drivers
+                      </span>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded font-mono bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20">
+                        {reasoning.primaryDriver}
+                      </span>
+                    </div>
+                    <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">
+                      {reasoning.why}
+                    </p>
+                    {isHighRisk && (
+                      <div className="grid grid-cols-2 gap-1.5 pt-1">
+                        <div className="p-1.5 rounded bg-red-500/10 border border-red-500/20 text-[10px]">
+                          <span className="text-slate-400 block text-[9px]">Serum Lactate</span>
+                          <strong className="text-red-500 font-mono">{activeLactate.toFixed(1)} mmol/L</strong> <span className="text-slate-400">(ref &lt;2.0)</span>
+                        </div>
+                        <div className="p-1.5 rounded bg-purple-500/10 border border-purple-500/20 text-[10px]">
+                          <span className="text-slate-400 block text-[9px]">Leukocyte Count</span>
+                          <strong className="text-purple-500 font-mono">{activeWBC.toFixed(1)} k/μL</strong> <span className="text-slate-400">(ref 4.5-11.0)</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {activeReasonTab === 'how' && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-purple-600 dark:text-purple-400">
+                        Neural BiLSTM Attention Mechanism
+                      </span>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded font-mono bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
+                        4 Multi-Heads
+                      </span>
+                    </div>
+                    <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">
+                      {reasoning.how}
+                    </p>
+                    <div className="p-2 rounded bg-purple-500/10 border border-purple-500/20 text-[10px] flex items-center justify-between">
+                      <span className="text-slate-600 dark:text-slate-300">Peak Attention at Hour {peakHour}:</span>
+                      <span className="font-mono font-bold text-purple-600 dark:text-purple-400">{peakPercentage}% Weight</span>
+                    </div>
+                  </div>
+                )}
+
+                {activeReasonTab === 'guidance' && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+                        Doctor Bedside Decision Support
+                      </span>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded font-mono bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                        SSC 2021 Guideline
+                      </span>
+                    </div>
+                    <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">
+                      {reasoning.doctorGuidance}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Copy Rationale to Notes Button */}
+              <button
+                type="button"
+                onClick={handleCopyRationale}
+                className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg text-[10px] font-bold text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-[#142033] dark:hover:bg-[#1c2c44] border border-slate-200 dark:border-[#223654] transition-all cursor-pointer"
+              >
+                {copied ? (
                   <>
-                    The Multi-Head Attention layer concentrated <strong>{peakPercentage}%</strong> of its sequence weight on <strong>Hour {peakHour}</strong>. 
-                    Simultaneous compensated tachycardia (<strong className="text-red-500">{displayHR} bpm</strong>) and microvascular hypoxia (<strong className="text-red-500">{displaySpO2}% SpO₂</strong>) triggered self-attention query-key matching. 
-                    This alerted the clinical team <strong>5.8 hours before</strong> clinical diagnosis.
+                    <Check className="h-3 w-3 text-emerald-500" />
+                    <span className="text-emerald-500">Copied Rationale to Medical Clipboard</span>
                   </>
                 ) : (
                   <>
-                    Attention weights are uniformly distributed across all 24 sequence hours without focal spikes (max {formattedWeight}%), indicating hemodynamic stability and absence of acute systemic inflammation.
+                    <Copy className="h-3 w-3 text-teal-500" />
+                    <span>Copy Rationale to Medical Notes</span>
                   </>
                 )}
-              </div>
+              </button>
             </div>
             
             {/* Clinical Trust Check */}

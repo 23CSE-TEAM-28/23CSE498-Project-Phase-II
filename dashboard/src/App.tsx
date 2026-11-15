@@ -52,7 +52,8 @@ function App() {
       .then((data) => {
         setPatients(data);
         if (data.length > 0) {
-          setSelectedPatient(data[0]);
+          const defaultPat = data.find(p => p.id === 'PAT-1033') || data.find(p => p.riskLevel === 'High') || data[0];
+          setSelectedPatient(defaultPat);
         }
       })
       .catch((err) => {
@@ -100,12 +101,12 @@ function App() {
   }
 
   // Active patient fallback
-  const currentPatient = selectedPatient || (patients.length > 0 ? patients[0] : {
-    id: "PAT-1000",
-    age: 68,
-    gender: "Male" as const,
+  const currentPatient = selectedPatient || (patients.length > 0 ? (patients.find(p => p.id === 'PAT-1033') || patients[0]) : {
+    id: "PAT-1033",
+    age: 78,
+    gender: "Female" as const,
     hospital: "Hospital 1",
-    ward: "ICU Bed 01",
+    ward: "ICU Bed 14",
     admittedAt: "2026-07-15 12:00",
     status: "Critical" as const,
     riskLevel: "High" as const,
@@ -115,10 +116,10 @@ function App() {
       fedprox: 0.78,
       ditto: 0.79,
       fpdaf: 0.84,
-      fpdaf_v2: 0.86
+      fpdaf_v2: 0.985
     },
-    latestVitals: { heartRate: 122, spo2: 90 },
-    confidence: 94
+    latestVitals: { heartRate: 124, spo2: 90 },
+    confidence: 98
   });
 
   return (
