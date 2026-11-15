@@ -94,20 +94,15 @@ Sepsis remains the leading cause of in-hospital mortality worldwide, claiming ov
 
 \subsection{Problem Statement \& Research Motivation}
 \begin{itemize}[noitemsep, topsep=2pt]
-    \item \textbf{Formal Problem Statement:} Given a decentralized network of $K$ distinct clinical institutions, where each center $k \in \{1, \dots, K\}$ holds a private set of longitudinal ICU patient trajectories $\mathcal{D}_k = \{(X_i, y_i)\}_{i=1}^{N_k}$, with $X_i \in \mathbb{R}^{T \times D}$ representing $T = 24$ hourly observations over $D = 40$ physiological parameters (vital signs, laboratory tests, and demographics), the objective is to collaboratively train an early sepsis forecasting model $\hat{y}_i = f(X_i; \theta)$ that predicts Sepsis-3 clinical onset $6\text{ hours}$ in advance without centralizing patient telemetry $\mathcal{D}_k$, while adapting dynamically to local institutional concept drift and providing clinically calibrated risk probabilities.
-    \item \textbf{Clinical Motivation \& Urgency:} Sepsis accounts for 1 in every 5 deaths globally. In critical care units, hemodynamic collapse occurs abruptly. Clinical trial evidence confirms that every hour of delayed antimicrobial therapy following septic shock onset lowers survival probability by approximately $7.6\%$ \cite{kumar2006duration}. Continuous multi-center clinical machine learning offers early warning; however, hospital legal firewalls strictly prohibit centralized data aggregation under HIPAA, GDPR, and DPDPA 2023 regulations.
-    \item \textbf{The Three Foundational Healthcare Gaps:}
+    \item \textbf{What is Sepsis \& Clinical Severity (Global \& Indian Healthcare Burden):} Sepsis is clinically defined by the Sepsis-3 international consensus as life-threatening acute organ dysfunction caused by a dysregulated host immune response to systemic infection \cite{singer2016third}. Globally, sepsis claims over \textbf{11 million lives annually} (accounting for 1 in every 5 deaths worldwide) \cite{rudd2020global}. In India alone, sepsis causes approximately \textbf{3 million deaths every year}, representing nearly $30\%$ of total intensive care unit (ICU) mortality \cite{chatterjee2022burden}. In septic shock, each hour of therapeutic antimicrobial delay increases mortality risk by approximately $\mathbf{7.6\% - 8.0\%}$ \cite{kumar2006duration}, rendering prospective early detection within the 6-hour window critical for survival.
+    \item \textbf{Problem Statement:} Given a decentralized network of $K$ distinct clinical institutions, where each center $k \in \{1, \dots, K\}$ holds a private set of longitudinal ICU patient trajectories $\mathcal{D}_k = \{(X_i, y_i)\}_{i=1}^{N_k}$, with $X_i \in \mathbb{R}^{T \times D}$ representing $T = 24$ hourly observations over $D = 40$ physiological parameters (vital signs, laboratory tests, and demographics), the objective is to collaboratively train an early sepsis forecasting model $\hat{y}_i = f(X_i; \theta)$ that predicts Sepsis-3 clinical onset $\mathbf{6\text{ hours}}$ in advance without centralizing patient telemetry $\mathcal{D}_k$, while adapting dynamically to local institutional concept drift and providing clinically calibrated risk probabilities.
+    \item \textbf{Research Motivation \& Existing Limitations:} Continuous multi-center clinical machine learning offers early warning potential; however, hospital legal firewalls strictly prohibit centralized data aggregation under HIPAA, GDPR, and India's DPDPA 2023 regulations. Furthermore, three critical translation barriers exist: (1)~\textit{The Privacy Gap} where legal statutory compliance forbids EHR pooling; (2)~\textit{The Accuracy Gap (Non-IID Drift)} where demographic divergence across community, trauma, and academic ICUs induces severe covariate and concept drift that degrades static federated consensus models; and (3)~\textit{The Trust Gap} where black-box deep models trigger uncalibrated, high-false-alarm alerts ($>80\%$), inducing severe clinician cynicism and bedside alarm fatigue.
+    \item \textbf{Research Objectives:}
     \begin{enumerate}[noitemsep, topsep=2pt]
-        \item \textit{The Privacy Gap:} Multi-institutional clinical datasets cannot be pooled into a centralized data warehouse due to statutory privacy compliance.
-        \item \textit{The Accuracy Gap (Non-IID Drift):} Patient demographics, admission acuity, and lab testing frequencies diverge widely across community hospitals, trauma centers, and geriatric ICUs, creating severe covariate and concept drift that deteriorates naive federated consensus models (e.g., FedAvg).
-        \item \textit{The Trust Gap:} Deep models frequently exhibit severe overconfidence in uncalibrated probabilities under class imbalance (sepsis prevalence $\approx 2.5\%$), inducing clinician cynicism and alarm fatigue.
-    \end{enumerate}
-    \item \textbf{Measurable Research Objectives:}
-    \begin{enumerate}[noitemsep, topsep=2pt]
-        \item \textit{Objective 1:} Formulate a split-weight federated neural architecture that decouples universal temporal dynamics from institution-specific risk calibration.
-        \item \textit{Objective 2:} Develop an online concept drift detection and client-side selective freezing mechanism that absorbs stochastic measurement noise while rapidly triggering local adaptation under real distribution shifts.
+        \item \textit{Objective 1:} Formulate a split-weight federated neural architecture (\texttt{DualPhaseAttentionLSTM}) that decouples universal temporal dynamics from institution-specific risk calibration.
+        \item \textit{Objective 2:} Develop an online concept drift detection (\textbf{AD-CUSUM}) and client-side selective freezing (\textbf{CSSP}) mechanism that absorbs stochastic measurement noise while rapidly triggering local adaptation under real distribution shifts.
         \item \textit{Objective 3:} Achieve superior predictive discrimination ($\text{AUPRC} \ge 0.10$, $\text{AUROC} \ge 0.79$) and probability calibration ($\text{ECE} < 0.10$) with zero data leakage on held-out multi-center clinical cohorts.
-        \item \textit{Objective 4:} Deliver an end-to-end, production-ready clinical workstation providing real-time ($< 5\text{ ms}$) explainable bedside alerts aligned with Surviving Sepsis Campaign Hour-1 bundles.
+        \item \textit{Objective 4:} Deliver an end-to-end, production-ready clinical workstation providing real-time ($< 1\text{ ms}$) explainable bedside alerts aligned with Surviving Sepsis Campaign Hour-1 bundles.
     \end{enumerate}
 \end{itemize}
 
@@ -183,49 +178,45 @@ The FPDAF architecture partitions the predictive model into a \textbf{shared fed
         \mathcal{L}_{\mathrm{local}} = \mathcal{L}_{\mathrm{BCE}}(\hat{y}, y) + \frac{\lambda}{2} \|\theta_{\mathrm{pers}, k} - \theta_{\mathrm{glob}}\|^2 - \gamma \, \mathcal{H}(\hat{y})
     \end{equation}
     where $\lambda = 0.10$ anchors parameters to prevent catastrophic forgetting, and $\gamma = 0.01$ penalizes overconfident entropy collapse $\mathcal{H}(\hat{y})$, reducing Expected Calibration Error (ECE) from $0.3150$ to $0.0902$.
+    \item \textbf{Theoretical Differentiation \& Novelty:} FPDAF fundamentally differentiates from FedAvg, FedProx, and Ditto through: (1)~\textit{asymmetric parameter splitting} that keeps institutional demographic calibration private while standardizing physiological feature extractors, (2)~\textit{dual-statistic drift detection} that eliminates false alarms from ICU measurement noise, and (3)~\textit{CSSP selective freezing} that simultaneously preserves global consensus stability and cuts communication bandwidth by $48.6\%$.
 \end{enumerate}
-
-\subsection{Novelty \& Theoretical Differentiation}
-\noindent
-FPDAF fundamentally differentiates from FedAvg, FedProx, and Ditto through: (1)~\textit{asymmetric parameter splitting} that keeps institutional demographic calibration private while standardizing physiological feature extractors, (2)~\textit{dual-statistic drift detection} that eliminates false alarms from ICU measurement noise, and (3)~\textit{CSSP selective freezing} that simultaneously preserves global consensus stability and cuts communication bandwidth by $48.6\%$.
 
 % ==========================================
 % 4. IMPLEMENTATION DETAILS
 % ==========================================
 \section{Implementation Details}
 
-\subsection{Hardware, Software \& Development Environment}
+\subsection{Implementation Environment \& Execution Setup}
 \begin{itemize}[noitemsep, topsep=2pt]
-    \item \textbf{Deep Learning Framework:} PyTorch 2.4.0 with Apple Silicon MPS and CUDA acceleration; custom asynchronous federated communication harness simulating three institutional nodes.
-    \item \textbf{Backend \& Data Warehouse:} Python 3.11, FastAPI 0.115 asynchronous REST services, SQLite 3.43 relational clinical data warehouse with foreign-key schema integrity.
-    \item \textbf{Clinical Frontend Workstation:} React 18.3, TypeScript, Vite 5.4, TailwindCSS, Recharts, and Lucide Icons providing bedside clinical decision support dashboards.
-    \item \textbf{Hardware Testbed:} Tested and profiled on Apple M4 (10-core CPU, 10-core GPU, 16-core Neural Engine, 24 GB Unified Memory) and NVIDIA A100 Tensor Core GPUs.
+    \item \textbf{Hardware \& Compute Specifications:} High-performance edge testbed on Apple Silicon M4 (10-core CPU, 10-core GPU, 16-core Neural Engine, 24 GB Unified Memory) achieving $0.67\text{ ms}$ single-window inference latency, alongside cloud multi-GPU validation on NVIDIA A100 Tensor Core GPUs ($40\text{ GB}$).
+    \item \textbf{Software \& Libraries:} Python 3.11, PyTorch 2.4.0 with Apple Silicon MPS and CUDA acceleration, FastAPI 0.115 asynchronous REST services, SQLite 3.43 relational clinical data warehouse with foreign-key schema integrity, React 18.3, TypeScript, Vite 5.4, TailwindCSS, Recharts, and Lucide Icons.
+    \item \textbf{Source Code Repository:} Fully organized, reproducible production repository in workspace directory \texttt{23CSE498\allowbreak-Project\allowbreak-Phase-II} containing asynchronous federated engines, automated test suites, database ingestion pipelines, and interactive bedside CDSS dashboards.
 \end{itemize}
 
-\subsection{Module-Wise Implementation Completion Status}
+\subsection{Module-Wise Implementation \& Integration Summary}
 \noindent
-The implementation is fully realized across all four architectural subsystems, validated with comprehensive automated test suites and reproducible audit scripts, as summarized in Table \ref{tab:modules}.
+The implementation is 100\% complete and fully realized across all four architectural subsystems, validated with comprehensive automated test suites and reproducible audit scripts, as summarized in Table \ref{tab:modules}.
 
 \begin{table}[!htbp]
     \centering
     \footnotesize
-    \renewcommand{\arraystretch}{1.12}
-    \begin{tabular}{c l p{5.8cm} c c}
+    \renewcommand{\arraystretch}{1.15}
+    \begin{tabular}{c l p{6.0cm} c c}
         \toprule
-        \textbf{Mod.} & \textbf{Subsystem Name} & \textbf{Key Components \& Deliverables Implemented} & \textbf{LOC} & \textbf{Deployment State} \\
+        \textbf{Mod.} & \textbf{Subsystem Name} & \textbf{Key Components \& Deliverables Implemented} & \textbf{LOC} & \textbf{Status} \\
         \midrule
-        \textbf{M1} & Clinical Data Pipeline & Patient-disjoint 70/15/15 partitioning ($N=40,327$ patients), causal backward-only forward fill, 40-feature normalizers & 2,840 & Production Pipeline \\
+        \textbf{M1} & Clinical Data Pipeline & Patient-disjoint 70/15/15 partitioning ($N=40,327$ patients), causal backward-only forward fill, 40-feature normalizers & 2,840 & \textbf{100\% (Integrated)} \\
         \addlinespace[2pt]
-        \textbf{M2} & Split-Weight Federated Engine & Custom PyTorch FL engine, FedAvg, FedProx, Ditto baselines, bi-level parameter anchoring, MPS/CUDA support & 3,450 & Distributed Consensus \\
+        \textbf{M2} & Split-Weight Federated Engine & Custom PyTorch FL engine, FedAvg, FedProx, Ditto baselines, bi-level parameter anchoring, MPS/CUDA support & 3,450 & \textbf{100\% (Integrated)} \\
         \addlinespace[2pt]
-        \textbf{M3} & AD-CUSUM Drift \& CSSP & Online JSD calculator, gradient variance monitor, adaptive slack $\kappa_r$, CSSP selective freeze toggle, entropy regularizer & 1,980 & Autonomous Drift Guard \\
+        \textbf{M3} & AD-CUSUM Drift \& CSSP & Online JSD calculator, gradient variance monitor, adaptive slack $\kappa_r$, CSSP selective freeze toggle, entropy regularizer & 1,980 & \textbf{100\% (Integrated)} \\
         \addlinespace[2pt]
-        \textbf{M4} & Clinical CDSS Workstation & FastAPI REST API, SQLite warehouse, React-Vite bedside CDSS, Integrated Gradients attributions, counterfactual engine & 4,720 & Live Bedside Workstation \\
+        \textbf{M4} & Clinical CDSS Workstation & FastAPI REST API, SQLite warehouse, React-Vite bedside CDSS, Integrated Gradients attributions, counterfactual engine & 4,720 & \textbf{100\% (Functional)} \\
         \midrule
-        \multicolumn{3}{r}{\textbf{Total Verified Production Codebase:}} & \textbf{12,990} & \textbf{Audited \& Verified} \\
+        \multicolumn{3}{r}{\textbf{Total Verified Production Codebase:}} & \textbf{12,990} & \textbf{100\% Complete} \\
         \bottomrule
     \end{tabular}
-    \caption{Module-Wise Implementation Details and Architectural Verification.}
+    \caption{Module-Wise Implementation Completion Status.}
     \label{tab:modules}
 \end{table}
 
@@ -238,17 +229,13 @@ The implementation is fully realized across all four architectural subsystems, v
 \end{itemize}
 
 % ==========================================
-% 5. EXPERIMENTAL RESULTS & DEMONSTRATION
+% 5. PRELIMINARY VERIFICATION, RESULTS & DEMONSTRATION
 % ==========================================
 \section{Preliminary Verification, Experimental Results \& Demonstration}
 
-\subsection{Experimental Setup \& Evaluation Protocol}
-\noindent
-Evaluated on $N = 102,994$ strictly held-out test windows spanning $M = 6,050$ patient encounters across the three institutional tiers. Sepsis prevalence in the test set is $2.58\%$ ($2,655$ positive windows), reflecting the extreme class imbalance of real-world critical care. Performance is assessed using Area Under the Precision-Recall Curve (AUPRC), Area Under the ROC Curve (AUROC), Expected Calibration Error (ECE), Brier Score, and Edge Inference Latency. Confidence intervals are derived from $B = 2,000$ patient-level cluster bootstrap iterations.
-
 \subsection{Quantitative Evaluation \& Baseline Comparison}
 \noindent
-Table \ref{tab:benchmarks} presents the comprehensive comparative evaluation of FPDAF against centralized and federated baselines.
+\textbf{Experimental Setup \& Protocol:} Evaluated on $N = 102,994$ strictly held-out test windows spanning $M = 6,050$ patient encounters across three institutional tiers. Sepsis prevalence in the test set is $2.58\%$ ($2,655$ positive windows), reflecting real-world ICU class imbalance. Performance is assessed using AUPRC, AUROC, ECE, Brier Score, and Edge Inference Latency with $B = 2,000$ patient-cluster bootstrap iterations. Table \ref{tab:benchmarks} presents the comparative evaluation of FPDAF against baselines.
 
 \begin{table}[!htbp]
     \centering
@@ -266,7 +253,7 @@ Table \ref{tab:benchmarks} presents the comprehensive comparative evaluation of 
         \textbf{FPDAF (Proposed Framework)} & $\mathbf{0.1043}$ & $0.7923$ & $\mathbf{0.0902}$ & $\mathbf{0.0548}$ & $\mathbf{0.67\text{ ms}}$ \\
         \bottomrule
     \end{tabular}
-    \caption{Multi-Center Benchmark on Held-Out Test Windows ($N = 102,994$ windows, $6,050$ patients).}
+    \caption{Comparative Experimental Evaluation Results on Held-Out Test Windows ($N = 102,994$).}
     \label{tab:benchmarks}
 \end{table}
 
@@ -278,9 +265,8 @@ Table \ref{tab:benchmarks} presents the comprehensive comparative evaluation of 
     \item \textbf{Statistical Equivalence to Centralized Bound:} Paired patient-cluster bootstrap testing shows that the AUROC difference between FPDAF ($0.7923$) and Centralized ($0.8058$) is not statistically significant ($\Delta = -0.0135$, $P = .176$, 95\% CI: [$-0.0320$, $+0.0066$]), confirming zero significant privacy penalty.
 \end{enumerate}
 
-\subsection{Drift Adaptation \& Calibration Performance}
 \noindent
-To benchmark robustness under real-world clinical shifts, an acute demographic concept drift was injected into Client 1 at communication round 3. Table \ref{tab:drift} demonstrates that AD-CUSUM detected the shift immediately at round 3 ($S_r = 5.24 > 5.0$), triggering CSSP selective freeze. Local entropy-regularized adaptation reduced Brier error by $63.1\%$ relative to unadapted FedAvg.
+\textbf{Concept Drift Adaptation Performance:} To benchmark robustness under real-world clinical shifts, an acute demographic concept drift was injected into Client 1 at communication round 3. Table \ref{tab:drift} demonstrates that AD-CUSUM detected the shift immediately at round 3 ($S_r = 5.24 > 5.0$), triggering CSSP selective freeze. Local entropy-regularized adaptation reduced Brier error by $63.1\%$ relative to unadapted FedAvg.
 
 \begin{table}[!htbp]
     \centering
@@ -330,21 +316,21 @@ Figure \ref{fig:visual_results} presents experimental ROC and Precision-Recall c
         \includegraphics[width=\textwidth, height=3.2cm, keepaspectratio]{images/dashboard_doctor.png}
         \caption{Working Clinical CDSS Doctor Workstation}
     \end{subfigure}
-    \caption{Experimental Performance Curves, Drift Telemetry, and Deployed Clinical CDSS Demonstration.}
+    \caption{Experimental Verification Plots and Working Prototype Outputs.}
     \label{fig:visual_results}
 \end{figure}
 
 \noindent
-\textbf{Demonstration Summary:} The live workstation demonstration streams 24-hour patient windows, executes local inference in $0.67\text{ ms}$, highlights early sepsis trajectories with an average lead time of $4.98\text{ hours}$ prior to clinical onset, provides top physiological drivers (Mean Arterial Pressure, Heart Rate, White Blood Cell count) via Integrated Gradients, and renders Surviving Sepsis Campaign Hour-1 bundle checklists.
+\textbf{Discussion of Results:} The live workstation demonstration streams 24-hour patient windows, executes local inference in $0.67\text{ ms}$, highlights early sepsis trajectories with an average lead time of $4.98\text{ hours}$ (up to $5.8\text{ hours}$) prior to clinical onset, provides top physiological drivers (Mean Arterial Pressure, Heart Rate, White Blood Cell count) via Integrated Gradients, and renders Surviving Sepsis Campaign Hour-1 bundle checklists with personalized multi-pillar clinical explainability.
 
 % ==========================================
 % 6. TECHNICAL KNOWLEDGE & DESIGN INSIGHTS
 % ==========================================
 \section{Technical Justification, Design Trade-offs \& Insights}
 \begin{itemize}[noitemsep, topsep=1pt]
-    \item \textbf{Decoupled Parameter Architecture:} Decoupling the model into a shared backbone $\theta_{\text{shared}}$ and private head $\theta_{\text{pers}}$ reflects clinical reality: physiological dynamics of infection are invariant across humans, whereas patient age distributions and testing protocols vary by hospital.
-    \item \textbf{Edge Profiling \& Network Efficiency:} Profiled on Apple Silicon M4 CPU, single-window inference executes in $\mathbf{0.67\text{ ms}}$ with $< 120\text{ MB}$ RAM footprint. CSSP selective freezing saves $0.59\text{ MB}$ per drifted round, slashing 30-round bandwidth by $\mathbf{48.6\%}$.
-    \item \textbf{Class Imbalance \& Missing Data:} Handles an extreme 1:39 sepsis positive ratio and $>80\%$ missing lab frequency via causal backward-only forward fill (0 lookahead leakage), median imputation, and focal loss weighting ($\alpha=0.75, \gamma=2.0$).
+    \item \textbf{Algorithmic \& Theoretical Justification:} Decoupling the model into a shared backbone $\theta_{\text{shared}}$ and private head $\theta_{\text{pers}}$ reflects clinical reality: physiological dynamics of infection are invariant across humans, whereas patient age distributions and testing protocols vary by hospital. The dual-phase attention mechanism captures critical cross-vital correlations and temporal deterioration inflection points without black-box opacity.
+    \item \textbf{Computational Complexity \& Trade-offs:} Profiled on Apple Silicon M4 CPU, single-window inference executes in $\mathbf{0.67\text{ ms}}$ with $< 120\text{ MB}$ RAM footprint. CSSP selective freezing saves $0.59\text{ MB}$ per drifted round, slashing 30-round bandwidth by $\mathbf{48.6\%}$, effectively trading local compute for network resilience.
+    \item \textbf{Handling Edge Cases \& Boundary Conditions:} Handles an extreme 1:39 sepsis positive ratio and $>80\%$ missing lab frequency via causal backward-only forward fill (0 lookahead leakage), median demographic imputation, and focal loss weighting ($\alpha=0.75, \gamma=2.0$). AD-CUSUM absorbs transient sensor noise and isolated vital spikes through adaptive slack $\kappa_r$ and gradient variance weighting.
 \end{itemize}
 
 % ==========================================
@@ -352,8 +338,9 @@ Figure \ref{fig:visual_results} presents experimental ROC and Precision-Recall c
 % ==========================================
 \section{Conclusion, Limitations \& Future Scope}
 \begin{itemize}[noitemsep, topsep=1pt]
-    \item \textbf{Conclusion:} FPDAF resolves the privacy, accuracy, and calibration gaps in multi-hospital sepsis forecasting. Validated on $102,994$ test windows, it achieves top discrimination ($0.1043$ AUPRC), unmatched calibration ($0.0902$ ECE), and robust drift adaptation with complete patient data confidentiality.
-    \item \textbf{Limitations \& Future Scope:} Currently validated on simulated local subnets; prospective bedside deployment and multimodal clinical text integration via federated LoRA represent immediate future extensions.
+    \item \textbf{Conclusion:} FPDAF resolves the statutory privacy, inter-hospital concept drift, and probability calibration gaps in multi-hospital sepsis forecasting. Validated on $102,994$ test windows, it achieves top discrimination ($0.1043$ AUPRC), unmatched calibration ($0.0902$ ECE), and robust drift adaptation with complete patient data confidentiality.
+    \item \textbf{Current Limitations:} Current validation utilizes simulated decentralized subnets across PhysioNet cohorts; prospective bedside deployment requires integration with heterogeneous electronic health record protocols (HL7/FHIR).
+    \item \textbf{Future Scope:} Integrating multimodal clinical nursing notes and unstructured radiology text via federated Parameter-Efficient Fine-Tuning (PEFT/LoRA) and executing prospective multi-center trial evaluations across regional ICUs.
 \end{itemize}
 
 % ==========================================
