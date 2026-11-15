@@ -153,19 +153,19 @@
     \begin{block}{Research Objectives}
         \scriptsize
         \begin{itemize}
-            \item \textbf{Objective 1 (Drift-Aware Model Architecture):} Design a split-weight BiLSTM with multi-head temporal attention and an online drift detector to flag clinical shift without ground-truth labels.
+            \item \textbf{Objective 1 (FPDAF-v2 Model Architecture):} Formulate the \textbf{FPDAF-v2} neural network (\texttt{DualPhaseAttentionLSTM}) to validate the proposed \textbf{FPDAF framework} with multi-head attention and AD-CUSUM drift detection.
             \item \textbf{Objective 2 (Personalization \& Communication Efficiency):} Formulate an edge-personalization objective and selective freeze protocol to adapt to local hospital demographics while slashing uplink bandwidth by $38.0\%$.
             \item \textbf{Objective 3 (Three-Pillar Clinician Explainability):} Build an interpretable bedside XAI pipeline providing 24h temporal risk heatmaps, biomarker saliency rankings, and interactive counterfactual recourse simulations.
-            \item \textbf{Objective 4 (Full-System CDSS Development):} Realize an operational, point-of-care clinical decision workstation integrating an asynchronous FastAPI telemetry engine, SQLite clinical database ($70$ beds across benchmark \& partner hospital cohorts), and dual-view React bedside interface.
+            \item \textbf{Objective 4 (Full-System CDSS Deployment):} Realize an operational bedside CDSS workstation integrating an asynchronous FastAPI telemetry engine, SQLite clinical database ($70$ beds), and dual-view React interface.
         \end{itemize}
     \end{block}
     \vspace{-0.10cm}
 
-    \begin{block}{System Scope \& Non-Duplication Delineation}
+    \begin{block}{System Scope: Framework vs. Model Delineation}
         \scriptsize
         \begin{itemize}
             \item \textbf{Accepted Conference Paper (CSCT 2026, Springer SIST):} Preliminary proof-of-concept covering split-weight attention and basic AD-CUSUM drift detection.
-            \item \textbf{Full Phase-II System Scope (Comprehensive Expansion):} Extensive non-overlapping architectural expansion incorporating full bedside CDSS workstation, counterfactual recourse, DCA clinical utility, edge profiling ($0.67\text{ ms}$), and $102,994$-window cluster bootstrap validation.
+            \item \textbf{Full Phase-II System Scope:} Proposes the complete \textbf{FPDAF Framework}; to prove its effectiveness, we engineered the \textbf{FPDAF-v2 Model} and deployed it within the operational \textbf{FPDAF CDSS Bedside Workstation} ($0.67\text{ ms}$ inference).
         \end{itemize}
     \end{block}
 \end{frame}
@@ -180,9 +180,9 @@
     \includegraphics[width=0.82\textwidth, height=0.36\textheight, keepaspectratio]{images/ArcDigram.jpeg}
     \vspace{0.03cm}
 
-    \begin{block}{Workflow Summary}
+    \begin{block}{Workflow Summary: FPDAF Framework \& FPDAF-v2 Model Execution}
         \scriptsize
-        Private ICU telemetry ($X \in \mathbb{R}^{24 \times 40}$) remains secured behind hospital firewalls. Local client nodes train shared BiLSTM feature extractors while continuously auditing prediction drift via AD-CUSUM. The federated aggregation server synchronizes shared backbone parameters $\theta_{\text{shared}}$ across non-IID hospital tiers, while CSSP freezes uplink parameter uploads during drift events to protect peer consensus and adapt local decision heads.
+        The \textbf{FPDAF framework} secures private ICU telemetry ($X \in \mathbb{R}^{24 \times 40}$) behind hospital firewalls. Within each hospital node, the \textbf{FPDAF-v2 model} (\texttt{DualPhaseAttentionLSTM}) processes sequential signals and continuously audits prediction drift via AD-CUSUM. The federated aggregation server synchronizes shared backbone parameters $\theta_{\text{shared}}$, while CSSP freezes uplink uploads during drift events to protect consensus and adapt local decision heads.
     \end{block}
 \end{frame}
 
@@ -210,10 +210,10 @@
     \framesubtitle{Sub-Module Breakdown, Governing Mathematical Model \& Datasets}
     \begin{columns}[T]
         \column{0.50\textwidth}
-        \begin{block}{Methodological Breakdown}
+        \begin{block}{FPDAF-v2 Model Architecture Breakdown}
             \scriptsize
             \begin{itemize}
-                \item \textbf{BiLSTM Backbone:} 2-layer bidirectional sequential encoder across 24 hourly time-steps ($h=64$).
+                \item \textbf{Model Engine (FPDAF-v2):} 2-layer BiLSTM sequential backbone across 24 hourly time-steps ($h=64$).
                 \item \textbf{Attention Pooling:} 4 heads capturing acute vitals spikes: $c = \sum_{t=1}^{24} \alpha_t h_t$.
                 \item \textbf{Split Decoupling:} Shared backbone $\theta_{\text{shared}}$ + private edge classification head $\phi_k$.
             \end{itemize}
